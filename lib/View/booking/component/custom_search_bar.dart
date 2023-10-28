@@ -4,7 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/View/colors.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({Key? key}) : super(key: key);
+  final int index;
+
+  const CustomSearchBar({
+    required this.index,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -36,9 +41,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 child: TextField(
                   cursorColor: purple,
                   controller: controller,
-                  decoration: const InputDecoration(
-                    hintText: '시설 검색',
-                    hintStyle: TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
+                  decoration: InputDecoration(
+                    hintText: getHintText(),
+                    hintStyle: const TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
                     border: InputBorder.none,
                   ),
                 ),
@@ -54,6 +59,18 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         ],
       ),
     );
+  }
+
+  String getHintText() {
+    switch (widget.index) {
+      case 0:
+        return '시설 검색';
+      case 1:
+        return '차량명 검색';
+      case 2:
+        return '장비명 검색';
+    }
+    return '검색';
   }
 
   /// Event Methods
