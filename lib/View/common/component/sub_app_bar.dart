@@ -26,7 +26,7 @@ class SubAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _SubAppBarState extends State<SubAppBar> {
   final titleStyle = const TextStyle(
-      color: darkGrey,
+      color: Colors.black,
       fontSize: 16
   );
 
