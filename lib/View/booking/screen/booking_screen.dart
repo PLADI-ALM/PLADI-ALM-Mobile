@@ -97,7 +97,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
         tabs: [
           renderTabItem('회의실'),
           renderTabItem('차량'),
-          renderTabItem('차량')
+          renderTabItem('장비')
         ]
       ),
     );
