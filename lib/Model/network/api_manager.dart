@@ -19,6 +19,57 @@ class APIManager {
   final dio = Dio();
   Options defaultOptions = Options();
 
+  /// Request methods
+  dynamic request(
+      RequestType requestType,
+      String path,
+      Options? options,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? data,
+      ) async {
+
+    if (options != null && options.headers != null) {
+      defaultOptions.headers!.addAll(options.headers!);
+    }
+
+    dynamic response;
+    switch (requestType) {
+      case RequestType.get :
+        response = await dio.get(
+            baseUrl + path,
+            options: defaultOptions,
+            queryParameters: queryParameters
+        );
+
+      case RequestType.post :
+        response = await dio.post(
+            baseUrl + path,
+            options: defaultOptions,
+            queryParameters: queryParameters,
+            data: data
+        );
+
+      case RequestType.patch :
+        response = await dio.patch(
+            baseUrl + path,
+            options: defaultOptions,
+            queryParameters: queryParameters,
+            data: data
+        );
+
+      case RequestType.delete :
+        response = await dio.delete(
+            baseUrl + path,
+            options: defaultOptions,
+            queryParameters: queryParameters
+        );
+    }
+
+    // print('api + ${response}');
+    // print('api + ${response.data}');
+
+    return response.data;
+  }
 
   /// Methods of Token
   void writeToken(String accessToken, String refreshToken) async {
