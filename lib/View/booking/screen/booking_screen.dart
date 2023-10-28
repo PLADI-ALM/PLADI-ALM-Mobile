@@ -4,9 +4,11 @@ import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 
+import '../../../Model/model/booking/resource_model.dart';
 import '../../../Presenter/booking/booking_service.dart';
 import '../component/custom_search_bar.dart';
 import '../component/office_item.dart';
+import '../component/resource_item.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
@@ -24,6 +26,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   int selectedTab = 0;
 
   bool isLoading = true;
+  dynamic data;
 
   @override
   void initState() {
@@ -32,14 +35,23 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     controller.addListener(tabListener);
   }
 
-  void tabListener() {
-    setState(() {
-      index = controller.index;
-    });
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 
   Future<dynamic> fetchData() async {
-    dynamic response = await BookingService().getOfficeListData('회의실');
+    dynamic response;
+    switch (index) {
+      case 0:
+        response = await BookingService().getOfficeListData();
+      case 1:
+        response = await BookingService().getOfficeListData();
+      case 2:
+        response = await BookingService().getResourceListData();
+    }
+    // print('response -> $response');
     isLoading = false;
     return response;
   }
@@ -114,7 +126,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     return FutureBuilder<dynamic>(
       future: fetchData(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError) {
+        if (snapshot.hasError || snapshot.data == null) {
           return const Center(
             child: Text('정보를 불러오지 못 하였습니다.'),
           );
@@ -123,7 +135,8 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
           if (isLoading) {
             return const Center(child: CircularProgressIndicator(color: purple,),);
           }
-          OfficeResponseModel data = OfficeResponseModel.fromJson(snapshot.data);
+          // OfficeResponseModel data = OfficeResponseModel.fromJson(snapshot.data);
+          data = configureData(snapshot.data);
           return Container(
             height: getItemHeight(categoryName) * data.data.content.length,
             color: Colors.white,
@@ -142,6 +155,25 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     );
   }
 
+  Widget renderItem(String categoryName, GeneralModel data, int index) {
+    switch (categoryName) {
+      case '회의실':
+        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
+      case '차량':
+        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
+      case '장비':
+        return ResourceItem(data: (data as ResourceResponseModel).data.content[index],);
+    }
+    return Container();
+  }
+
+  /// Helper Methods
+  void tabListener() {
+    setState(() {
+      index = controller.index;
+    });
+  }
+
   double getItemHeight(String categoryName) {
     switch (categoryName) {
       case '회의실': return 292.0;
@@ -151,15 +183,14 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     return 0.0;
   }
 
-  Widget renderItem(String categoryName, GeneralModel data, int index) {
-    switch (categoryName) {
-      case '회의실':
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
-      case '차량':
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
-      case '장비':
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
+  dynamic configureData(dynamic response) {
+    switch (index) {
+      case 0:
+        return OfficeResponseModel.fromJson(response);
+      case 1:
+        return OfficeResponseModel.fromJson(response);
+      case 2:
+        return ResourceResponseModel.fromJson(response);
     }
-    return Container();
   }
 }

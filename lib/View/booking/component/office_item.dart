@@ -40,8 +40,9 @@ class _OfficeItemState extends State<OfficeItem> {
             width: MediaQuery.of(context).size.width,
             height: 176,
             margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-            // child: Image.asset('asset/image/office_sample.png')),
-            child: Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)
+              child: (widget.data.imgUrl == null || widget.data.imgUrl.contains('null'))
+                  ? Image.asset('asset/image/pladi_icon.png')
+                  : Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)
           ),
           renderOfficeInfo(),
         ],
