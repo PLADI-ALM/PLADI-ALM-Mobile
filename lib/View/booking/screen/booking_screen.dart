@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/View/common/component/main_app_bar.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
@@ -10,6 +11,13 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: const MainAppBar(),
+      body: renderBody(),
+    );
+  }
+
+  Widget renderBody() {
+    return Container();
   }
 }
