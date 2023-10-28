@@ -14,6 +14,8 @@ class BookingScreen extends StatefulWidget {
 
 class _BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
 
+  static const category = ['회의실', '차량', '장비'];
+
   late final TabController controller;
   int index = 0;
   int selectedTab = 0;
@@ -43,11 +45,17 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   Widget renderBody() {
     return SizedBox(
       height: 292.0 * 10 + 300, // TODO: 10을 data 개수로 수정
-      child: ListView(
+      child: Column(
         children: [
           renderTabBar(),
           const CustomSearchBar(),
-          renderItems()
+          Expanded(
+            child: TabBarView(
+              controller: controller,
+              children:
+              category.map((e) => renderItems(e)).toList(),
+            ),
+          )
         ],
       ),
     );
@@ -92,22 +100,41 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     );
   }
   
-  Widget renderItems() {
+  Widget renderItems(String categoryName) {
     return Container(
-      // height: 292.0 * data.length,
-      height: 292.0 * 10,
+      // height: getItemHeight(categoryName) * data.length,
+      height: getItemHeight(categoryName) * 10,
       color: Colors.white,
       child:
       ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         // itemCount: data.length,
         itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
-          return OfficeItem();
+          return renderItem(categoryName);
         },
       ),
     );
   }
 
+  double getItemHeight(String categoryName) {
+    switch (categoryName) {
+      case '회의실': return 292.0;
+      case '차량': return 232.0;
+      case '장비': return 232.0;
+    }
+    return 0.0;
+  }
+
+  Widget renderItem(String categoryName) {
+    switch (categoryName) {
+      case '회의실':
+        return OfficeItem();
+      case '차량':
+        return OfficeItem();
+      case '장비':
+        return OfficeItem();
+    }
+    return Container();
+  }
 }
