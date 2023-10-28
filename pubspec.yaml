@@ -63,6 +63,17 @@ flutter:
   assets:
     - asset/image/
     - asset/image/tab_icon/
+  fonts:
+    - family: NanumSquare
+      fonts:
+        - asset: asset/fonts/nanum_sqaure/NanumSquareOTF_acEB.otf
+          weight: 900
+        - asset: asset/fonts/nanum_sqaure/NanumSquareOTF_acB.otf
+          weight: 700
+        - asset: asset/fonts/nanum_sqaure/NanumSquareOTF_acR.otf
+          weight: 500
+        - asset: asset/fonts/nanum_sqaure/NanumSquareOTF_acL.otf
+          weight: 400
 
   # To add assets to your application, add an assets section, like this:
   # assets:
