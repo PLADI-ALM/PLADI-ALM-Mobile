@@ -3,6 +3,7 @@ import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 
 import '../component/custom_search_bar.dart';
+import '../component/office_item.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
@@ -40,11 +41,13 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   }
 
   Widget renderBody() {
-    return Container(
-      child: Column(
+    return SizedBox(
+      height: 292.0 * 10 + 300, // TODO: 10을 data 개수로 수정
+      child: ListView(
         children: [
           renderTabBar(),
-          CustomSearchBar(),
+          const CustomSearchBar(),
+          renderItems()
         ],
       ),
     );
@@ -89,5 +92,22 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     );
   }
   
-  
+  Widget renderItems() {
+    return Container(
+      // height: 292.0 * data.length,
+      height: 292.0 * 10,
+      color: Colors.white,
+      child:
+      ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        // itemCount: data.length,
+        itemCount: 10,
+        itemBuilder: (BuildContext context, int index) {
+          return OfficeItem();
+        },
+      ),
+    );
+  }
+
 }
