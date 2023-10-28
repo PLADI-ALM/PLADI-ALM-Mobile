@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/Presenter/booking/booking_service.dart';
 import 'package:frontend/View/colors.dart';
+
+import '../screen/booking_screen.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final int index;
@@ -21,6 +24,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (BookingService().getKeyword().isEmpty) {
+      controller = TextEditingController();
+    }
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -46,6 +52,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     hintStyle: const TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
                     border: InputBorder.none,
                   ),
+                  onEditingComplete: didChangedSearchBar,
                 ),
               )
           ),
@@ -61,14 +68,12 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     );
   }
 
+  /// Helper Methods
   String getHintText() {
     switch (widget.index) {
-      case 0:
-        return '시설 검색';
-      case 1:
-        return '차량명 검색';
-      case 2:
-        return '장비명 검색';
+      case 0: return '시설 검색';
+      case 1: return '차량명 검색';
+      case 2: return '장비명 검색';
     }
     return '검색';
   }
@@ -76,5 +81,14 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   /// Event Methods
   void didTapFilterButton() {
     print('didTapFilterButton');
+  }
+
+  void didChangedSearchBar() {
+    print('controller.value.text -> ${controller.value.text}');
+    FocusScope.of(context).unfocus();
+    BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
+    if (controller.value.text.isNotEmpty) {
+      parent!.searchItems(controller.value.text);
+    }
   }
 }

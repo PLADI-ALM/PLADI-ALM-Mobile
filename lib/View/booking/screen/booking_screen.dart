@@ -14,10 +14,10 @@ class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
 
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  State<BookingScreen> createState() => BookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
+class BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
 
   static const category = ['회의실', '차량', '장비'];
 
@@ -170,6 +170,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   void tabListener() {
     setState(() {
       index = controller.index;
+      BookingService().setKeyword('');
     });
   }
 
@@ -191,5 +192,11 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
       case 2:
         return ResourceResponseModel.fromJson(response);
     }
+  }
+
+  void searchItems(String keyword) {
+    setState(() {
+      BookingService().setKeyword(keyword);
+    });
   }
 }
