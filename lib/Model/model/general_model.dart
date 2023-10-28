@@ -5,10 +5,12 @@ part 'general_model.g.dart';
 @JsonSerializable()
 class GeneralModel {
   final int status;
+  final String code;
   final String message;
 
   GeneralModel({
     required this.status,
+    required this.code,
     required this.message,
   });
 

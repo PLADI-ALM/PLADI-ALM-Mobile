@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/View/colors.dart';
 
+import '../../../Model/model/booking/office_model.dart';
+
 class OfficeItem extends StatefulWidget {
-  const OfficeItem({Key? key}) : super(key: key);
+
+  final OfficeInfo data;
+
+  const OfficeItem({
+    required this.data,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<OfficeItem> createState() => _OfficeItemState();
@@ -29,8 +37,12 @@ class _OfficeItemState extends State<OfficeItem> {
       child: Column(
         children: [
           Container(
-              margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-              child: Image.asset('asset/image/office_sample.png')),
+            width: MediaQuery.of(context).size.width,
+            height: 176,
+            margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
+            // child: Image.asset('asset/image/office_sample.png')),
+            child: Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)
+          ),
           renderOfficeInfo(),
         ],
       ),
@@ -44,27 +56,49 @@ class _OfficeItemState extends State<OfficeItem> {
         children: [
           Row(
             children: [
-              Text('회의실', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: purple),),
+              Text(widget.data.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: purple),),
               const SizedBox(width: 8,),
-              Text('401호', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),),
+              Text(widget.data.location, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),),
               Flexible(child: Container()),
-              Text('6명', style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFF717171)),)
+              Text('${widget.data.capacity}명', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFF717171)),)
             ],
           ),
-          Divider(color: Color(0xFF4C4C4C).withOpacity(0.6),),
+          Divider(color: const Color(0xFF4C4C4C).withOpacity(0.6),),
           const SizedBox(height: 3,),
-          Row(
-            children: [
-              renderFacilityItem('빔 프로젝터'),
-              renderFacilityItem('마이크'),
-              renderFacilityItem('화상회의'),
-              Flexible(child: Container()),
-              Text('외 2개', style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFF717171)),)
-            ],
-          )
+          renderFacilityRow(widget.data.facilityList)
         ],
       ),
     );
+  }
+
+  Widget renderFacilityRow(List<String?> facilityList) {
+    if (facilityList.isNotEmpty) {
+      List<Widget> items = [];
+      if (facilityList.length > 3) {
+        for(int i=0; i<3; i++) {
+          items.add(renderFacilityItem(facilityList[i]!));
+        }
+      } else {
+        items = facilityList.map((e) =>
+            renderFacilityItem(e!)
+        ).toList();
+      }
+
+      items.add(Flexible(child: Container()));
+      items.add(
+        (facilityList.length > 3)
+            ? Text('외 ${facilityList.length-3}개', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFF717171)),)
+            : Container()
+      );
+      return Row(children: items);
+
+    } else {
+      return const Row(
+        children: [
+          Text('편의시설 없음', style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFF717171)),)
+        ],
+      );
+    }
   }
 
   Widget renderFacilityItem(String name) {
@@ -80,4 +114,5 @@ class _OfficeItemState extends State<OfficeItem> {
       ),
     );
   }
+
 }

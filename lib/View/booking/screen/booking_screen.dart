@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Model/model/booking/office_model.dart';
+import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 
+import '../../../Presenter/booking/booking_service.dart';
 import '../component/custom_search_bar.dart';
 import '../component/office_item.dart';
 
@@ -20,6 +23,8 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   int index = 0;
   int selectedTab = 0;
 
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +38,12 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     });
   }
 
+  Future<dynamic> fetchData() async {
+    dynamic response = await BookingService().getOfficeListData('회의실');
+    isLoading = false;
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +55,6 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
 
   Widget renderBody() {
     return SizedBox(
-      height: 292.0 * 10 + 300, // TODO: 10을 data 개수로 수정
       child: Column(
         children: [
           renderTabBar(),
@@ -101,19 +111,34 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   }
   
   Widget renderItems(String categoryName) {
-    return Container(
-      // height: getItemHeight(categoryName) * data.length,
-      height: getItemHeight(categoryName) * 10,
-      color: Colors.white,
-      child:
-      ListView.builder(
-        scrollDirection: Axis.vertical,
-        // itemCount: data.length,
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) {
-          return renderItem(categoryName);
-        },
-      ),
+    return FutureBuilder<dynamic>(
+      future: fetchData(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('정보를 불러오지 못 하였습니다.'),
+          );
+        }
+        else {
+          if (isLoading) {
+            return const Center(child: CircularProgressIndicator(color: purple,),);
+          }
+          OfficeResponseModel data = OfficeResponseModel.fromJson(snapshot.data);
+          return Container(
+            height: getItemHeight(categoryName) * data.data.content.length,
+            color: Colors.white,
+            child:
+            ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: data.data.content.length,
+              itemBuilder: (BuildContext context, int index) {
+                return renderItem(categoryName, data, index);
+              },
+            ),
+          );
+        }
+
+      }
     );
   }
 
@@ -126,14 +151,14 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     return 0.0;
   }
 
-  Widget renderItem(String categoryName) {
+  Widget renderItem(String categoryName, GeneralModel data, int index) {
     switch (categoryName) {
       case '회의실':
-        return OfficeItem();
+        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
       case '차량':
-        return OfficeItem();
+        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
       case '장비':
-        return OfficeItem();
+        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
     }
     return Container();
   }
