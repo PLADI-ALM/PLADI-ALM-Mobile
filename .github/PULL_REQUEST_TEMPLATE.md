@@ -1,5 +1,5 @@
 ## ✈️ 지라 티켓
-- [PDW-지라번호](https://pladi-alm.atlassian.net/browse/PDW-지라번호) 
+- [PDA-지라번호](https://pladi-alm.atlassian.net/browse/PDA-지라번호) 
 
 <br>
 
