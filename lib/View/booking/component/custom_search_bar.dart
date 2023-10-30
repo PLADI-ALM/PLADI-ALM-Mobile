@@ -52,7 +52,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     hintStyle: const TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
                     border: InputBorder.none,
                   ),
-                  onEditingComplete: didChangedSearchBar,
+                  onChanged: (value) {didChangedSearchBar();},
+                  onEditingComplete: didEditingComplete,
                 ),
               )
           ),
@@ -84,11 +85,11 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   }
 
   void didChangedSearchBar() {
-    print('controller.value.text -> ${controller.value.text}');
-    FocusScope.of(context).unfocus();
     BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
     if (controller.value.text.isNotEmpty) {
       parent!.searchItems(controller.value.text);
     }
   }
+
+  void didEditingComplete() { FocusScope.of(context).unfocus(); }
 }

@@ -171,6 +171,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
   /// Helper Methods
   void tabListener() {
     setState(() {
+      FocusScope.of(context).unfocus();
       index = controller.index;
       BookingService().setKeyword('');
     });
