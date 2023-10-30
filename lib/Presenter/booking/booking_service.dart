@@ -3,6 +3,7 @@ import '../../Model/network/api_manager.dart';
 
 class BookingService {
   final officeListURL = '/offices';
+  final carListURL = '/cars';
   final resourceListURL = '/resources';
 
   String keyword = '';
@@ -20,6 +21,17 @@ class BookingService {
         officeListURL,
         null,
         (keyword.isNotEmpty) ? {"facilityName" : keyword} : null,
+        null
+    );
+    return response;
+  }
+
+  Future<dynamic> getCarListData() async {
+    final response = await APIManager().request(
+        RequestType.get,
+        carListURL,
+        null,
+        (keyword.isNotEmpty) ? {"carName" : keyword} : null,
         null
     );
     return response;

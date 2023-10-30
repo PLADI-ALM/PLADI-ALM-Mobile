@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/screen/root_tab.dart';
+import 'package:frontend/View/login/screen/login_screen.dart';
 
 import '../../../Model/network/api_manager.dart';
 
@@ -38,9 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (_) => const RootTab()), (route) => false);
 
     } else {
-      // Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(builder: (_) => LoginScreen()),
-      //         (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+              (route) => false);
     }
   }
 }

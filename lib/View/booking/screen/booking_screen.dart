@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Model/model/general_model.dart';
+import 'package:frontend/View/booking/component/car_item.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 
+import '../../../Model/model/booking/car_model.dart';
 import '../../../Model/model/booking/resource_model.dart';
 import '../../../Presenter/booking/booking_service.dart';
 import '../component/custom_search_bar.dart';
@@ -48,7 +50,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         response = await BookingService().getOfficeListData();
       case 1:
-        response = await BookingService().getOfficeListData();
+        response = await BookingService().getCarListData();
       case 2:
         response = await BookingService().getResourceListData();
     }
@@ -159,7 +161,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
       case 1:
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
+        return CarItem(data: (data as CarResponseModel).data.content[itemIndex],);
       case 2:
         return ResourceItem(data: (data as ResourceResponseModel).data.content[itemIndex],);
     }
@@ -188,7 +190,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         return OfficeResponseModel.fromJson(response);
       case 1:
-        return OfficeResponseModel.fromJson(response);
+        return CarResponseModel.fromJson(response);
       case 2:
         return ResourceResponseModel.fromJson(response);
     }
