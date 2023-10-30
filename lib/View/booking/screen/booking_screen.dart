@@ -4,18 +4,20 @@ import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 
+import '../../../Model/model/booking/resource_model.dart';
 import '../../../Presenter/booking/booking_service.dart';
 import '../component/custom_search_bar.dart';
 import '../component/office_item.dart';
+import '../component/resource_item.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
 
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  State<BookingScreen> createState() => BookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
+class BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
 
   static const category = ['회의실', '차량', '장비'];
 
@@ -24,6 +26,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   int selectedTab = 0;
 
   bool isLoading = true;
+  dynamic data;
 
   @override
   void initState() {
@@ -32,14 +35,23 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     controller.addListener(tabListener);
   }
 
-  void tabListener() {
-    setState(() {
-      index = controller.index;
-    });
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 
   Future<dynamic> fetchData() async {
-    dynamic response = await BookingService().getOfficeListData('회의실');
+    isLoading = true;
+    dynamic response;
+    switch (index) {
+      case 0:
+        response = await BookingService().getOfficeListData();
+      case 1:
+        response = await BookingService().getOfficeListData();
+      case 2:
+        response = await BookingService().getResourceListData();
+    }
     isLoading = false;
     return response;
   }
@@ -58,7 +70,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
       child: Column(
         children: [
           renderTabBar(),
-          const CustomSearchBar(),
+          CustomSearchBar(index: index,),
           Expanded(
             child: TabBarView(
               controller: controller,
@@ -95,9 +107,9 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
         unselectedLabelColor: Colors.grey,
         unselectedLabelStyle: unSelectedTextStyle,
         tabs: [
-          renderTabItem('회의실'),
-          renderTabItem('차량'),
-          renderTabItem('장비')
+          renderTabItem(category[0]),
+          renderTabItem(category[1]),
+          renderTabItem(category[2]),
         ]
       ),
     );
@@ -114,7 +126,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     return FutureBuilder<dynamic>(
       future: fetchData(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError) {
+        if (snapshot.hasError || snapshot.data == null) {
           return const Center(
             child: Text('정보를 불러오지 못 하였습니다.'),
           );
@@ -123,16 +135,16 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
           if (isLoading) {
             return const Center(child: CircularProgressIndicator(color: purple,),);
           }
-          OfficeResponseModel data = OfficeResponseModel.fromJson(snapshot.data);
+          data = configureData(snapshot.data);
           return Container(
-            height: getItemHeight(categoryName) * data.data.content.length,
+            height: getItemHeight() * data.data.content.length,
             color: Colors.white,
             child:
             ListView.builder(
               scrollDirection: Axis.vertical,
               itemCount: data.data.content.length,
               itemBuilder: (BuildContext context, int index) {
-                return renderItem(categoryName, data, index);
+                return renderItem(data, index);
               },
             ),
           );
@@ -142,24 +154,49 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     );
   }
 
-  double getItemHeight(String categoryName) {
-    switch (categoryName) {
-      case '회의실': return 292.0;
-      case '차량': return 232.0;
-      case '장비': return 232.0;
+  Widget renderItem(GeneralModel data, int itemIndex) {
+    switch (index) {
+      case 0:
+        return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
+      case 1:
+        return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
+      case 2:
+        return ResourceItem(data: (data as ResourceResponseModel).data.content[itemIndex],);
+    }
+    return Container();
+  }
+
+  /// Helper Methods
+  void tabListener() {
+    setState(() {
+      index = controller.index;
+      BookingService().setKeyword('');
+    });
+  }
+
+  double getItemHeight() {
+    switch (index) {
+      case 0: return 292.0;
+      case 1: return 232.0;
+      case 2: return 232.0;
     }
     return 0.0;
   }
 
-  Widget renderItem(String categoryName, GeneralModel data, int index) {
-    switch (categoryName) {
-      case '회의실':
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
-      case '차량':
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
-      case '장비':
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[index],);
+  dynamic configureData(dynamic response) {
+    switch (index) {
+      case 0:
+        return OfficeResponseModel.fromJson(response);
+      case 1:
+        return OfficeResponseModel.fromJson(response);
+      case 2:
+        return ResourceResponseModel.fromJson(response);
     }
-    return Container();
+  }
+
+  void searchItems(String keyword) {
+    setState(() {
+      BookingService().setKeyword(keyword);
+    });
   }
 }
