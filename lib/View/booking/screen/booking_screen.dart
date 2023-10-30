@@ -130,7 +130,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasError || snapshot.data == null) {
           return const Center(
-            child: Text('정보를 불러오지 못 하였습니다.'),
+            child: Text('정보를 불러오지 못 하였습니다.', style: TextStyle(fontSize: 16, color: purple),),
           );
         }
         else {
@@ -141,14 +141,17 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
           return Container(
             height: getItemHeight() * data.data.content.length,
             color: Colors.white,
-            child:
-            ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: data.data.content.length,
-              itemBuilder: (BuildContext context, int index) {
-                return renderItem(data, index);
-              },
-            ),
+            child: (data.data.content.length == 0)
+                ? const Center(
+                    child: Text('결과 정보가 없습니다.', style: TextStyle(fontSize: 16, color: purple),),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: data.data.content.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return renderItem(data, index);
+                    },
+                  ),
           );
         }
 
