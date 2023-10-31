@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Model/model/general_model.dart';
+import 'package:frontend/View/booking/component/car_item.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 
+import '../../../Model/model/booking/car_model.dart';
 import '../../../Model/model/booking/resource_model.dart';
 import '../../../Presenter/booking/booking_service.dart';
 import '../component/custom_search_bar.dart';
@@ -48,7 +50,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         response = await BookingService().getOfficeListData();
       case 1:
-        response = await BookingService().getOfficeListData();
+        response = await BookingService().getCarListData();
       case 2:
         response = await BookingService().getResourceListData();
     }
@@ -128,7 +130,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasError || snapshot.data == null) {
           return const Center(
-            child: Text('정보를 불러오지 못 하였습니다.'),
+            child: Text('정보를 불러오지 못 하였습니다.', style: TextStyle(fontSize: 16, color: purple),),
           );
         }
         else {
@@ -139,14 +141,17 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
           return Container(
             height: getItemHeight() * data.data.content.length,
             color: Colors.white,
-            child:
-            ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: data.data.content.length,
-              itemBuilder: (BuildContext context, int index) {
-                return renderItem(data, index);
-              },
-            ),
+            child: (data.data.content.length == 0)
+                ? const Center(
+                    child: Text('결과 정보가 없습니다.', style: TextStyle(fontSize: 16, color: purple),),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: data.data.content.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return renderItem(data, index);
+                    },
+                  ),
           );
         }
 
@@ -159,7 +164,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
       case 1:
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
+        return CarItem(data: (data as CarResponseModel).data.content[itemIndex],);
       case 2:
         return ResourceItem(data: (data as ResourceResponseModel).data.content[itemIndex],);
     }
@@ -169,6 +174,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
   /// Helper Methods
   void tabListener() {
     setState(() {
+      FocusScope.of(context).unfocus();
       index = controller.index;
       BookingService().setKeyword('');
     });
@@ -188,7 +194,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         return OfficeResponseModel.fromJson(response);
       case 1:
-        return OfficeResponseModel.fromJson(response);
+        return CarResponseModel.fromJson(response);
       case 2:
         return ResourceResponseModel.fromJson(response);
     }
