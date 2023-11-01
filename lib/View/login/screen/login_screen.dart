@@ -4,6 +4,7 @@ import 'package:frontend/Presenter/login/login_service.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 
 import '../../common/component/purple_bottom_button.dart';
+import '../../common/screen/root_tab.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -227,9 +228,10 @@ class _LoginScreenState extends State<LoginScreen> {
     Future<dynamic> result = LoginService().login(email, password);
     result.then((value) => {
       if (value == true) {
-
+        Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const RootTab()), (route) => false)
       }else if (value == false) {
-
+        showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")
       }else {
         showAlert(value)
       }
