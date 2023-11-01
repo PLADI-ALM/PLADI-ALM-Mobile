@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Presenter/login/login_service.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 
 import '../../common/component/purple_bottom_button.dart';
@@ -15,6 +16,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   FocusNode emailFocusNode = FocusNode();
   FocusNode pwFocusNode = FocusNode();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController pwController = TextEditingController();
 
   @override
   void initState() {
@@ -138,6 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
             maxLines: 1,
             focusNode: emailFocusNode,
             obscureText: false,
+            controller: emailController,
             decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Color(0xFF640FAF))
@@ -159,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
             maxLines: 1,
             focusNode: pwFocusNode,
             obscureText: true,
+            controller: pwController,
             decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Color(0xFF640FAF))
@@ -174,8 +180,60 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void showAlert(String content) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            title: Column(
+              children: <Widget>[
+                new Text("로그인 오류"),
+              ],
+            ),
+            //
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(content),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  "확인",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   void login() {
-    print("login");
+    var email = emailController.text;
+    var password = pwController.text;
+
+    Future<dynamic> result = LoginService().login(email, password);
+    result.then((value) => {
+      if (value == true) {
+
+      }else if (value == false) {
+
+      }else {
+        showAlert(value)
+      }
+    });
   }
   
   void findPw() {
