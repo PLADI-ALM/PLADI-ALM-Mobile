@@ -44,7 +44,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
-                child: TextField(
+                child: TextFormField(
                   cursorColor: purple,
                   controller: controller,
                   decoration: InputDecoration(
@@ -86,10 +86,12 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   void didChangedSearchBar() {
     BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
-    if (controller.value.text.isNotEmpty) {
-      parent!.searchItems(controller.value.text);
-    }
+    parent!.searchItems((controller.value.text.isEmpty) ? '' : controller.value.text);
   }
 
-  void didEditingComplete() { FocusScope.of(context).unfocus(); }
+  void didEditingComplete() {
+    FocusScope.of(context).unfocus();
+    BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
+    parent!.searchItems((controller.value.text.isEmpty) ? '' : controller.value.text);
+  }
 }
