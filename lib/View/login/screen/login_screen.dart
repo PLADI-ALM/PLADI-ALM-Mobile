@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/Presenter/login/login_service.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 
@@ -41,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
         pwFocusNode.unfocus();
       },
       child:Scaffold(
+        resizeToAvoidBottomInset: false,
         body: renderBody()
       )
     );
@@ -228,6 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Future<dynamic> result = LoginService().login(email, password);
     result.then((value) => {
       if (value == true) {
+
         Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const RootTab()), (route) => false)
       }else if (value == false) {

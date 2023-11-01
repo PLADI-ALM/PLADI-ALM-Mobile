@@ -28,6 +28,10 @@ class APIManager {
       Map<String, dynamic>? data,
       ) async {
 
+    setToken();
+    print('${await storage.read(key: accessTokenKey)}');
+    print('${defaultOptions.headers}');
+
     if (options != null && options.headers != null) {
       defaultOptions.headers!.addAll(options.headers!);
     }
