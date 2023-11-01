@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'NanumSquare',
         ),
         home: const Scaffold(
-          body: LoginScreen(),
+          body: SplashScreen(),
         )
     );
   }

@@ -86,15 +86,16 @@ class APIManager {
   }
 
   Future<bool> checkToken() async {
-    // final refreshToken = await storage.read(key: refreshTokenKey);
-    // final accessToken = await storage.read(key: accessTokenKey);
-    //
-    // if (refreshToken == null && accessToken == null) {
-    //   return false;
-    // } else {
-    //   setToken();
-    //   return true;
-    // }
-    return true;
+    // storage.deleteAll();
+
+    final refreshToken = await storage.read(key: refreshTokenKey);
+    final accessToken = await storage.read(key: accessTokenKey);
+
+    if (refreshToken == null && accessToken == null) {
+      return false;
+    } else {
+      setToken();
+      return true;
+    }
   }
 }
