@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/View/login/screen/login_screen.dart';
 
 import 'View/common/screen/splash_screen.dart';
 
@@ -20,7 +19,6 @@ class MyApp extends StatelessWidget {
         ),
         home: const Scaffold(
           body: SplashScreen(),
-        )
-    );
+        ));
   }
 }
