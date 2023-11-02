@@ -17,8 +17,12 @@ void initializeNotification() async {
           importance: Importance.max));
 
   await flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
-    android: AndroidInitializationSettings("@ipmap/ic_launcher"),
-  ));
+      android: AndroidInitializationSettings("@ipmap/ic_launcher"),
+      iOS: DarwinInitializationSettings(
+        requestSoundPermission: true,
+        requestBadgePermission: true,
+        requestAlertPermission: true,
+      )));
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
@@ -34,6 +38,12 @@ void showNotification() {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      'high_importance_channel',
+      'high_importance_notification',
+      importance: Importance.max,
+    );
 
     if (notification != null) {
       FlutterLocalNotificationsPlugin().show(
@@ -41,14 +51,14 @@ void showNotification() {
         notification.title,
         notification.body,
         const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'high_importance_channel',
-            'high_importance_notification',
-            importance: Importance.max,
-          ),
-        ),
+            android: androidNotificationDetails,
+            iOS: DarwinNotificationDetails(badgeNumber: 1)),
       );
       print("앱 실행시 메시지 수신: ${message.notification!.body!}");
     }
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print(message);
   });
 }
