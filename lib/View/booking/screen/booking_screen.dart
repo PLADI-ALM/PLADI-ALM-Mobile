@@ -3,7 +3,6 @@ import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
-import 'package:frontend/View/common/component/main_drawer.dart';
 
 import '../../../Presenter/booking/booking_service.dart';
 import '../component/custom_search_bar.dart';
@@ -50,7 +49,6 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const MainAppBar(),
-      endDrawer: const MainDrawer(),
       body: renderBody(),
     );
   }
