@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../component/select_time_button.dart';
 
@@ -13,6 +15,8 @@ class OfficeFilterScreen extends StatefulWidget {
 }
 
 class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
+
+  static const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   bool isShowTimePicker = false;
 
@@ -53,20 +57,46 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
   }
 
   Widget renderCalendarView() {
+    TextStyle weekdayStyle = const TextStyle(fontSize: 11, color: purple);
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
-      height: 259,
+      height: 300,
       decoration: const BoxDecoration(
         color: Color(0xFFF2F2F2),
         borderRadius: BorderRadius.all(Radius.circular(10))
+      ),
+      child: TableCalendar(
+        rowHeight: 35,
+        focusedDay: DateTime.now(),
+        firstDay: DateTime(2023,1,1),
+        lastDay: DateTime(2023,12,31),
+        // locale: 'ko-KR',
+        daysOfWeekHeight: 30,
+        headerStyle: const HeaderStyle(
+          formatButtonVisible: false,
+          titleCentered: true,
+          leftChevronVisible: true,
+          rightChevronVisible: true,
+          leftChevronMargin: EdgeInsets.only(left: 23),
+          rightChevronMargin: EdgeInsets.only(right: 23),
+          leftChevronIcon: Icon(Icons.chevron_left, color: purple,),
+          rightChevronIcon: Icon(Icons.chevron_right, color: purple,),
+        ),
+        calendarBuilders: CalendarBuilders(
+          dowBuilder: (context, day) {
+            return Center(child: Text(weekdays[day.weekday-1], style: weekdayStyle,),);
+          },
+        ),
+        onDaySelected: (DateTime time, _) {
+          didSelectedDay(time);
+        },
       ),
     );
   }
 
 
   void showTimePicker() {
-    TextStyle style = const TextStyle(fontSize: 13, color: Colors.black);
-
     showCupertinoDialog(
         context: context,
         barrierDismissible: true,
@@ -86,6 +116,11 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
           );
         }
     );
+  }
+
+
+  void didSelectedDay(DateTime time) {
+    print('didSelectedDay - $time');
   }
 
   void didTapStartButton() {
