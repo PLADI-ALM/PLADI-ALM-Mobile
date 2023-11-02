@@ -34,7 +34,7 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
     TextStyle titleStyle = const TextStyle(fontSize: 16, color: Colors.black);
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
