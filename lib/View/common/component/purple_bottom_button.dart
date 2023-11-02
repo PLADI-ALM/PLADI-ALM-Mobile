@@ -21,7 +21,7 @@ class _PurpleBottomButtonState extends State<PurpleBottomButton> {
   Widget build(BuildContext context) {
     TextStyle titleStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 18),
+      margin: const EdgeInsets.only(left: 18, right: 18, bottom: 25),
       height: 44,
       child: ElevatedButton(
           onPressed: widget.onPressed,
