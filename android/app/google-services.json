@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "7702202947",
+    "project_id": "pladi-alm",
+    "storage_bucket": "pladi-alm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7702202947:android:f33197039df4d61482e2f6",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9aRm1wNj2lnpgVr5BHELd9qZW0yG5Neg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

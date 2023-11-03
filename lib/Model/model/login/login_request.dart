@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class LoginRequest {
   String email;
   String password;
