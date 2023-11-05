@@ -38,7 +38,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       backgroundColor: Colors.white,
       appBar: const SubAppBar(titleText: '',),
       body: renderBody(),
-      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: didTapBookingButton,),
+      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: (data == null) ? null : didTapBookingButton,),
     );
   }
 
