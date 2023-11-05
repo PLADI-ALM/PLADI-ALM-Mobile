@@ -77,3 +77,47 @@ Map<String, dynamic> _$OfficeInfoToJson(OfficeInfo instance) =>
       'name': instance.name,
       'officeId': instance.officeId,
     };
+
+OfficeDetailResponse _$OfficeDetailResponseFromJson(
+        Map<String, dynamic> json) =>
+    OfficeDetailResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: OfficeDetailInfo.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$OfficeDetailResponseToJson(
+        OfficeDetailResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+OfficeDetailInfo _$OfficeDetailInfoFromJson(Map<String, dynamic> json) =>
+    OfficeDetailInfo(
+      location: json['location'] as String,
+      capacity: json['capacity'] as String,
+      description: json['description'] as String,
+      facilityList: (json['facilityList'] as List<dynamic>)
+          .map((e) => e as String?)
+          .toList(),
+      imgUrl: json['imgUrl'] as String,
+      name: json['name'] as String,
+      officeId: json['officeId'] as int,
+      isActive: json['isActive'] as bool,
+    );
+
+Map<String, dynamic> _$OfficeDetailInfoToJson(OfficeDetailInfo instance) =>
+    <String, dynamic>{
+      'location': instance.location,
+      'capacity': instance.capacity,
+      'description': instance.description,
+      'facilityList': instance.facilityList,
+      'imgUrl': instance.imgUrl,
+      'name': instance.name,
+      'officeId': instance.officeId,
+      'isActive': instance.isActive,
+    };

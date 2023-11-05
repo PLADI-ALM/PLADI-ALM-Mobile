@@ -6,6 +6,7 @@ import '../general_list_model.dart';
 
 part 'office_model.g.dart';
 
+/// 회의실 목록 조회를 위한 데이터 모델
 @JsonSerializable()
 class OfficeResponseModel extends GeneralModel {
   final OfficeResponse data;
@@ -65,4 +66,47 @@ class OfficeInfo {
 
   factory OfficeInfo.fromJson(Map<String, dynamic> json)
   => _$OfficeInfoFromJson(json);
+}
+
+/// 회의실 개별 조회를 위한 데이터 모델
+@JsonSerializable()
+class OfficeDetailResponse extends GeneralModel {
+
+  OfficeDetailInfo data;
+
+  OfficeDetailResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory OfficeDetailResponse.fromJson(Map<String, dynamic> json)
+  => _$OfficeDetailResponseFromJson(json);
+}
+
+@JsonSerializable()
+class OfficeDetailInfo {
+  String location;
+  String capacity;
+  String description;
+  List<String?> facilityList;
+  String imgUrl;
+  String name;
+  int officeId;
+  bool isActive;
+
+  OfficeDetailInfo({
+    required this.location,
+    required this.capacity,
+    required this.description,
+    required this.facilityList,
+    required this.imgUrl,
+    required this.name,
+    required this.officeId,
+    required this.isActive,
+  });
+
+  factory OfficeDetailInfo.fromJson(Map<String, dynamic> json)
+  => _$OfficeDetailInfoFromJson(json);
 }
