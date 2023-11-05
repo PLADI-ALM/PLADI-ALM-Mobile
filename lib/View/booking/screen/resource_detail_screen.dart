@@ -1,12 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Presenter/booking/resource_service.dart';
 
+import '../../../Model/model/booking/resource_model.dart';
 import '../../colors.dart';
 import '../../common/component/purple_bottom_button.dart';
 import '../../common/component/sub_app_bar.dart';
 
 class ResourceDetailScreen extends StatefulWidget {
-  const ResourceDetailScreen({Key? key}) : super(key: key);
+
+  final int resourceId;
+
+  const ResourceDetailScreen({
+    required this.resourceId,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<ResourceDetailScreen> createState() => _ResourceDetailScreenState();
@@ -15,6 +23,16 @@ class ResourceDetailScreen extends StatefulWidget {
 class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
 
   TextStyle nameStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
+
+  bool isLoading = true;
+  dynamic data;
+
+  Future<dynamic> fetchData() async {
+    isLoading = true;
+    dynamic response = await ResourceService().getResourceDetailData(widget.resourceId);
+    isLoading = false;
+    return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,43 +45,61 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
   }
 
   Widget renderBody() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 800,
-      child: ListView(
-        children: [
-          Container(
+    return FutureBuilder<dynamic>(
+      future: fetchData(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasError || snapshot.data == null) {
+          return const Center(
+            child: Text('정보를 불러오지 못 하였습니다.',
+              style: TextStyle(fontSize: 16, color: purple),),
+          );
+        }
+        else {
+          if (isLoading) {
+            return const Center(child: CircularProgressIndicator(color: purple,),);
+          }
+          data = ResourceDetailResponse.fromJson(snapshot.data);
+          return SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: 232,
-            // child: Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
-            color: Colors.grey,
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text('장비명', style: nameStyle,),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
+            height: 800,
+            child: ListView(
               children: [
-                infoCardItem(Icons.location_on_outlined, '위치', 'S1350'),
-                const SizedBox(width: 20,),
-                infoCardItem(Icons.phone_in_talk_outlined, '책임자', '홍길동'),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 232,
+                  child: (data.data.imgUrl == null)
+                    ? const Center(child: Text('이미지를 불러올 수 없습니다.', style: TextStyle(fontSize: 16, color: purple),),)
+                    : Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(data.data.name, style: nameStyle,),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      infoCardItem(Icons.location_on_outlined, '위치', data.data.location),
+                      const SizedBox(width: 20,),
+                      infoCardItem(Icons.phone_in_talk_outlined, '책임자', data.data.responsibilityName),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10,),
+
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text('상세정보', style: nameStyle,),
+                ),
+
+                renderDescription(),
               ],
             ),
-          ),
-          const SizedBox(height: 10,),
-
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text('상세정보', style: nameStyle,),
-          ),
-
-          renderDescription(),
-        ],
-      ),
+          );
+        }
+      }
     );
   }
 
@@ -117,7 +153,7 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
           const SizedBox(width: 30,),
           SizedBox(
               width: MediaQuery.of(context).size.width - 100,
-              child: Text('설명입니다 설명입니다 설명입니다 설명입니다 설명입니다 설명입니다 설명입니다 설명입니다', maxLines: 30, style: contentStyle,)
+              child: Text(data.data.description, maxLines: 30, style: contentStyle,)
           )
         ],
       ),
@@ -126,6 +162,6 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
 
   /// Event Methods
   void didTapBookingButton() {
-    // Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingOfficeScreen()));
+    // Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingResourceScreen()));
   }
 }

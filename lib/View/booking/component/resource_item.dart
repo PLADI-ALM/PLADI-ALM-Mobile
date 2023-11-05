@@ -68,6 +68,6 @@ class _ResourceItemState extends State<ResourceItem> {
 
   /// Event Methods
   void didTapResourceItem() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ResourceDetailScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ResourceDetailScreen(resourceId: widget.data.resourceId,)));
   }
 }
