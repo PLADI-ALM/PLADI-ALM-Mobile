@@ -59,7 +59,7 @@ Map<String, dynamic> _$ResourceResponseToJson(ResourceResponse instance) =>
 ResourceInfo _$ResourceInfoFromJson(Map<String, dynamic> json) => ResourceInfo(
       description: json['description'] as String,
       location: json['location'] as String,
-      imgUrl: json['imgUrl'] as String,
+      imgUrl: json['imgUrl'] as String?,
       name: json['name'] as String,
       resourceId: json['resourceId'] as int,
     );

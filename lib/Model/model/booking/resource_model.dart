@@ -46,7 +46,7 @@ class ResourceResponse extends GeneralListModel {
 class ResourceInfo {
   String description;
   String location;
-  String imgUrl;
+  String? imgUrl;
   String name;
   int resourceId;
 
