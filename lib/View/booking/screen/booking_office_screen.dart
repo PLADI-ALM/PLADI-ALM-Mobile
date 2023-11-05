@@ -6,6 +6,7 @@ import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../common/component/purple_bottom_button.dart';
+import 'booking_success_screen.dart';
 
 class BookingOfficeScreen extends StatefulWidget {
   const BookingOfficeScreen({Key? key}) : super(key: key);
@@ -188,6 +189,6 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
   void didTapBookingButton() {
-    print('didTapBookingButton');
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingSuccessScreen()));
   }
 }
