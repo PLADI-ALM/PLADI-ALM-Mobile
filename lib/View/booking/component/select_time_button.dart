@@ -5,10 +5,12 @@ class SelectTimeButton extends StatefulWidget {
 
   final VoidCallback onPressed;
   final String title;
+  final bool isContentInit;
 
   const SelectTimeButton({
     required this.onPressed,
     required this.title,
+    required this.isContentInit,
     Key? key
   }) : super(key: key);
 
@@ -18,10 +20,10 @@ class SelectTimeButton extends StatefulWidget {
 
 class _SelectTimeButtonState extends State<SelectTimeButton> {
 
-  TextStyle style = const TextStyle(fontSize: 13, color: Color(0xFFC9C9C9));
-
   @override
   Widget build(BuildContext context) {
+    TextStyle style = TextStyle(fontSize: 13, color: widget.isContentInit ? Colors.black : const Color(0xFFC9C9C9));
+
     return Container(
       height: 42,
       width: MediaQuery.of(context).size.width,
