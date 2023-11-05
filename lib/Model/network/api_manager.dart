@@ -28,6 +28,10 @@ class APIManager {
       Map<String, dynamic>? data,
       ) async {
 
+    setToken();
+    print('${await storage.read(key: accessTokenKey)}');
+    print('${defaultOptions.headers}');
+
     if (options != null && options.headers != null) {
       defaultOptions.headers!.addAll(options.headers!);
     }
@@ -86,15 +90,16 @@ class APIManager {
   }
 
   Future<bool> checkToken() async {
-    // final refreshToken = await storage.read(key: refreshTokenKey);
-    // final accessToken = await storage.read(key: accessTokenKey);
-    //
-    // if (refreshToken == null && accessToken == null) {
-    //   return false;
-    // } else {
-    //   setToken();
-    //   return true;
-    // }
-    return true;
+    // storage.deleteAll();
+
+    final refreshToken = await storage.read(key: refreshTokenKey);
+    final accessToken = await storage.read(key: accessTokenKey);
+
+    if (refreshToken == null && accessToken == null) {
+      return false;
+    } else {
+      setToken();
+      return true;
+    }
   }
 }

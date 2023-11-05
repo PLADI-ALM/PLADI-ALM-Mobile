@@ -26,7 +26,17 @@ class OfficeResponse extends GeneralListModel {
   List<OfficeInfo> content;
 
   OfficeResponse({
-    required super.pageable, required super.last, required super.totalPages, required super.totalElements, required super.size, required super.number, required super.sort, required super.first, required super.numberOfElements, required super.empty, required this.content,
+    required super.pageable,
+    required super.last,
+    required super.totalPages,
+    required super.totalElements,
+    required super.size,
+    required super.number,
+    required super.sort,
+    required super.first,
+    required super.numberOfElements,
+    required super.empty,
+    required this.content,
   });
 
   factory OfficeResponse.fromJson(Map<String, dynamic> json)

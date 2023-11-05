@@ -2,11 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/View/booking/screen/office_filter_screen.dart';
+import 'package:frontend/Presenter/booking/booking_service.dart';
 import 'package:frontend/View/colors.dart';
+
+import '../screen/booking_screen.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final bool isOfficeBooking;
+  final int index;
+
   const CustomSearchBar({
+    required this.index,
     required this.isOfficeBooking,
     Key? key
   }) : super(key: key);
@@ -21,6 +27,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (BookingService().getKeyword().isEmpty) {
+      controller = TextEditingController();
+    }
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -38,14 +47,16 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
-                child: TextField(
+                child: TextFormField(
                   cursorColor: purple,
                   controller: controller,
-                  decoration: const InputDecoration(
-                    hintText: '시설 검색',
-                    hintStyle: TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
+                  decoration: InputDecoration(
+                    hintText: getHintText(),
+                    hintStyle: const TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
                     border: InputBorder.none,
                   ),
+                  onChanged: (value) {didChangedSearchBar();},
+                  onEditingComplete: didEditingComplete,
                 ),
               )
           ),
@@ -61,6 +72,16 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     );
   }
 
+  /// Helper Methods
+  String getHintText() {
+    switch (widget.index) {
+      case 0: return '시설 검색';
+      case 1: return '차량명 검색';
+      case 2: return '장비명 검색';
+    }
+    return '검색';
+  }
+
   /// Event Methods
   void didTapFilterButton() {
     Navigator.of(context).push(MaterialPageRoute(
@@ -68,5 +89,16 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             ? const OfficeFilterScreen() : const OfficeFilterScreen())
         // TODO: widget.isOfficeBooking == false 인 경우 그 외 필터 화면으로 이동시키기
     );
+  }
+
+  void didChangedSearchBar() {
+    BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
+    parent!.searchItems((controller.value.text.isEmpty) ? '' : controller.value.text);
+  }
+
+  void didEditingComplete() {
+    FocusScope.of(context).unfocus();
+    BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
+    parent!.searchItems((controller.value.text.isEmpty) ? '' : controller.value.text);
   }
 }

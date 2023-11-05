@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:frontend/Presenter/notification/notification_firebase.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/screen/root_tab.dart';
+import 'package:frontend/View/login/screen/login_screen.dart';
 
 import '../../../Model/network/api_manager.dart';
 
@@ -13,11 +14,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
     checkToken();
+    showNotification();
   }
 
   @override
@@ -31,16 +32,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> checkToken() async {
-
     /// Access / Refresh Token 저장 여부 확인 (있으면 홈 화면, 없으면 로그인 화면으로 전환)
     if (await APIManager().checkToken()) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const RootTab()), (route) => false);
-
     } else {
-      // Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(builder: (_) => LoginScreen()),
-      //         (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false);
     }
   }
 }
