@@ -27,6 +27,11 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   int startTime = -1;
   int endTime = -1;
 
+  // dummy data
+  int bookedStartTime = 1;
+  int bookedEndTime = 3;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +46,6 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
   Widget renderBody() {
-    print('(endTime - startTime) - ${(endTime - startTime)}');
     return Container(
       child: ListView(
         children: [
@@ -144,24 +148,48 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
           itemCount: 24,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: () { didTapTimeItem(index); },
+              onTap: isBookedTime(index)
+                  ? () { didTapBookedTimeItem(index); }
+                  : () { didTapTimeItem(index); },
               child: Container(
                 width: (MediaQuery.of(context).size.width - 80) / 4,
                 height: 36,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(11)),
-                  border: Border.all(color: const Color(0xFF939393)),
-                  color: isContainInSelectedTime(index) ? purple : Colors.white
+                  border: Border.all(color: getBorderColorOfTimeItem(index)),
+                  color: getBackColorOfTimeItem(index)
                 ),
                 child: Center(
                     child: Text('${index < 10 ? '0$index' : '$index'}:00',
-                      style: TextStyle(fontSize: 14, color: isContainInSelectedTime(index) ? Colors.white : const Color(0xFF939393)),)
+                      style: TextStyle(fontSize: 14, color: getTextColorOfTimeItem(index)),)
                 ),
               ),
             );
           }
       ),
     );
+  }
+
+  Color getBackColorOfTimeItem(int index) {
+    if (isBookedTime(index)) { return const Color(0xFFE9E9E9); }
+    else if (isContainInSelectedTime(index)) { return purple; }
+    else { return Colors.white; }
+  }
+
+  Color getBorderColorOfTimeItem(int index) {
+    if (isBookedTime(index)) { return Colors.transparent; }
+    else if (isContainInSelectedTime(index)) { return Colors.transparent; }
+    else { return const Color(0xFF939393); }
+  }
+
+  Color getTextColorOfTimeItem(int index) {
+    if (isContainInSelectedTime(index)) { return Colors.white; }
+    else { return const Color(0xFF939393); }
+  }
+
+
+  bool isBookedTime(int index) {
+    return ((bookedStartTime <= index) && (bookedEndTime >= index));
   }
 
   bool isContainInSelectedTime(int index) {
@@ -174,6 +202,10 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
       startTime = -1;
       endTime = -1;
     });
+  }
+
+  void didTapBookedTimeItem(int index) {
+    print('didTapBookedTimeItem');
   }
 
   void didTapTimeItem(int index) {
