@@ -42,7 +42,7 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
       backgroundColor: Colors.white,
       appBar: const SubAppBar(titleText: '',),
       body: renderBody(),
-      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: (data == null) ? null : didTapBookingButton,),
+      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: didTapBookingButton,),
     );
   }
 
@@ -174,6 +174,10 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
   }
   
   void didTapBookingButton() {
-    // Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingResourceScreen()));
+    if (data == null) {
+      Fluttertoast.showToast(msg: '회의실 정보를 불러올 수 없으므로 예약이 불가능합니다.');
+    } else {
+      // Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingResourceScreen()));
+    }
   }
 }

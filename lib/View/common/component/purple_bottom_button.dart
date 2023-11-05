@@ -4,11 +4,11 @@ import 'package:frontend/View/colors.dart';
 class PurpleBottomButton extends StatefulWidget {
 
   final String title;
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
 
   const PurpleBottomButton({
     required this.title,
-    this.onPressed,
+    required this.onPressed,
     Key? key
   }) : super(key: key);
 
