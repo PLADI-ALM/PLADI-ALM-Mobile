@@ -205,7 +205,94 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
   void didTapBookedTimeItem(int index) {
-    print('didTapBookedTimeItem');
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: ((context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: Row(
+            children: [
+              Flexible(child: Container()),
+              const Text('예약 정보', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
+              Flexible(child: Container()),
+              SizedBox(
+                width: 17, height: 17,
+                child: IconButton(
+                    onPressed: (){Navigator.of(context).pop();},
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(CupertinoIcons.xmark, size: 17, color: Colors.black,)
+                ),
+              )
+            ],
+          ),
+          content: Container(
+            height: 150,
+            // color: Colors.red,
+            margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 10),
+            child: Column(
+              children: [
+                const SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                          width: 85,
+                          child: const Text('예약자명', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+                      ),
+                      Text('홍길동', style: TextStyle(fontSize: 14, color: Colors.black),),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                          width: 85,
+                          child: const Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+                      ),
+                      Text('미디어부', style: TextStyle(fontSize: 14, color: Colors.black),),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                          width: 85,
+                          child: const Text('연락처', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+                      ),
+                      Text('010-1234-1234', style: TextStyle(fontSize: 14, color: Colors.black),),
+                      const SizedBox(width: 5,),
+                      SizedBox(
+                        width: 15, height: 15,
+                        child: IconButton(
+                            onPressed: didTapCallButton,
+                            padding: EdgeInsets.zero,
+                            icon: Icon(Icons.phone_in_talk_outlined, color: Colors.black, size: 15,)
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  void didTapCallButton() {
+    print('didTapCallButton');
   }
 
   void didTapTimeItem(int index) {
