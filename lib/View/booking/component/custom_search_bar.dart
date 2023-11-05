@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/View/booking/screen/office_filter_screen.dart';
 import 'package:frontend/Presenter/booking/booking_service.dart';
 import 'package:frontend/View/colors.dart';
@@ -92,6 +93,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   }
 
   void didChangedSearchBar() {
+    if (BookingService().isFilterInfoEmpty()) {
+      Fluttertoast.showToast(msg: '사용 일자 및 시간을 선택해주세요!', gravity: ToastGravity.CENTER);
+      return;
+    }
     BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
     parent!.searchItems((controller.value.text.isEmpty) ? '' : controller.value.text);
   }
