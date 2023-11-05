@@ -53,7 +53,6 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         const BookingScreen(),
         const BookingScreen(),
         const BookingScreen(),
-        const BookingScreen(),
         // EquipmentScreen(),
         // ArchivingScreen(),
         // MypageScreen(),

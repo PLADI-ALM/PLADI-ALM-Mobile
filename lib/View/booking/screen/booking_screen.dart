@@ -72,7 +72,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       child: Column(
         children: [
           renderTabBar(),
-          CustomSearchBar(index: index,),
+          CustomSearchBar(index: index, isOfficeBooking: index==0,),
           Expanded(
             child: TabBarView(
               controller: controller,

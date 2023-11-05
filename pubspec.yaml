@@ -39,7 +39,9 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   dio: ^4.0.6
   json_annotation: ^4.8.0
+  table_calendar: ^3.0.9
   intl: ^0.18.0
+  fluttertoast: ^8.2.2
   firebase_core: ^2.21.0
   firebase_messaging: ^14.5.0
   flutter_local_notifications: ^14.0.0+1

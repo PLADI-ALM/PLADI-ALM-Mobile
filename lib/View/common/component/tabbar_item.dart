@@ -16,11 +16,6 @@ final tabBarIcons = [
     label: '비품 내역',
   ),
   BottomNavigationBarItem(
-      icon: SvgPicture.asset("asset/image/tab_icon/archiving_unselected.svg", width: iconWidth, height: iconHeight),
-      activeIcon: SvgPicture.asset("asset/image/tab_icon/archiving_selected.svg", width: iconWidth, height: iconHeight),
-      label: '아카이빙'
-  ),
-  BottomNavigationBarItem(
       icon: SvgPicture.asset("asset/image/tab_icon/mypage_unselected.svg", width: iconWidth, height: iconHeight),
       activeIcon: SvgPicture.asset("asset/image/tab_icon/mypage_selected.svg", width: iconWidth, height: iconHeight),
       label: 'My 예약'
