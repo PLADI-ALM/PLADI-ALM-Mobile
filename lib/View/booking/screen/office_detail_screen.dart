@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Model/model/booking/office_model.dart';
+import 'package:frontend/Presenter/booking/office_service.dart';
 import 'package:frontend/View/booking/screen/booking_office_screen.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
@@ -19,6 +21,17 @@ class OfficeDetailScreen extends StatefulWidget {
 }
 
 class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
+
+  bool isLoading = true;
+  dynamic data;
+
+  Future<dynamic> fetchData() async {
+    isLoading = true;
+    dynamic response = await OfficeService().getOfficeInfoData(widget.officeId);
+    isLoading = false;
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,43 +45,61 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
   Widget renderBody() {
     TextStyle nameStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
 
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 800,
-      child: ListView(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 232,
-            color: Colors.grey,
-          ),
+    return FutureBuilder<dynamic>(
+        future: fetchData(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return const Center(
+              child: Text('정보를 불러오지 못 하였습니다.',
+                style: TextStyle(fontSize: 16, color: purple),),
+            );
+          }
+          else {
+            if (isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: purple,),);
+            }
+            data = OfficeDetailResponse.fromJson(snapshot.data);
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 800,
+              child: ListView(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 232,
+                    child: Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
+                  ),
 
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text('회의실명', style: nameStyle,),
-          ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(data.data.name, style: nameStyle,),
+                  ),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              children: [
-                infoCardItem(Icons.location_on_outlined, '위치', 'S1350'),
-                const SizedBox(width: 20,),
-                infoCardItem(CupertinoIcons.person_2, '수용인원', '6'),
-              ],
-            ),
-          ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Row(
+                      children: [
+                        infoCardItem(Icons.location_on_outlined, '위치', data.data.location),
+                        const SizedBox(width: 20,),
+                        infoCardItem(CupertinoIcons.person_2, '수용인원', '${data.data.capacity}'),
+                      ],
+                    ),
+                  ),
 
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text('상세정보', style: nameStyle,),
-          ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text('상세정보', style: nameStyle,),
+                  ),
 
-          renderFacilityListInfo(),
-          const SizedBox(height: 15,),
-          renderDescription(),
-        ],
-      ),
+                  renderFacilityListInfo(),
+                  const SizedBox(height: 15,),
+                  renderDescription(),
+                ],
+              ),
+            );
+          }
+        }
     );
   }
 
@@ -80,7 +111,6 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
     return Container(
       width: (MediaQuery.of(context).size.width - 60) / 2,
       height: 60,
-      // padding: const EdgeInsets.all(13),
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(12)),
           border: Border.all(color: const Color(0xFF939393))
@@ -122,7 +152,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
           const SizedBox(width: 30,),
           SizedBox(
             width: MediaQuery.of(context).size.width - 100,
-            height: 30.0 * (4/2),
+            height: 30.0 * (data.data.facilityList.length/2),
             child: GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -131,12 +161,12 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 0,
                 ),
-                itemCount: 4,
+                itemCount: data.data.facilityList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return SizedBox(
                       width: (MediaQuery.of(context).size.width - 100) / 2,
                       height: 20,
-                      child: Text('시설 이름', style: TextStyle(fontSize: 14, color: Colors.black),)
+                      child: Text(data.data.facilityList[index], style: TextStyle(fontSize: 14, color: Colors.black),)
                   );
                 }
             ),
@@ -159,7 +189,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
           const SizedBox(width: 30,),
           SizedBox(
               width: MediaQuery.of(context).size.width - 100,
-              child: Text('설명입니다. 설명입니다. 설명입니다. 설명입니다. 설명입니다. 설명입니다. 설명입니다. 설명입니다. ', maxLines: 30, style: contentStyle,)
+              child: Text(data.data.description, maxLines: 30, style: contentStyle,)
           )
         ],
       ),

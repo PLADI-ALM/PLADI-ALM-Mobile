@@ -99,7 +99,7 @@ Map<String, dynamic> _$OfficeDetailResponseToJson(
 OfficeDetailInfo _$OfficeDetailInfoFromJson(Map<String, dynamic> json) =>
     OfficeDetailInfo(
       location: json['location'] as String,
-      capacity: json['capacity'] as String,
+      capacity: json['capacity'] as int,
       description: json['description'] as String,
       facilityList: (json['facilityList'] as List<dynamic>)
           .map((e) => e as String?)

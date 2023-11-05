@@ -88,7 +88,7 @@ class OfficeDetailResponse extends GeneralModel {
 @JsonSerializable()
 class OfficeDetailInfo {
   String location;
-  String capacity;
+  int capacity;
   String description;
   List<String?> facilityList;
   String imgUrl;
