@@ -134,24 +134,51 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
         builder: (BuildContext buildContext) {
           return Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 285,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.time,
-                onDateTimeChanged: (DateTime time) {
-                  setState(() {
-                    if(isStart) {
-                      startTime = time;
-                      startTimeHintText = getTrimmedTimeStr(time);
-                    }
-                    else {
-                      endTime = time;
-                      endTimeHintText = getTrimmedTimeStr(time);
-                    }
-                  });
-                },
-              )
+            child: Card(
+              child: Container(
+                height: 305,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 40,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 15,),
+                          Text(isStart ? '시작 시간 선택' : '종료 시간 선택', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+                          Flexible(child: Container()),
+                          IconButton(
+                              onPressed: (){Navigator.of(context).pop();},
+                              icon: const Icon(CupertinoIcons.xmark, color: Colors.black, size: 24,)
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 245,
+                      child: CupertinoDatePicker(
+                        mode: CupertinoDatePickerMode.time,
+                        onDateTimeChanged: (DateTime time) {
+                          setState(() {
+                            if(isStart) {
+                              startTime = time;
+                              startTimeHintText = getTrimmedTimeStr(time);
+                            }
+                            else {
+                              endTime = time;
+                              endTimeHintText = getTrimmedTimeStr(time);
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                  ],
+                )
+              ),
             ),
           );
         }
