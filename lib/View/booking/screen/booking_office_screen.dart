@@ -406,7 +406,8 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
     if (response != null) {
       if (response.runtimeType == GeneralModel) {
         if (response.status == 200) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingSuccessScreen()));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const BookingSuccessScreen()), (route) => false);
         }
         else { Fluttertoast.showToast(msg: response.message); }
       }
