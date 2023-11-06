@@ -51,6 +51,12 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -64,55 +70,38 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
   Widget renderBody() {
-    return FutureBuilder<dynamic>(
-        future: fetchData(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('정보를 불러오지 못 하였습니다.',
-                style: TextStyle(fontSize: 16, color: purple),),
-            );
-          }
-          else {
-            if (isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: purple,),);
-            }
-            return ListView(
+    return ListView(
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 20, top: 20),
+          child: Text('날짜 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+        ),
+
+        renderCalendar(),
+        const Divider(thickness: 1.0,),
+
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20, top: 20),
-                  child: Text('날짜 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-                ),
-
-                renderCalendar(),
-                const Divider(thickness: 1.0,),
-
-                Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text('시간 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-                        Flexible(child: Container()),
-                        SizedBox(
-                            width: 22, height: 22,
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: didTapResetTimeGridButton,
-                              icon: const Icon(CupertinoIcons.refresh, size: 22,),
-                            )
-                        )
-                      ],
+                const Text('시간 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+                Flexible(child: Container()),
+                SizedBox(
+                    width: 22, height: 22,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: didTapResetTimeGridButton,
+                      icon: const Icon(CupertinoIcons.refresh, size: 22,),
                     )
-                ),
-                const SizedBox(height: 15,),
-
-                renderTimeGrid(),
+                )
               ],
-            );
-          }
-        }
+            )
+        ),
+        const SizedBox(height: 15,),
+
+        renderTimeGrid(),
+      ],
     );
   }
 
@@ -156,6 +145,7 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
           setState(() {
             this.selectedDay = selectedDay;
             this.focusedDay = selectedDay;
+            fetchData();
           });
         },
         selectedDayPredicate: (DateTime day) {
@@ -225,7 +215,9 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   void setBookedTimeList(OfficeBookingResponse data) {
     if (data.status == 200 && data.data.bookedTimes.isNotEmpty) {
       for (var time in data.data.bookedTimes) {
-        bookedTimeList.add([getTimeWithString(time!.startTime), getTimeWithString(time!.endTime)]);
+        setState(() {
+          bookedTimeList.add([getTimeWithString(time!.startTime), getTimeWithString(time!.endTime)]);
+        });
       }
     }
   }
