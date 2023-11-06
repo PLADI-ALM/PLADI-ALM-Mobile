@@ -6,10 +6,7 @@ import '../../colors.dart';
 class CarItem extends StatefulWidget {
   final CarInfo data;
 
-  const CarItem({
-    required this.data,
-    Key? key
-  }) : super(key: key);
+  const CarItem({required this.data, Key? key}) : super(key: key);
 
   @override
   State<CarItem> createState() => _CarItemState();
@@ -39,10 +36,10 @@ class _CarItemState extends State<CarItem> {
               width: MediaQuery.of(context).size.width,
               height: 176,
               margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-              child: (widget.data.imgUrl == null || widget.data.imgUrl.contains('null'))
+              child: (widget.data.imgUrl == null ||
+                      widget.data.imgUrl.contains('null'))
                   ? Image.asset('asset/image/pladi_icon.png')
-                  : Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)
-          ),
+                  : Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)),
           renderResourceInfo(),
         ],
       ),
@@ -54,9 +51,19 @@ class _CarItemState extends State<CarItem> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         children: [
-          Text(widget.data.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: purple),),
+          Text(
+            widget.data.name,
+            style: const TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w600, color: purple),
+          ),
           Flexible(child: Container()),
-          Text(widget.data.location, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),)
+          Text(
+            widget.data.location,
+            style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF717171)),
+          )
         ],
       ),
     );
