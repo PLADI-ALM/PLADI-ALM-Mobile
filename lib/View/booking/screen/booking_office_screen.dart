@@ -14,9 +14,9 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SubAppBar(titleText: '예약 가능한 회의실 검색',),
+      appBar: const SubAppBar(titleText: '회의실 예약',),
       body: renderBody(),
-      bottomNavigationBar: PurpleBottomButton(title: '적용', onPressed: didTapBookingButton,),
+      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: didTapBookingButton,),
     );
   }
 
