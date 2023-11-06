@@ -198,3 +198,21 @@ Map<String, dynamic> _$BookingDetailToJson(BookingDetail instance) =>
       'reservatorPhone': instance.reservatorPhone,
       'department': instance.department,
     };
+
+OfficeBookingRequest _$OfficeBookingRequestFromJson(
+        Map<String, dynamic> json) =>
+    OfficeBookingRequest(
+      date: json['date'] as String,
+      startTime: json['startTime'] as String,
+      endTime: json['endTime'] as String,
+      memo: json['memo'] as String,
+    );
+
+Map<String, dynamic> _$OfficeBookingRequestToJson(
+        OfficeBookingRequest instance) =>
+    <String, dynamic>{
+      'date': instance.date,
+      'startTime': instance.startTime,
+      'endTime': instance.endTime,
+      'memo': instance.memo,
+    };

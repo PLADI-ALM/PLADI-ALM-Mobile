@@ -188,3 +188,22 @@ class BookingDetail {
   factory BookingDetail.fromJson(Map<String, dynamic> json)
   => _$BookingDetailFromJson(json);
 }
+
+/// 회의실 예약 데이터 모델
+@JsonSerializable()
+class OfficeBookingRequest {
+
+  String date;
+  String startTime;
+  String endTime;
+  String memo;
+
+  OfficeBookingRequest({
+    required this.date,
+    required this.startTime,
+    required this.endTime,
+    required this.memo,
+  });
+
+  Map<String, dynamic> toJson() => _$OfficeBookingRequestToJson(this);
+}
