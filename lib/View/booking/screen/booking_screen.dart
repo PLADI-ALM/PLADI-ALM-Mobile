@@ -12,6 +12,8 @@ import '../component/custom_search_bar.dart';
 import '../component/office_item.dart';
 import '../component/resource_item.dart';
 
+enum BookingType {  office, resource, car  }
+
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class BookingScreen extends StatefulWidget {
 
 class BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
 
-  static const category = ['회의실', '차량', '장비'];
+  static const category = ['회의실', '장비', '차량'];
 
   late final TabController controller;
   int index = 0;
@@ -50,9 +52,9 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         response = await BookingService().getOfficeListData();
       case 1:
-        response = await BookingService().getCarListData();
-      case 2:
         response = await BookingService().getResourceListData();
+      case 2:
+        response = await BookingService().getCarListData();
     }
     isLoading = false;
     return response;
@@ -72,7 +74,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       child: Column(
         children: [
           renderTabBar(),
-          CustomSearchBar(index: index, isOfficeBooking: index==0,),
+          CustomSearchBar(index: index, type: BookingType.values.elementAt(index),),
           Expanded(
             child: TabBarView(
               controller: controller,
@@ -164,9 +166,9 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
       case 1:
-        return CarItem(data: (data as CarResponseModel).data.content[itemIndex],);
-      case 2:
         return ResourceItem(data: (data as ResourceResponseModel).data.content[itemIndex],);
+      case 2:
+        return CarItem(data: (data as CarResponseModel).data.content[itemIndex],);
     }
     return Container();
   }
@@ -194,9 +196,9 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       case 0:
         return OfficeResponseModel.fromJson(response);
       case 1:
-        return CarResponseModel.fromJson(response);
-      case 2:
         return ResourceResponseModel.fromJson(response);
+      case 2:
+        return CarResponseModel.fromJson(response);
     }
   }
 

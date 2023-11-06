@@ -8,14 +8,15 @@ import 'package:frontend/View/colors.dart';
 
 import '../screen/booking_office_screen.dart';
 import '../screen/booking_screen.dart';
+import '../screen/general_filter_screen.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  final bool isOfficeBooking;
+  final BookingType type;
   final int index;
 
   const CustomSearchBar({
     required this.index,
-    required this.isOfficeBooking,
+    required this.type,
     Key? key
   }) : super(key: key);
 
@@ -86,11 +87,14 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   /// Event Methods
   void didTapFilterButton() {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => (widget.isOfficeBooking)
-            ? const OfficeFilterScreen() : const OfficeFilterScreen())
-        // TODO: widget.isOfficeBooking == false 인 경우 그 외 필터 화면으로 이동시키기
-    );
+    switch (widget.type) {
+      case BookingType.office:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OfficeFilterScreen()));
+      case BookingType.resource:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GeneralFilterScreen(appBarTitle: '예약 가능 장비 검색',)));
+      case BookingType.car:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GeneralFilterScreen(appBarTitle: '예약 가능 차량 검색',)));
+    }
   }
 
   void didChangedSearchBar() {
