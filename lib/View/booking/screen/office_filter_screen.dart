@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Presenter/booking/booking_service.dart';
+import 'package:frontend/View/booking/component/select_time_button.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../component/select_time_button.dart';
 
 class OfficeFilterScreen extends StatefulWidget {
   const OfficeFilterScreen({Key? key}) : super(key: key);
@@ -31,8 +30,8 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
   DateTime? startTime;
   DateTime? endTime;
 
-  String startTimeHintText = startHintStr;
-  String endTimeHintText = endHintStr;
+  // String startTimeHintText = startHintStr;
+  // String endTimeHintText = endHintStr;
 
   @override
   void initState() {
@@ -45,12 +44,12 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
 
     if (BookingService().startTime != null) {
       startTime = BookingService().startTime;
-      startTimeHintText = DateFormat('HH:mm').format(startTime!);
+      // startTimeHintText = DateFormat('HH:mm').format(startTime!);
     }
 
     if (BookingService().endTime != null) {
       endTime = BookingService().endTime;
-      endTimeHintText = DateFormat('HH:mm').format(endTime!);
+      // endTimeHintText = DateFormat('HH:mm').format(endTime!);
     }
 
   }
@@ -79,17 +78,25 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
 
           Text('시작 시간 선택', style: titleStyle,),
           SelectTimeButton(
-            title: startTimeHintText,
-            onPressed: (){ showTimePicker(true); },
-            isContentInit: (startTimeHintText != startHintStr),
+              initialTitle: startHintStr,
+              bottomSheetTopTitle: '시작 시간 선택',
+              changeTime: (DateTime time) { setState(() {
+                startTime = time;
+                // startTimeHintText = getTrimmedTimeStr(time);
+              });
+            }
           ),
           const SizedBox(height: 15,),
 
           Text('종료 시간 선택', style: titleStyle,),
           SelectTimeButton(
-            onPressed: (){ showTimePicker(false); },
-            title: endTimeHintText,
-            isContentInit: (endTimeHintText != endHintStr),
+              initialTitle: endHintStr,
+              bottomSheetTopTitle: '종료 시간 선택',
+              changeTime: (DateTime time) { setState(() {
+                endTime = time;
+                // startTimeHintText = getTrimmedTimeStr(time);
+              });
+              }
           ),
         ],
       ),
@@ -109,8 +116,8 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
       child: TableCalendar(
         rowHeight: 35,
         focusedDay: focusedDay,
-        firstDay: DateTime(2023,1,1),
-        lastDay: DateTime(2023,12,31),
+        firstDay: DateTime(1800),
+        lastDay: DateTime(3000),
         // locale: 'ko-KR',
         daysOfWeekHeight: 30,
         headerStyle: const HeaderStyle(
@@ -148,71 +155,12 @@ class _OfficeFilterScreenState extends State<OfficeFilterScreen> {
     );
   }
 
-
-  void showTimePicker(bool isStart) {
-    showCupertinoDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext buildContext) {
-          return Align(
-            alignment: Alignment.bottomCenter,
-            child: Card(
-              child: Container(
-                height: 305,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 40,
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 15,),
-                          Text(isStart ? '시작 시간 선택' : '종료 시간 선택', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-                          Flexible(child: Container()),
-                          IconButton(
-                              onPressed: (){Navigator.of(context).pop();},
-                              icon: const Icon(CupertinoIcons.xmark, color: Colors.black, size: 24,)
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 245,
-                      child: CupertinoDatePicker(
-                        mode: CupertinoDatePickerMode.time,
-                        onDateTimeChanged: (DateTime time) {
-                          setState(() {
-                            if(isStart) {
-                              startTime = time;
-                              startTimeHintText = getTrimmedTimeStr(time);
-                            }
-                            else {
-                              endTime = time;
-                              endTimeHintText = getTrimmedTimeStr(time);
-                            }
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 20,),
-                  ],
-                )
-              ),
-            ),
-          );
-        }
-    );
-  }
-
   String getTrimmedTimeStr(DateTime time) {
     return DateFormat('HH:mm').format(time);
   }
 
   void didTapApplyButton() {
-    if ((selectedDay == null) || (startTimeHintText == startHintStr) || (endTimeHintText == endHintStr)) {
+    if ((selectedDay == null) || (startTime == null) || (endTime == null)) {
       Fluttertoast.showToast(msg: '날짜와 시작, 종료 시간을 모두 선택해주세요!', gravity: ToastGravity.BOTTOM);
     } else {
       if(endTime!.isAfter(startTime!) && !(endTime!.isAtSameMomentAs(startTime!))) {
