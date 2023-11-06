@@ -6,6 +6,7 @@ import 'package:frontend/View/booking/screen/office_filter_screen.dart';
 import 'package:frontend/Presenter/booking/booking_service.dart';
 import 'package:frontend/View/colors.dart';
 
+import '../screen/booking_office_screen.dart';
 import '../screen/booking_screen.dart';
 
 class CustomSearchBar extends StatefulWidget {

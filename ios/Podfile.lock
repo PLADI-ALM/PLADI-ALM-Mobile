@@ -70,7 +70,6 @@ PODS:
   - url_launcher_ios (0.0.1):
     - Flutter
 
-
 DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)

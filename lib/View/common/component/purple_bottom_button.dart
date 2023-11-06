@@ -8,7 +8,7 @@ class PurpleBottomButton extends StatefulWidget {
 
   const PurpleBottomButton({
     required this.title,
-    required this.onPressed,
+    this.onPressed,
     Key? key
   }) : super(key: key);
 
