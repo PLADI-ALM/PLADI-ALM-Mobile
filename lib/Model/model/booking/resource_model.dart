@@ -5,6 +5,8 @@ import '../general_model.dart';
 
 part 'resource_model.g.dart';
 
+
+/// 장비 목록 조회용 데이터 모델
 @JsonSerializable()
 class ResourceResponseModel extends GeneralModel {
   final ResourceResponse data;
@@ -46,7 +48,7 @@ class ResourceResponse extends GeneralListModel {
 class ResourceInfo {
   String description;
   String location;
-  String imgUrl;
+  String? imgUrl;
   String name;
   int resourceId;
 
@@ -60,4 +62,44 @@ class ResourceInfo {
 
   factory ResourceInfo.fromJson(Map<String, dynamic> json)
   => _$ResourceInfoFromJson(json);
+}
+
+/// 장비 세부 조회용 데이터 모델
+@JsonSerializable()
+class ResourceDetailResponse extends GeneralModel {
+  ResourceDetailInfo data;
+
+  ResourceDetailResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory ResourceDetailResponse.fromJson(Map<String, dynamic> json)
+  => _$ResourceDetailResponseFromJson(json);
+}
+
+@JsonSerializable()
+class ResourceDetailInfo {
+  String description;
+  String location;
+  String? imgUrl;
+  String name;
+  int responsibilityId;
+  String responsibilityName;
+  String responsibilityPhone;
+
+  ResourceDetailInfo({
+    required this.description,
+    required this.location,
+    required this.imgUrl,
+    required this.name,
+    required this.responsibilityId,
+    required this.responsibilityName,
+    required this.responsibilityPhone,
+  });
+
+  factory ResourceDetailInfo.fromJson(Map<String, dynamic> json)
+  => _$ResourceDetailInfoFromJson(json);
 }
