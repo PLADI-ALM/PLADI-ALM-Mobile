@@ -7,10 +7,7 @@ import '../screen/resource_detail_screen.dart';
 class ResourceItem extends StatefulWidget {
   final ResourceInfo data;
 
-  const ResourceItem({
-    required this.data,
-    Key? key
-  }) : super(key: key);
+  const ResourceItem({required this.data, Key? key}) : super(key: key);
 
   @override
   State<ResourceItem> createState() => _ResourceItemState();
@@ -44,8 +41,7 @@ class _ResourceItemState extends State<ResourceItem> {
                 margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: (widget.data.imgUrl == null)
                     ? Image.asset('asset/image/pladi_icon.png')
-                    : Image.network(widget.data.imgUrl!, fit: BoxFit.fitWidth)
-            ),
+                    : Image.network(widget.data.imgUrl!, fit: BoxFit.fitWidth)),
             renderResourceInfo(),
           ],
         ),
@@ -58,9 +54,19 @@ class _ResourceItemState extends State<ResourceItem> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         children: [
-          Text(widget.data.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: purple),),
+          Text(
+            widget.data.name,
+            style: const TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w600, color: purple),
+          ),
           Flexible(child: Container()),
-          Text(widget.data.location, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),)
+          Text(
+            widget.data.location,
+            style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF717171)),
+          )
         ],
       ),
     );
@@ -68,6 +74,9 @@ class _ResourceItemState extends State<ResourceItem> {
 
   /// Event Methods
   void didTapResourceItem() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ResourceDetailScreen(resourceId: widget.data.resourceId,)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => ResourceDetailScreen(
+              resourceId: widget.data.resourceId,
+            )));
   }
 }

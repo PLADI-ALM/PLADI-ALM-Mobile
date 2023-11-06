@@ -10,12 +10,12 @@ class SubAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   static const double appBarHeight = 50;
 
-  const SubAppBar({
-    required this.titleText,
-    this.rightItems,
-    this.isBackItemHidden,
-    Key? key
-  }) : super(key: key);
+  const SubAppBar(
+      {required this.titleText,
+      this.rightItems,
+      this.isBackItemHidden,
+      Key? key})
+      : super(key: key);
 
   @override
   State<SubAppBar> createState() => _SubAppBarState();
@@ -25,10 +25,7 @@ class SubAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _SubAppBarState extends State<SubAppBar> {
-  final titleStyle = const TextStyle(
-      color: Colors.black,
-      fontSize: 16
-  );
+  final titleStyle = const TextStyle(color: Colors.black, fontSize: 16);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,12 @@ class _SubAppBarState extends State<SubAppBar> {
   AppBar renderAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      title: (widget.titleText != null) ? Text(widget.titleText!, style: titleStyle,) : const Text(''),
+      title: (widget.titleText != null)
+          ? Text(
+              widget.titleText!,
+              style: titleStyle,
+            )
+          : const Text(''),
       centerTitle: true,
       leading: (widget.isBackItemHidden ?? false) ? null : renderLeftItem(),
       actions: widget.rightItems,
@@ -55,5 +57,7 @@ class _SubAppBarState extends State<SubAppBar> {
   }
 
   /// event methods
-  void didTapBackItem() { Navigator.of(context).pop(); }
+  void didTapBackItem() {
+    Navigator.of(context).pop();
+  }
 }
