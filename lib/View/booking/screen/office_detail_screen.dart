@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Presenter/booking/office_service.dart';
 import 'package:frontend/View/booking/screen/booking_office_screen.dart';
@@ -38,7 +39,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       backgroundColor: Colors.white,
       appBar: const SubAppBar(titleText: '',),
       body: renderBody(),
-      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: (data == null) ? null : didTapBookingButton,),
+      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: didTapBookingButton,),
     );
   }
 
@@ -198,6 +199,10 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
 
   /// Event Methods
   void didTapBookingButton() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingOfficeScreen()));
+    if (data == null) {
+      Fluttertoast.showToast(msg: '회의실 정보를 불러오지 못 하여 예약이 불가능합니다.');
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingOfficeScreen(officeId: widget.officeId,)));
+    }
   }
 }

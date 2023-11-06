@@ -5,7 +5,13 @@ import '../../booking/screen/booking_screen.dart';
 import '../component/tabbar_item.dart';
 
 class RootTab extends StatefulWidget {
-  const RootTab({Key? key}) : super(key: key);
+
+  final int? initialIndex;
+
+  const RootTab({
+    this.initialIndex,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<RootTab> createState() => _RootTabState();
@@ -21,6 +27,8 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
     super.initState();
     controller = TabController(length: tabBarIcons.length, vsync: this);
     controller.addListener(tabListener);
+    index = widget.initialIndex ?? 0;
+    selectedTab = widget.initialIndex ?? 0;
   }
 
   @override

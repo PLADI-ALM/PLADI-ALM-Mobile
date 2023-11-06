@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/View/colors.dart';
 
+import '../../common/screen/root_tab.dart';
+
 class BookingSuccessScreen extends StatefulWidget {
   const BookingSuccessScreen({Key? key}) : super(key: key);
 
@@ -81,10 +83,12 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
 
 
   void didTapConfirmButton() {
-    print('didTapConfirmButton');
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const RootTab()), (route) => false);
   }
 
   void didTapMyBookingButton() {
-    print('didTapMyBookingButton');
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const RootTab(initialIndex: 2,)), (route) => false);
   }
 }
