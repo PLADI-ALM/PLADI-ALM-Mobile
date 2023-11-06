@@ -146,6 +146,7 @@ class _SelectDateButtonState extends State<SelectDateButton> {
           setState(() {
             this.selectedDay = selectedDay;
             this.focusedDay = selectedDay;
+            widget.changedDate(this.selectedDay!);
             hintText = DateFormat('yyyy-MM-dd').format(this.selectedDay!);
           });
         },

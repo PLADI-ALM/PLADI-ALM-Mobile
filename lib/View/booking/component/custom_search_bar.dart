@@ -2,20 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/Presenter/booking/car_service.dart';
+import 'package:frontend/Presenter/booking/office_service.dart';
+import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:frontend/View/booking/screen/office_filter_screen.dart';
-import 'package:frontend/Presenter/booking/booking_service.dart';
 import 'package:frontend/View/colors.dart';
 
-import '../screen/booking_office_screen.dart';
 import '../screen/booking_screen.dart';
 import '../screen/general_filter_screen.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final BookingType type;
-  final int index;
 
   const CustomSearchBar({
-    required this.index,
     required this.type,
     Key? key
   }) : super(key: key);
@@ -30,7 +29,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    if (BookingService().getKeyword().isEmpty) {
+    if (getKeyword().isEmpty) {
       controller = TextEditingController();
     }
     return Container(
@@ -77,12 +76,27 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   /// Helper Methods
   String getHintText() {
-    switch (widget.index) {
-      case 0: return '시설 검색';
-      case 1: return '차량명 검색';
-      case 2: return '장비명 검색';
+    switch (widget.type) {
+      case BookingType.office: return '시설 검색';
+      case BookingType.resource: return '장비명 검색';
+      case BookingType.car: return '차량명 검색';
     }
-    return '검색';
+  }
+
+  String getKeyword() {
+    switch(widget.type) {
+      case BookingType.office: return OfficeService().keyword;
+      case BookingType.resource: return ResourceService().keyword;
+      case BookingType.car: return CarService().keyword;
+    }
+  }
+
+  bool isFilterInfoEmpty() {
+    switch(widget.type) {
+      case BookingType.office: return OfficeService().isFilterInfoEmpty();
+      case BookingType.resource: return ResourceService().isFilterInfoEmpty();
+      case BookingType.car: return CarService().isFilterInfoEmpty();
+    }
   }
 
   /// Event Methods
@@ -91,14 +105,14 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       case BookingType.office:
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OfficeFilterScreen()));
       case BookingType.resource:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GeneralFilterScreen(appBarTitle: '예약 가능 장비 검색',)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GeneralFilterScreen(type: BookingType.resource,)));
       case BookingType.car:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GeneralFilterScreen(appBarTitle: '예약 가능 차량 검색',)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GeneralFilterScreen(type: BookingType.car,)));
     }
   }
 
   void didChangedSearchBar() {
-    if (BookingService().isFilterInfoEmpty()) {
+    if (isFilterInfoEmpty()) {
       Fluttertoast.showToast(msg: '사용 일자 및 시간을 선택해주세요!', gravity: ToastGravity.CENTER);
       return;
     }

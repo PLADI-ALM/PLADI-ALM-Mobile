@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Model/model/general_model.dart';
+import 'package:frontend/Presenter/booking/office_service.dart';
+import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:frontend/View/booking/component/car_item.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 
 import '../../../Model/model/booking/car_model.dart';
 import '../../../Model/model/booking/resource_model.dart';
-import '../../../Presenter/booking/booking_service.dart';
+import '../../../Presenter/booking/car_service.dart';
 import '../component/custom_search_bar.dart';
 import '../component/office_item.dart';
 import '../component/resource_item.dart';
@@ -24,9 +26,9 @@ class BookingScreen extends StatefulWidget {
 class BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
 
   static const category = ['회의실', '장비', '차량'];
+  BookingType currentType = BookingType.office;
 
   late final TabController controller;
-  int index = 0;
   int selectedTab = 0;
 
   bool isLoading = true;
@@ -48,13 +50,13 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
   Future<dynamic> fetchData() async {
     isLoading = true;
     dynamic response;
-    switch (index) {
-      case 0:
-        response = await BookingService().getOfficeListData();
-      case 1:
-        response = await BookingService().getResourceListData();
-      case 2:
-        response = await BookingService().getCarListData();
+    switch (currentType) {
+      case BookingType.office:
+        response = await OfficeService().getOfficeListData();
+      case BookingType.resource:
+        response = await ResourceService().getResourceListData();
+      case BookingType.car:
+        response = await CarService().getCarListData();
     }
     isLoading = false;
     return response;
@@ -74,7 +76,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       child: Column(
         children: [
           renderTabBar(),
-          CustomSearchBar(index: index, type: BookingType.values.elementAt(index),),
+          CustomSearchBar(type: currentType,),
           Expanded(
             child: TabBarView(
               controller: controller,
@@ -162,49 +164,57 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
   }
 
   Widget renderItem(GeneralModel data, int itemIndex) {
-    switch (index) {
-      case 0:
+    switch (currentType) {
+      case BookingType.office:
         return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
-      case 1:
+      case BookingType.resource:
         return ResourceItem(data: (data as ResourceResponseModel).data.content[itemIndex],);
-      case 2:
+      case BookingType.car:
         return CarItem(data: (data as CarResponseModel).data.content[itemIndex],);
     }
-    return Container();
   }
 
   /// Helper Methods
   void tabListener() {
     setState(() {
       FocusScope.of(context).unfocus();
-      index = controller.index;
-      BookingService().setKeyword('');
+      switch (controller.index) {
+        case 0: currentType = BookingType.office;
+        case 1: currentType = BookingType.resource;
+        case 2: currentType = BookingType.car;
+      }
+      OfficeService().keyword = '';
+      ResourceService().keyword = '';
+      CarService().keyword = '';
     });
   }
 
   double getItemHeight() {
-    switch (index) {
-      case 0: return 292.0;
-      case 1: return 232.0;
-      case 2: return 232.0;
+    switch (currentType) {
+      case BookingType.office: return 292.0;
+      case BookingType.resource: return 232.0;
+      case BookingType.car: return 232.0;
     }
-    return 0.0;
   }
 
   dynamic configureData(dynamic response) {
-    switch (index) {
-      case 0:
+    switch (currentType) {
+      case BookingType.office:
         return OfficeResponseModel.fromJson(response);
-      case 1:
+      case BookingType.resource:
         return ResourceResponseModel.fromJson(response);
-      case 2:
+      case BookingType.car:
         return CarResponseModel.fromJson(response);
     }
   }
 
   void searchItems(String keyword) {
     setState(() {
-      BookingService().setKeyword(keyword);
+      switch (currentType) {
+        case BookingType.office: OfficeService().keyword = keyword;
+        case BookingType.resource: ResourceService().keyword = keyword;
+        case BookingType.car: CarService().keyword = keyword;
+      }
     });
   }
 }
