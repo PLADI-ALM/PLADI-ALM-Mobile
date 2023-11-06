@@ -68,3 +68,41 @@ Map<String, dynamic> _$CarInfoToJson(CarInfo instance) => <String, dynamic>{
       'name': instance.name,
       'carId': instance.carId,
     };
+
+CarDetailResponse _$CarDetailResponseFromJson(Map<String, dynamic> json) =>
+    CarDetailResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: CarDetailInfo.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CarDetailResponseToJson(CarDetailResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+CarDetailInfo _$CarDetailInfoFromJson(Map<String, dynamic> json) =>
+    CarDetailInfo(
+      description: json['description'] as String,
+      imgUrl: json['imgUrl'] as String?,
+      location: json['location'] as String,
+      name: json['name'] as String,
+      responsibilityId: json['responsibilityId'] as int,
+      responsibilityName: json['responsibilityName'] as String,
+      responsibilityPhone: json['responsibilityPhone'] as String,
+    );
+
+Map<String, dynamic> _$CarDetailInfoToJson(CarDetailInfo instance) =>
+    <String, dynamic>{
+      'description': instance.description,
+      'imgUrl': instance.imgUrl,
+      'location': instance.location,
+      'name': instance.name,
+      'responsibilityId': instance.responsibilityId,
+      'responsibilityName': instance.responsibilityName,
+      'responsibilityPhone': instance.responsibilityPhone,
+    };

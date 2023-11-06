@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:frontend/Presenter/booking/resource_service.dart';
+import 'package:frontend/Presenter/booking/car_service.dart';
+import 'package:frontend/View/booking/screen/booking_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../Model/model/booking/car_model.dart';
 import '../../../Model/model/booking/resource_model.dart';
+import '../../../Presenter/booking/resource_service.dart';
 import '../../colors.dart';
 import '../../common/component/purple_bottom_button.dart';
 import '../../common/component/sub_app_bar.dart';
 
-class ResourceDetailScreen extends StatefulWidget {
+class GeneralDetailScreen extends StatefulWidget {
+  final BookingType type;
+  final int id;
 
-  final int resourceId;
-
-  const ResourceDetailScreen({
-    required this.resourceId,
+  const GeneralDetailScreen({
+    required this.type,
+    required this.id,
     Key? key
   }) : super(key: key);
 
   @override
-  State<ResourceDetailScreen> createState() => _ResourceDetailScreenState();
+  State<GeneralDetailScreen> createState() => _GeneralDetailScreenState();
 }
 
-class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
+class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
 
   TextStyle nameStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
 
@@ -31,7 +34,15 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
 
   Future<dynamic> fetchData() async {
     isLoading = true;
-    dynamic response = await ResourceService().getResourceDetailData(widget.resourceId);
+    dynamic response;
+    switch (widget.type) {
+      case BookingType.resource:
+        response = await ResourceService().getResourceDetailData(widget.id);
+      case BookingType.car:
+        response = await CarService().getCarDetailData(widget.id);
+      default: return;
+    }
+    // dynamic response = await ResourceService().getResourceDetailData(widget.resourceId);
     isLoading = false;
     return response;
   }
@@ -46,62 +57,73 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
     );
   }
 
+  void configure(dynamic snapshotData) {
+    switch (widget.type) {
+      case BookingType.resource:
+        data = ResourceDetailResponse.fromJson(snapshotData);
+      case BookingType.car:
+        data = CarDetailResponse.fromJson(snapshotData);
+      default: return;
+    }
+  }
+
   Widget renderBody() {
     return FutureBuilder<dynamic>(
-      future: fetchData(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError || snapshot.data == null) {
-          return const Center(
-            child: Text('정보를 불러오지 못 하였습니다.',
-              style: TextStyle(fontSize: 16, color: purple),),
-          );
-        }
-        else {
-          if (isLoading) {
-            return const Center(child: CircularProgressIndicator(color: purple,),);
+        future: fetchData(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return const Center(
+              child: Text('정보를 불러오지 못 하였습니다.',
+                style: TextStyle(fontSize: 16, color: purple),),
+            );
           }
-          data = ResourceDetailResponse.fromJson(snapshot.data);
-          return SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 800,
-            child: ListView(
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 232,
-                  child: (data.data.imgUrl == null)
-                    ? const Center(child: Text('이미지를 불러올 수 없습니다.', style: TextStyle(fontSize: 16, color: purple),),)
-                    : Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(data.data.name, style: nameStyle,),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      infoCardItem(Icons.location_on_outlined, '위치', data.data.location, null),
-                      const SizedBox(width: 20,),
-                      infoCardItem(Icons.phone_in_talk_outlined, '책임자', data.data.responsibilityName, didTapPhoneItem),
-                    ],
+          else {
+            if (isLoading) {
+              return const Center(child: CircularProgressIndicator(color: purple,),);
+            }
+            // data = ResourceDetailResponse.fromJson(snapshot.data);
+            configure(snapshot.data);
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 800,
+              child: ListView(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 232,
+                    child: (data.data.imgUrl == null)
+                        ? const Center(child: Text('이미지를 불러올 수 없습니다.', style: TextStyle(fontSize: 16, color: purple),),)
+                        : Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
                   ),
-                ),
-                const SizedBox(height: 10,),
 
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text('상세정보', style: nameStyle,),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(data.data.name, style: nameStyle,),
+                  ),
 
-                renderDescription(),
-              ],
-            ),
-          );
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        infoCardItem(Icons.location_on_outlined, '위치', data.data.location, null),
+                        const SizedBox(width: 20,),
+                        infoCardItem(Icons.phone_in_talk_outlined, '책임자', data.data.responsibilityName, didTapPhoneItem),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text('상세정보', style: nameStyle,),
+                  ),
+
+                  renderDescription(),
+                ],
+              ),
+            );
+          }
         }
-      }
     );
   }
 
@@ -172,7 +194,7 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
     if (await canLaunchUrl(uri)) { await launchUrl(uri); }
     else { Fluttertoast.showToast(msg: '전화 앱에 연결할 수 없습니다.'); }
   }
-  
+
   void didTapBookingButton() {
     if (data == null) {
       Fluttertoast.showToast(msg: '회의실 정보를 불러올 수 없으므로 예약이 불가능합니다.');
