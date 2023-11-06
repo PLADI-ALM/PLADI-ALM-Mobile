@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/View/colors.dart';
 
 import '../../../Model/model/booking/office_model.dart';
+import '../screen/office_detail_screen.dart';
 
 class OfficeItem extends StatefulWidget {
 
@@ -19,33 +20,36 @@ class OfficeItem extends StatefulWidget {
 class _OfficeItemState extends State<OfficeItem> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 272,
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.25),
-            spreadRadius: 4,
-            blurRadius: 7,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 176,
-            margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-              child: (widget.data.imgUrl == null || widget.data.imgUrl.contains('null'))
-                  ? Image.asset('asset/image/pladi_icon.png')
-                  : Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)
-          ),
-          renderOfficeInfo(),
-        ],
+    return GestureDetector(
+      onTap: didTapOfficeItem,
+      child: Container(
+        height: 272,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.25),
+              spreadRadius: 4,
+              blurRadius: 7,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 176,
+              margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                child: (widget.data.imgUrl == null || widget.data.imgUrl.contains('null'))
+                    ? Image.asset('asset/image/pladi_icon.png')
+                    : Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)
+            ),
+            renderOfficeInfo(),
+          ],
+        ),
       ),
     );
   }
@@ -116,4 +120,8 @@ class _OfficeItemState extends State<OfficeItem> {
     );
   }
 
+  /// Event Methods
+  void didTapOfficeItem() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfficeDetailScreen(officeId: widget.data.officeId,)));
+  }
 }

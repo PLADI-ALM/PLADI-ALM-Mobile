@@ -59,7 +59,7 @@ Map<String, dynamic> _$ResourceResponseToJson(ResourceResponse instance) =>
 ResourceInfo _$ResourceInfoFromJson(Map<String, dynamic> json) => ResourceInfo(
       description: json['description'] as String,
       location: json['location'] as String,
-      imgUrl: json['imgUrl'] as String,
+      imgUrl: json['imgUrl'] as String?,
       name: json['name'] as String,
       resourceId: json['resourceId'] as int,
     );
@@ -71,4 +71,44 @@ Map<String, dynamic> _$ResourceInfoToJson(ResourceInfo instance) =>
       'imgUrl': instance.imgUrl,
       'name': instance.name,
       'resourceId': instance.resourceId,
+    };
+
+ResourceDetailResponse _$ResourceDetailResponseFromJson(
+        Map<String, dynamic> json) =>
+    ResourceDetailResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: ResourceDetailInfo.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ResourceDetailResponseToJson(
+        ResourceDetailResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+ResourceDetailInfo _$ResourceDetailInfoFromJson(Map<String, dynamic> json) =>
+    ResourceDetailInfo(
+      description: json['description'] as String,
+      location: json['location'] as String,
+      imgUrl: json['imgUrl'] as String?,
+      name: json['name'] as String,
+      responsibilityId: json['responsibilityId'] as int,
+      responsibilityName: json['responsibilityName'] as String,
+      responsibilityPhone: json['responsibilityPhone'] as String,
+    );
+
+Map<String, dynamic> _$ResourceDetailInfoToJson(ResourceDetailInfo instance) =>
+    <String, dynamic>{
+      'description': instance.description,
+      'location': instance.location,
+      'imgUrl': instance.imgUrl,
+      'name': instance.name,
+      'responsibilityId': instance.responsibilityId,
+      'responsibilityName': instance.responsibilityName,
+      'responsibilityPhone': instance.responsibilityPhone,
     };
