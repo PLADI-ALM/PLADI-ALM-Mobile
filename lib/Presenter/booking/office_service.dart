@@ -7,7 +7,17 @@ import 'package:intl/intl.dart';
 import '../../Model/network/api_manager.dart';
 
 class OfficeService {
-  final officeInfoURL = '/offices';
+  final officeURL = '/offices';
+
+  DateTime? selectedDate;
+  DateTime? startTime;
+  DateTime? endTime;
+
+  String keyword = '';
+  String selectedDateStr = '';
+  String startTimeStr = '';
+  String endTimeStr = '';
+
 
   /// Singleton Pattern
   static final OfficeService _officeService = OfficeService._();
@@ -16,10 +26,23 @@ class OfficeService {
     return _officeService;
   }
 
+  Future<dynamic> getOfficeListData() async {
+    final response = await APIManager().request(
+        RequestType.get,
+        officeURL,
+        null,
+        (keyword.isEmpty)
+            ? null
+            : {"facilityName" : keyword, "startDate" : '$selectedDateStr $startTimeStr', "endDate" : '$selectedDateStr $endTimeStr'},
+        null
+    );
+    return response;
+  }
+
   Future<dynamic> getOfficeInfoData(int officeId) async {
     final response = await APIManager().request(
         RequestType.get,
-        '$officeInfoURL/$officeId',
+        '$officeURL/$officeId',
         null, null, null
     );
     return response;
@@ -29,7 +52,7 @@ class OfficeService {
     String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
     final response = await APIManager().request(
         RequestType.get,
-        '$officeInfoURL/$officeId/booking-state',
+        '$officeURL/$officeId/booking-state',
         null,
         {'date':selectedDateStr},
         null
@@ -41,11 +64,9 @@ class OfficeService {
     String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
     String startTimeStr = (startTime < 10) ? '0$startTime:00' : '$startTime:00';
 
-    print('selectedDateStr - $selectedDateStr');
-    print('startTimeStr - $startTimeStr');
     final response = await APIManager().request(
         RequestType.get,
-        '$officeInfoURL/$officeId/booking',
+        '$officeURL/$officeId/booking',
         null,
         {'date':selectedDateStr, 'time':startTimeStr},
         null
@@ -69,7 +90,7 @@ class OfficeService {
     try {
       final response = await APIManager().request(
           RequestType.post,
-          '$officeInfoURL/$officeId/booking',
+          '$officeURL/$officeId/booking',
           null, null,
           body.toJson()
       );
@@ -89,4 +110,21 @@ class OfficeService {
     }
   }
 
+  /// Helper Methods
+  void setDate(DateTime date) {
+    selectedDate = date;
+    selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate!);
+  }
+  void setStartTime(DateTime time) {
+    startTime = time;
+    startTimeStr = DateFormat('HH:mm').format(startTime!);
+  }
+  void setEndTime(DateTime time) {
+    endTime = time;
+    endTimeStr = DateFormat('HH:mm').format(endTime!);
+  }
+
+  bool isFilterInfoEmpty() {
+    return (selectedDateStr.isEmpty || startTimeStr.isEmpty || endTimeStr.isEmpty);
+  }
 }

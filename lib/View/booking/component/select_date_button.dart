@@ -2,38 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-typedef SetSelectedTime = void Function(DateTime time);
+import 'custom_calendar.dart';
 
-class SelectTimeButton extends StatefulWidget {
-  final String initialTitle;
+class SelectDateButton extends StatefulWidget {
+  final String hintText;
   final String bottomSheetTopTitle;
-  final SetSelectedTime changeTime;
+  final SetSelectedDate changedDate;
 
-  const SelectTimeButton({
-    required this.initialTitle,
+  const SelectDateButton({
+    required this.hintText,
     required this.bottomSheetTopTitle,
-    required this.changeTime,
+    required this.changedDate,
     Key? key
   }) : super(key: key);
 
   @override
-  State<SelectTimeButton> createState() => _SelectTimeButtonState();
+  State<SelectDateButton> createState() => _SelectDateButtonState();
 }
 
-class _SelectTimeButtonState extends State<SelectTimeButton> {
+class _SelectDateButtonState extends State<SelectDateButton> {
 
-  DateTime? selectedTime;
+  DateTime? selectedDay;
   String hintText = '';
 
   @override
   void initState() {
     super.initState();
-    hintText = widget.initialTitle;
+    hintText = widget.hintText;
   }
 
   @override
   Widget build(BuildContext context) {
-    TextStyle style = TextStyle(fontSize: 13, color: (selectedTime != null) ? Colors.black : const Color(0xFFC9C9C9));
+    TextStyle style = TextStyle(fontSize: 13, color: (selectedDay != null) ? Colors.black : const Color(0xFFC9C9C9));
 
     return Container(
       height: 42,
@@ -44,19 +44,19 @@ class _SelectTimeButtonState extends State<SelectTimeButton> {
           border: Border.all(color: const Color(0xFF939393))
       ),
       child: TextButton(
-          onPressed: showBottomTimePicker,
+          onPressed: showBottomCalendar,
           child: Row(
             children: [
               Text(hintText, style: style,),
               Flexible(child: Container()),
-              const Icon(CupertinoIcons.clock, size: 24, color: Colors.black,)
+              const Icon(Icons.calendar_today_outlined, size: 24, color: Colors.black,)
             ],
           )
       ),
     );
   }
 
-  void showBottomTimePicker() {
+  void showBottomCalendar() {
     showCupertinoDialog(
         context: context,
         barrierDismissible: true,
@@ -65,7 +65,7 @@ class _SelectTimeButtonState extends State<SelectTimeButton> {
             alignment: Alignment.bottomCenter,
             child: Card(
               child: Container(
-                  height: 305,
+                  height: MediaQuery.of(context).size.height * 0.63,
                   width: MediaQuery.of(context).size.width,
                   color: Colors.white,
                   child: Column(
@@ -85,27 +85,33 @@ class _SelectTimeButtonState extends State<SelectTimeButton> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: 245,
-                        child: CupertinoDatePicker(
-                          mode: CupertinoDatePickerMode.time,
-                          onDateTimeChanged: (DateTime time) {
-                            setState(() {
-                              selectedTime = time;
-                              hintText = DateFormat('HH:mm').format(selectedTime!);
-                              widget.changeTime(selectedTime!);
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 20,),
+
+                      renderCalendarView(),
                     ],
-                  )
+                  ),
               ),
             ),
           );
         }
+    );
+  }
+
+  Widget renderCalendarView() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10))
+      ),
+      child: CustomCalender(
+        changedDate: (DateTime date) {
+          selectedDay = date;
+          hintText = DateFormat('yyyy-MM-dd').format(selectedDay!);
+          widget.changedDate(date);
+        },
+        calendarDayHeight: 50,
+      ),
     );
   }
 }

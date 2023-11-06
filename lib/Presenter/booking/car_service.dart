@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../../Model/network/api_manager.dart';
 
-class ResourceService {
-  final resourceURL = '/resources';
+class CarService {
+  final carURL = '/cars';
 
   DateTime? startDate;
   DateTime? startTime;
@@ -15,33 +15,24 @@ class ResourceService {
   String keyword = '';
 
   /// Singleton Pattern
-  static final ResourceService _resourceService = ResourceService._();
-  ResourceService._();
-  factory ResourceService() {
-    return _resourceService;
+  static final CarService _carService = CarService._();
+  CarService._();
+  factory CarService() {
+    return _carService;
   }
 
-  Future<dynamic> getResourceListData() async {
+  Future<dynamic> getCarListData() async {
     final response = await APIManager().request(
         RequestType.get,
-        resourceURL,
+        carURL,
         null,
         (keyword.isEmpty)
             ? null
-            : { "resourceName" : keyword,
+            : { "carName" : keyword,
                 "startDate" : '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}',
                 "endDate" : '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}'
               },
         null
-    );
-    return response;
-  }
-
-  Future<dynamic> getResourceDetailData(int resourceId) async {
-    final response = await APIManager().request(
-        RequestType.get,
-        '$resourceURL/$resourceId',
-        null, null, null
     );
     return response;
   }
@@ -59,4 +50,5 @@ class ResourceService {
   bool isFilterInfoEmpty() {
     return ((startDate == null) || (endDate == null) || (startTime == null) || (endTime == null));
   }
+
 }
