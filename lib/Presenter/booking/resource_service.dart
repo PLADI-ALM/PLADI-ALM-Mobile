@@ -28,7 +28,7 @@ class ResourceService {
         null,
         (keyword.isEmpty)
             ? null
-            : { "carName" : keyword,
+            : { "resourceName" : keyword,
                 "startDate" : '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}',
                 "endDate" : '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}'
               },
