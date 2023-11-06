@@ -155,3 +155,36 @@ class BookingTime {
   factory BookingTime.fromJson(Map<String, dynamic> json)
   => _$BookingTimeFromJson(json);
 }
+
+@JsonSerializable()
+class BookingDetailResponse extends GeneralModel {
+
+  BookingDetail? data;
+
+  BookingDetailResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory BookingDetailResponse.fromJson(Map<String, dynamic> json)
+  => _$BookingDetailResponseFromJson(json);
+}
+
+@JsonSerializable()
+class BookingDetail {
+
+  String reservatorName;
+  String reservatorPhone;
+  String department;
+
+  BookingDetail({
+    required this.reservatorName,
+    required this.reservatorPhone,
+    required this.department,
+  });
+
+  factory BookingDetail.fromJson(Map<String, dynamic> json)
+  => _$BookingDetailFromJson(json);
+}

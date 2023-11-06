@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Presenter/booking/office_service.dart';
 import '../../common/component/purple_bottom_button.dart';
@@ -193,6 +195,92 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
     );
   }
 
+  void showBookingInfoDialog(BookingDetail info) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: ((context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: Row(
+            children: [
+              Flexible(child: Container()),
+              const Text('예약 정보', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
+              Flexible(child: Container()),
+              SizedBox(
+                width: 17, height: 17,
+                child: IconButton(
+                    onPressed: (){Navigator.of(context).pop();},
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(CupertinoIcons.xmark, size: 17, color: Colors.black,)
+                ),
+              )
+            ],
+          ),
+          content: Container(
+            height: 150,
+            margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 10),
+            child: Column(
+              children: [
+                const SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                          width: 85,
+                          child: Text('예약자명', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+                      ),
+                      Text(info.reservatorName, style: const TextStyle(fontSize: 14, color: Colors.black),),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                          width: 85,
+                          child: Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+                      ),
+                      Text(info.department, style: const TextStyle(fontSize: 14, color: Colors.black),),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                          width: 85,
+                          child: Text('연락처', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+                      ),
+                      Text(info.reservatorPhone, style: const TextStyle(fontSize: 14, color: Colors.black),),
+                      const SizedBox(width: 5,),
+                      SizedBox(
+                        width: 15, height: 15,
+                        child: IconButton(
+                            onPressed: () { didTapCallButton(info.reservatorPhone); },
+                            padding: EdgeInsets.zero,
+                            icon: const Icon(Icons.phone_in_talk_outlined, color: Colors.black, size: 15,)
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
   Color getBackColorOfTimeItem(int index) {
     if (isBookedTime(index)) { return const Color(0xFFE9E9E9); }
     else if (isContainInSelectedTime(index)) { return purple; }
@@ -248,95 +336,20 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
     });
   }
 
-  void didTapBookedTimeItem(int index) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: ((context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.zero,
-          insetPadding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          title: Row(
-            children: [
-              Flexible(child: Container()),
-              const Text('예약 정보', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
-              Flexible(child: Container()),
-              SizedBox(
-                width: 17, height: 17,
-                child: IconButton(
-                    onPressed: (){Navigator.of(context).pop();},
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(CupertinoIcons.xmark, size: 17, color: Colors.black,)
-                ),
-              )
-            ],
-          ),
-          content: Container(
-            height: 150,
-            // color: Colors.red,
-            margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 10),
-            child: Column(
-              children: [
-                const SizedBox(height: 20,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                          width: 85,
-                          child: const Text('예약자명', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
-                      ),
-                      Text('홍길동', style: TextStyle(fontSize: 14, color: Colors.black),),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                          width: 85,
-                          child: const Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
-                      ),
-                      Text('미디어부', style: TextStyle(fontSize: 14, color: Colors.black),),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                          width: 85,
-                          child: const Text('연락처', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
-                      ),
-                      Text('010-1234-1234', style: TextStyle(fontSize: 14, color: Colors.black),),
-                      const SizedBox(width: 5,),
-                      SizedBox(
-                        width: 15, height: 15,
-                        child: IconButton(
-                            onPressed: didTapCallButton,
-                            padding: EdgeInsets.zero,
-                            icon: Icon(Icons.phone_in_talk_outlined, color: Colors.black, size: 15,)
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      }),
-    );
+  void didTapBookedTimeItem(int index) async {
+    dynamic response = await OfficeService().getBookedInfo(widget.officeId, selectedDay ?? DateTime.now(), index);
+    if (response != null) {
+      dynamic data = BookingDetailResponse.fromJson(response);
+      BookingDetail info = data.data;
+      showBookingInfoDialog(info);
+    }
   }
 
-  void didTapCallButton() {
-    print('didTapCallButton');
+  void didTapCallButton(String phoneNumStr) async {
+    Uri uri = Uri.parse("tel:${phoneNumStr.replaceAll('-','')}");
+
+    if (await canLaunchUrl(uri)) { await launchUrl(uri); }
+    else { Fluttertoast.showToast(msg: '전화 앱에 연결할 수 없습니다.'); }
   }
 
   void didTapTimeItem(int index) {

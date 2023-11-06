@@ -34,4 +34,20 @@ class OfficeService {
     return response;
   }
 
+  Future<dynamic> getBookedInfo(int officeId, DateTime selectedDate, int startTime) async {
+    String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String startTimeStr = (startTime < 10) ? '0$startTime:00' : '$startTime:00';
+
+    print('selectedDateStr - $selectedDateStr');
+    print('startTimeStr - $startTimeStr');
+    final response = await APIManager().request(
+        RequestType.get,
+        '$officeInfoURL/$officeId/booking',
+        null,
+        {'date':selectedDateStr, 'time':startTimeStr},
+        null
+    );
+    return response;
+  }
+
 }
