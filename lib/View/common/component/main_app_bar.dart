@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/View/notification/screen/notification_screen.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   const MainAppBar({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _MainAppBarState extends State<MainAppBar> {
-
   @override
   Widget build(BuildContext context) {
     return renderAppBar();
@@ -34,17 +34,13 @@ class _MainAppBarState extends State<MainAppBar> {
     Widget notificationItem = IconButton(
       onPressed: didTapNotificationButton,
       icon: SvgPicture.asset('asset/image/notification.svg'),
-      style: IconButton.styleFrom(
-        padding: EdgeInsets.zero
-      ),
+      style: IconButton.styleFrom(padding: EdgeInsets.zero),
     );
 
     Widget sideBarItem = IconButton(
       onPressed: didTapSideBarButton,
       icon: SvgPicture.asset('asset/image/side_bar.svg'),
-      style: IconButton.styleFrom(
-          padding: EdgeInsets.zero
-      ),
+      style: IconButton.styleFrom(padding: EdgeInsets.zero),
     );
 
     return [notificationItem, sideBarItem];
@@ -52,7 +48,8 @@ class _MainAppBarState extends State<MainAppBar> {
 
   /// event methods
   void didTapNotificationButton() {
-    print('didTapNotificationButton');
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const NotificationScreen()));
   }
 
   void didTapSideBarButton() {
