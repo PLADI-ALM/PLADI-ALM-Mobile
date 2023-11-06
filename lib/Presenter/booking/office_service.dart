@@ -1,4 +1,6 @@
 
+import 'package:intl/intl.dart';
+
 import '../../Model/network/api_manager.dart';
 
 class OfficeService {
@@ -16,6 +18,18 @@ class OfficeService {
         RequestType.get,
         '$officeInfoURL/$officeId',
         null, null, null
+    );
+    return response;
+  }
+
+  Future<dynamic> getBookedTimeList(int officeId, DateTime selectedDate) async {
+    String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
+    final response = await APIManager().request(
+        RequestType.get,
+        '$officeInfoURL/$officeId/booking-state',
+        null,
+        {'date':selectedDateStr},
+        null
     );
     return response;
   }

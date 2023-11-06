@@ -202,7 +202,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
     if (data == null) {
       Fluttertoast.showToast(msg: '회의실 정보를 불러오지 못 하여 예약이 불가능합니다.');
     } else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingOfficeScreen()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingOfficeScreen(officeId: widget.officeId,)));
     }
   }
 }

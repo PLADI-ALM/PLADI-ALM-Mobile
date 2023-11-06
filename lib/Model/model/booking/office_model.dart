@@ -110,3 +110,48 @@ class OfficeDetailInfo {
   factory OfficeDetailInfo.fromJson(Map<String, dynamic> json)
   => _$OfficeDetailInfoFromJson(json);
 }
+
+/// 회의실 예약 현황 데이터 모델
+@JsonSerializable()
+class OfficeBookingResponse extends GeneralModel {
+
+  OfficeBookingInfo data;
+
+  OfficeBookingResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory OfficeBookingResponse.fromJson(Map<String, dynamic> json)
+  => _$OfficeBookingResponseFromJson(json);
+}
+
+@JsonSerializable()
+class OfficeBookingInfo {
+
+  List<BookingTime?> bookedTimes;
+
+  OfficeBookingInfo({
+    required this.bookedTimes,
+  });
+
+  factory OfficeBookingInfo.fromJson(Map<String, dynamic> json)
+  => _$OfficeBookingInfoFromJson(json);
+}
+
+@JsonSerializable()
+class BookingTime {
+
+  String startTime;
+  String endTime;
+
+  BookingTime({
+    required this.startTime,
+    required this.endTime,
+  });
+
+  factory BookingTime.fromJson(Map<String, dynamic> json)
+  => _$BookingTimeFromJson(json);
+}

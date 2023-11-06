@@ -121,3 +121,46 @@ Map<String, dynamic> _$OfficeDetailInfoToJson(OfficeDetailInfo instance) =>
       'officeId': instance.officeId,
       'isActive': instance.isActive,
     };
+
+OfficeBookingResponse _$OfficeBookingResponseFromJson(
+        Map<String, dynamic> json) =>
+    OfficeBookingResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: OfficeBookingInfo.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$OfficeBookingResponseToJson(
+        OfficeBookingResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+OfficeBookingInfo _$OfficeBookingInfoFromJson(Map<String, dynamic> json) =>
+    OfficeBookingInfo(
+      bookedTimes: (json['bookedTimes'] as List<dynamic>)
+          .map((e) => e == null
+              ? null
+              : BookingTime.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$OfficeBookingInfoToJson(OfficeBookingInfo instance) =>
+    <String, dynamic>{
+      'bookedTimes': instance.bookedTimes,
+    };
+
+BookingTime _$BookingTimeFromJson(Map<String, dynamic> json) => BookingTime(
+      startTime: json['startTime'] as String,
+      endTime: json['endTime'] as String,
+    );
+
+Map<String, dynamic> _$BookingTimeToJson(BookingTime instance) =>
+    <String, dynamic>{
+      'startTime': instance.startTime,
+      'endTime': instance.endTime,
+    };

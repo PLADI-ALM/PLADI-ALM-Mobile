@@ -1,15 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../Presenter/booking/office_service.dart';
 import '../../common/component/purple_bottom_button.dart';
 import 'booking_success_screen.dart';
 
 class BookingOfficeScreen extends StatefulWidget {
-  const BookingOfficeScreen({Key? key}) : super(key: key);
+  final int officeId;
+
+  const BookingOfficeScreen({
+    required this.officeId,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<BookingOfficeScreen> createState() => _BookingOfficeScreenState();
@@ -27,10 +33,22 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   int startTime = -1;
   int endTime = -1;
 
-  // dummy data
-  int bookedStartTime = 1;
-  int bookedEndTime = 3;
+  List<List<int>> bookedTimeList = [];
 
+  bool isLoading = true;
+  dynamic data;
+
+  Future<dynamic> fetchData() async {
+    bookedTimeList = [];
+    isLoading = true;
+    dynamic response = await OfficeService().getBookedTimeList(widget.officeId, selectedDay ?? DateTime.now());
+    if (response != null) {
+      data = OfficeBookingResponse.fromJson(response);
+      setBookedTimeList(data);
+    }
+    isLoading = false;
+    return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,40 +64,55 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
   Widget renderBody() {
-    return Container(
-      child: ListView(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20, top: 20),
-            child: Text('날짜 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-          ),
-
-          renderCalendar(),
-          const Divider(thickness: 1.0,),
-
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return FutureBuilder<dynamic>(
+        future: fetchData(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('정보를 불러오지 못 하였습니다.',
+                style: TextStyle(fontSize: 16, color: purple),),
+            );
+          }
+          else {
+            if (isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: purple,),);
+            }
+            return ListView(
               children: [
-                const Text('시간 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-                Flexible(child: Container()),
-                SizedBox(
-                  width: 22, height: 22,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: didTapResetTimeGridButton,
-                    icon: const Icon(CupertinoIcons.refresh, size: 22,),
-                  )
-                )
-              ],
-            )
-          ),
-          const SizedBox(height: 15,),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20),
+                  child: Text('날짜 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+                ),
 
-          renderTimeGrid(),
-        ],
-      ),
+                renderCalendar(),
+                const Divider(thickness: 1.0,),
+
+                Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text('시간 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+                        Flexible(child: Container()),
+                        SizedBox(
+                            width: 22, height: 22,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: didTapResetTimeGridButton,
+                              icon: const Icon(CupertinoIcons.refresh, size: 22,),
+                            )
+                        )
+                      ],
+                    )
+                ),
+                const SizedBox(height: 15,),
+
+                renderTimeGrid(),
+              ],
+            );
+          }
+        }
     );
   }
 
@@ -188,8 +221,27 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
 
+  /// Helper Methods
+  void setBookedTimeList(OfficeBookingResponse data) {
+    if (data.status == 200 && data.data.bookedTimes.isNotEmpty) {
+      for (var time in data.data.bookedTimes) {
+        bookedTimeList.add([getTimeWithString(time!.startTime), getTimeWithString(time!.endTime)]);
+      }
+    }
+  }
+
+  int getTimeWithString(String timeStr) {
+    timeStr = timeStr.substring(0,2);
+    if (timeStr[0] == '0') { return int.parse(timeStr[1]); }
+    else { return int.parse(timeStr); }
+  }
+
   bool isBookedTime(int index) {
-    return ((bookedStartTime <= index) && (bookedEndTime >= index));
+    for (List<int> time in bookedTimeList) {
+      if ((time[0] <= index) && (time[1] > index)) { return true; }
+      else { continue; }
+    }
+    return false;
   }
 
   bool isContainInSelectedTime(int index) {
