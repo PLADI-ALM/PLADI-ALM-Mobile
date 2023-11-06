@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
+import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -34,8 +35,9 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
 
   int startTime = -1;
   int endTime = -1;
-
   List<List<int>> bookedTimeList = [];
+
+  TextEditingController memoController = TextEditingController();
 
   bool isLoading = true;
   dynamic data;
@@ -72,38 +74,48 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   }
 
   Widget renderBody() {
-    return ListView(
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 20, top: 20),
-          child: Text('날짜 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-        ),
+    return GestureDetector(
+      onTap: () { FocusScope.of(context).unfocus(); },
+      child: ListView(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 20, top: 20),
+            child: Text('날짜 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+          ),
 
-        renderCalendar(),
-        const Divider(thickness: 1.0,),
+          renderCalendar(),
+          const Divider(thickness: 1.0,),
 
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('시간 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-                Flexible(child: Container()),
-                SizedBox(
-                    width: 22, height: 22,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: didTapResetTimeGridButton,
-                      icon: const Icon(CupertinoIcons.refresh, size: 22,),
-                    )
-                )
-              ],
-            )
-        ),
-        const SizedBox(height: 15,),
+          Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('시간 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+                  Flexible(child: Container()),
+                  SizedBox(
+                      width: 22, height: 22,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: didTapResetTimeGridButton,
+                        icon: const Icon(CupertinoIcons.refresh, size: 22,),
+                      )
+                  )
+                ],
+              )
+          ),
+          const SizedBox(height: 15,),
 
-        renderTimeGrid(),
-      ],
+          renderTimeGrid(),
+          const Divider(thickness: 1.0,),
+
+          const Padding(
+            padding: EdgeInsets.only(left: 20, top: 20),
+            child: Text('이용목적', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+          ),
+          renderMemoField()
+        ],
+      ),
     );
   }
 
@@ -160,7 +172,7 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   Widget renderTimeGrid() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 380,
+      height: 340,
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -191,6 +203,31 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
               ),
             );
           }
+      ),
+    );
+  }
+
+  Widget renderMemoField() {
+    return Container(
+      margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 50),
+      padding: const EdgeInsets.only(left: 10,right: 10, bottom: 10),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        // color: Colors.red,
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        border: Border.all(color: darkGrey.withOpacity(0.3))
+      ),
+      child: Flexible(
+        child: TextField(
+          controller: memoController,
+          maxLength: 100,
+          cursorColor: purple,
+          decoration: const InputDecoration(
+            hintText: '이용목적을 입력해주세요.',
+            hintStyle: TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
+            border: InputBorder.none,
+          ),
+        ),
       ),
     );
   }
@@ -364,7 +401,16 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
     });
   }
 
-  void didTapBookingButton() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingSuccessScreen()));
+  void didTapBookingButton() async {
+    dynamic response = await OfficeService().bookOffice(widget.officeId, selectedDay!, startTime, endTime, memoController.value.text ?? '');
+    if (response != null) {
+      if (response.runtimeType == GeneralModel) {
+        if (response.status == 200) {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingSuccessScreen()));
+        }
+        else { Fluttertoast.showToast(msg: response.message); }
+      }
+      else { Fluttertoast.showToast(msg: response); }
+    }
   }
 }
