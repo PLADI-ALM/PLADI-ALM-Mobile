@@ -159,6 +159,8 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
           setState(() {
             this.selectedDay = selectedDay;
             this.focusedDay = selectedDay;
+            startTime = -1;
+            endTime = -1;
             fetchData();
           });
         },
