@@ -8,9 +8,16 @@ class BookingService {
   final carListURL = '/cars';
   final resourceListURL = '/resources';
 
+  DateTime? selectedDate;
+  DateTime? startTime;
+  DateTime? endTime;
+
   String keyword = '';
-  String startDate = '';
-  String endDate = '';
+  String selectedDateStr = '';
+  String startTimeStr = '';
+  String endTimeStr = '';
+
+
 
   /// Singleton Pattern
   static final BookingService _bookingService = BookingService._();
@@ -20,42 +27,39 @@ class BookingService {
   }
 
   Future<dynamic> getOfficeListData() async {
-    setDate();
     final response = await APIManager().request(
         RequestType.get,
         officeListURL,
         null,
         (keyword.isEmpty)
             ? null
-            : {"facilityName" : keyword, "startDate" : startDate, "endDate" : endDate},
+            : {"facilityName" : keyword, "startDate" : '$selectedDateStr $startTimeStr', "endDate" : '$selectedDateStr $endTimeStr'},
         null
     );
     return response;
   }
 
   Future<dynamic> getCarListData() async {
-    setDate();
     final response = await APIManager().request(
         RequestType.get,
         carListURL,
         null,
         (keyword.isEmpty)
             ? null
-            : {"carName" : keyword, "startDate" : startDate, "endDate" : endDate},
+            : {"carName" : keyword,  "startDate" : '$selectedDateStr $startTimeStr', "endDate" : '$selectedDateStr $endTimeStr'},
         null
     );
     return response;
   }
 
   Future<dynamic> getResourceListData() async {
-    setDate();
     final response = await APIManager().request(
       RequestType.get,
       resourceListURL,
       null,
       (keyword.isEmpty)
           ? null
-          : {"resourceName" : keyword, "startDate" : startDate, "endDate" : endDate},
+          : {"resourceName" : keyword, "startDate" : '$selectedDateStr $startTimeStr', "endDate" : '$selectedDateStr $endTimeStr'},
       null
     );
     return response;
@@ -65,8 +69,20 @@ class BookingService {
   void setKeyword(String input) { keyword = input; }
   String getKeyword() { return keyword; }
 
-  void setDate() {
-    startDate = DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now());
-    endDate = DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now().add(const Duration(hours: 1)));
+  void setDate(DateTime date) {
+    selectedDate = date;
+    selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate!);
+  }
+  void setStartTime(DateTime time) {
+    startTime = time;
+    startTimeStr = DateFormat('HH:mm').format(startTime!);
+  }
+  void setEndTime(DateTime time) {
+    endTime = time;
+    endTimeStr = DateFormat('HH:mm').format(endTime!);
+  }
+
+  bool isFilterInfoEmpty() {
+    return (selectedDateStr.isEmpty || startTimeStr.isEmpty || endTimeStr.isEmpty);
   }
 }
