@@ -55,7 +55,7 @@ class _GeneralFilterScreenState extends State<GeneralFilterScreen> {
             hintText: '시작 날짜를 선택해주세요',
             bottomSheetTopTitle: '시작 날짜 선택',
             changedDate: (DateTime date) { setState(() { startDate = date; }); },
-            calendarDayHeight: 50
+            // calendarDayHeight: 50
           ),
           SelectTimeButton(
             initialTitle: '시작 시간을 선택해주세요',
@@ -71,7 +71,7 @@ class _GeneralFilterScreenState extends State<GeneralFilterScreen> {
             hintText: '종료 날짜를 선택해주세요',
             bottomSheetTopTitle: '종료 날짜 선택',
             changedDate: (DateTime date) { setState(() { endDate = date; }); },
-            calendarDayHeight: 50
+            // calendarDayHeight: 50
           ),
           SelectTimeButton(
             initialTitle: '종료 시간을 선택해주세요',

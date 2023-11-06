@@ -1,23 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-import '../../colors.dart';
-
-typedef SetSelectedDate = void Function(DateTime date);
+import 'custom_calendar.dart';
 
 class SelectDateButton extends StatefulWidget {
   final String hintText;
   final String bottomSheetTopTitle;
   final SetSelectedDate changedDate;
-  final double? calendarDayHeight;
 
   const SelectDateButton({
     required this.hintText,
     required this.bottomSheetTopTitle,
     required this.changedDate,
-    this.calendarDayHeight,
     Key? key
   }) : super(key: key);
 
@@ -27,11 +22,7 @@ class SelectDateButton extends StatefulWidget {
 
 class _SelectDateButtonState extends State<SelectDateButton> {
 
-  static const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
   DateTime? selectedDay;
-  DateTime focusedDay = DateTime.now();
-
   String hintText = '';
 
   @override
@@ -106,8 +97,6 @@ class _SelectDateButtonState extends State<SelectDateButton> {
   }
 
   Widget renderCalendarView() {
-    TextStyle weekdayStyle = const TextStyle(fontSize: 11, color: purple);
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
       padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
@@ -115,44 +104,13 @@ class _SelectDateButtonState extends State<SelectDateButton> {
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(10))
       ),
-      child: TableCalendar(
-        rowHeight: widget.calendarDayHeight ?? 35,
-        focusedDay: focusedDay,
-        firstDay: DateTime(1800),
-        lastDay: DateTime(3000),
-        daysOfWeekHeight: 30,
-        headerStyle: const HeaderStyle(
-          formatButtonVisible: false,
-          titleCentered: true,
-          leftChevronVisible: true,
-          rightChevronVisible: true,
-          leftChevronMargin: EdgeInsets.only(left: 23),
-          rightChevronMargin: EdgeInsets.only(right: 23),
-          leftChevronIcon: Icon(Icons.chevron_left, color: purple,),
-          rightChevronIcon: Icon(Icons.chevron_right, color: purple,),
-        ),
-        calendarStyle: CalendarStyle(
-          isTodayHighlighted: true,
-          selectedDecoration: BoxDecoration(
-            color: purple.withOpacity(0.6),
-          ),
-        ),
-        calendarBuilders: CalendarBuilders(
-          dowBuilder: (context, day) {
-            return Center(child: Text(weekdays[day.weekday-1], style: weekdayStyle,),);
-          },
-        ),
-        onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-          setState(() {
-            this.selectedDay = selectedDay;
-            this.focusedDay = selectedDay;
-            widget.changedDate(this.selectedDay!);
-            hintText = DateFormat('yyyy-MM-dd').format(this.selectedDay!);
-          });
+      child: CustomCalender(
+        changedDate: (DateTime date) {
+          selectedDay = date;
+          hintText = DateFormat('yyyy-MM-dd').format(selectedDay!);
+          widget.changedDate(date);
         },
-        selectedDayPredicate: (DateTime day) {
-          return isSameDay(selectedDay, day);
-        },
+        calendarDayHeight: 50,
       ),
     );
   }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Model/model/general_model.dart';
+import 'package:frontend/View/booking/component/custom_calendar.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Presenter/booking/office_service.dart';
@@ -26,12 +26,7 @@ class BookingOfficeScreen extends StatefulWidget {
 
 class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
 
-  static const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
-  TextStyle weekdayStyle = const TextStyle(fontSize: 11, color: purple);
-
   DateTime? selectedDay;
-  DateTime focusedDay = DateTime.now();
 
   int startTime = -1;
   int endTime = -1;
@@ -127,45 +122,15 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
           color: Color(0xFFF2F2F2),
           borderRadius: BorderRadius.all(Radius.circular(10))
       ),
-      child: TableCalendar(
-        rowHeight: 35,
-        focusedDay: focusedDay,
-        firstDay: DateTime(2023,1,1),
-        lastDay: DateTime(2023,12,31),
-        // locale: 'ko-KR',
-        daysOfWeekHeight: 30,
-        headerStyle: const HeaderStyle(
-          formatButtonVisible: false,
-          titleCentered: true,
-          leftChevronVisible: true,
-          rightChevronVisible: true,
-          leftChevronMargin: EdgeInsets.only(left: 23),
-          rightChevronMargin: EdgeInsets.only(right: 23),
-          leftChevronIcon: Icon(Icons.chevron_left, color: purple,),
-          rightChevronIcon: Icon(Icons.chevron_right, color: purple,),
-        ),
-        calendarStyle: CalendarStyle(
-          isTodayHighlighted: true,
-          selectedDecoration: BoxDecoration(
-            color: purple.withOpacity(0.6),
-          ),
-        ),
-        calendarBuilders: CalendarBuilders(
-          dowBuilder: (context, day) {
-            return Center(child: Text(weekdays[day.weekday-1], style: weekdayStyle,),);
-          },
-        ),
-        onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+      child: CustomCalender(
+        calendarDayHeight: 35,
+        changedDate: (DateTime date) {
           setState(() {
-            this.selectedDay = selectedDay;
-            this.focusedDay = selectedDay;
+            selectedDay = date;
             startTime = -1;
             endTime = -1;
             fetchData();
           });
-        },
-        selectedDayPredicate: (DateTime day) {
-          return isSameDay(selectedDay, day);
         },
       ),
     );
