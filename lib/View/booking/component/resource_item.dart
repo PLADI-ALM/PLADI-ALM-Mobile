@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/model/booking/resource_model.dart';
+import 'package:frontend/View/booking/screen/booking_screen.dart';
 
 import '../../colors.dart';
-import '../screen/resource_detail_screen.dart';
+import '../screen/general_detail_screen.dart';
 
 class ResourceItem extends StatefulWidget {
   final ResourceInfo data;
@@ -75,8 +76,7 @@ class _ResourceItemState extends State<ResourceItem> {
   /// Event Methods
   void didTapResourceItem() {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => ResourceDetailScreen(
-              resourceId: widget.data.resourceId,
-            )));
+        builder: (_) => GeneralDetailScreen(type: BookingType.resource, id: widget.data.resourceId,)
+    ));
   }
 }

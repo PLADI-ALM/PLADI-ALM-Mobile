@@ -61,3 +61,43 @@ class CarInfo {
   factory CarInfo.fromJson(Map<String, dynamic> json)
   => _$CarInfoFromJson(json);
 }
+
+/// 차량 세부 조회용 데이터 모델
+@JsonSerializable()
+class CarDetailResponse extends GeneralModel {
+  CarDetailInfo data;
+
+  CarDetailResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory CarDetailResponse.fromJson(Map<String, dynamic> json)
+  => _$CarDetailResponseFromJson(json);
+}
+
+@JsonSerializable()
+class CarDetailInfo {
+  String description;
+  String? imgUrl;
+  String location;
+  String name;
+  int responsibilityId;
+  String responsibilityName;
+  String responsibilityPhone;
+
+  CarDetailInfo({
+    required this.description,
+    required this.imgUrl,
+    required this.location,
+    required this.name,
+    required this.responsibilityId,
+    required this.responsibilityName,
+    required this.responsibilityPhone,
+  });
+
+  factory CarDetailInfo.fromJson(Map<String, dynamic> json)
+  => _$CarDetailInfoFromJson(json);
+}

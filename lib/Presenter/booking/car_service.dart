@@ -37,6 +37,15 @@ class CarService {
     return response;
   }
 
+  Future<dynamic> getCarDetailData(int carId) async {
+    final response = await APIManager().request(
+        RequestType.get,
+        '$carURL/$carId',
+        null, null, null
+    );
+    return response;
+  }
+
   /// Helper Methods
   void setStartInfo(DateTime date, DateTime time) {
     startDate = date;
