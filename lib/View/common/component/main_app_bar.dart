@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/View/mypage/screen/mypage_screen.dart';
 import 'package:frontend/View/notification/screen/notification_screen.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -39,7 +40,7 @@ class _MainAppBarState extends State<MainAppBar> {
 
     Widget sideBarItem = IconButton(
       onPressed: didTapSideBarButton,
-      icon: SvgPicture.asset('asset/image/side_bar.svg'),
+      icon: SvgPicture.asset('asset/image/mypage_icon.svg'),
       style: IconButton.styleFrom(padding: EdgeInsets.zero),
     );
 
@@ -53,6 +54,7 @@ class _MainAppBarState extends State<MainAppBar> {
   }
 
   void didTapSideBarButton() {
-    print('didTapNotificationButton');
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const MypageScreen()));
   }
 }
