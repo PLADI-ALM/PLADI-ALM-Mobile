@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/View/colors.dart';
 
 import '../../booking/screen/booking_screen.dart';
@@ -22,10 +23,23 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   int index = 0;
   int selectedTab = 0;
 
+  void setTabControllerByRole() async {
+    controller = APIManager().isAdmin
+        ? TabController(length: adminTabBarIcons.length, vsync: this)
+        : TabController(length: basicTabBarIcons.length, vsync: this);
+    controller.addListener(tabListener);
+    index = widget.initialIndex ?? 0;
+    selectedTab = widget.initialIndex ?? 0;
+  }
+
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: tabBarIcons.length, vsync: this);
+
+    controller = TabController(
+        length: APIManager().isAdmin ? adminTabBarIcons.length : basicTabBarIcons.length,
+        vsync: this
+    );
     controller.addListener(tabListener);
     index = widget.initialIndex ?? 0;
     selectedTab = widget.initialIndex ?? 0;
@@ -52,19 +66,29 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
     });
   }
 
+  List<Widget> getTabBarItemList() {
+    if (APIManager().isAdmin) {
+      return [
+        const BookingScreen(),
+        const BookingScreen(),
+        const BookingScreen(),
+        const BookingScreen(),
+      ];
+    } else {
+      return [
+        const BookingScreen(),
+        const BookingScreen(),
+        const BookingScreen(),
+      ];
+    }
+  }
+
   /// 화면 중앙 UI 구현 메소드 ///
   Widget renderTabBarView() {
     return TabBarView(
       physics: const NeverScrollableScrollPhysics(),
       controller: controller,
-      children: [
-        const BookingScreen(),
-        const BookingScreen(),
-        const BookingScreen(),
-        // EquipmentScreen(),
-        // ArchivingScreen(),
-        // MypageScreen(),
-      ],
+      children: getTabBarItemList()
     );
   }
 
@@ -88,13 +112,13 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
           });
         },
         currentIndex: index,
-        items: tabBarIcons,
+        items: APIManager().isAdmin ? adminTabBarIcons : basicTabBarIcons,
       ),
     );
   }
 
   TextStyle renderLabelStyle() {
-    return TextStyle(
+    return const TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w500
     );
