@@ -5,7 +5,6 @@ import 'constants.dart';
 enum RequestType { get, post, patch, delete }
 
 class APIManager {
-
   /// Singleton Pattern
   static final APIManager _apiManager = APIManager._();
 
@@ -21,13 +20,12 @@ class APIManager {
 
   /// Request methods
   dynamic request(
-      RequestType requestType,
-      String path,
-      Options? options,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? data,
-      ) async {
-
+    RequestType requestType,
+    String path,
+    Options? options,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+  ) async {
     setToken();
     print('${await storage.read(key: accessTokenKey)}');
     print('${defaultOptions.headers}');
@@ -38,35 +36,25 @@ class APIManager {
 
     dynamic response;
     switch (requestType) {
-      case RequestType.get :
-        response = await dio.get(
-            baseUrl + path,
-            options: defaultOptions,
-            queryParameters: queryParameters
-        );
+      case RequestType.get:
+        response = await dio.get(baseUrl + path,
+            options: defaultOptions, queryParameters: queryParameters);
 
-      case RequestType.post :
-        response = await dio.post(
-            baseUrl + path,
+      case RequestType.post:
+        response = await dio.post(baseUrl + path,
             options: defaultOptions,
             queryParameters: queryParameters,
-            data: data
-        );
+            data: data);
 
-      case RequestType.patch :
-        response = await dio.patch(
-            baseUrl + path,
+      case RequestType.patch:
+        response = await dio.patch(baseUrl + path,
             options: defaultOptions,
             queryParameters: queryParameters,
-            data: data
-        );
+            data: data);
 
-      case RequestType.delete :
-        response = await dio.delete(
-            baseUrl + path,
-            options: defaultOptions,
-            queryParameters: queryParameters
-        );
+      case RequestType.delete:
+        response = await dio.delete(baseUrl + path,
+            options: defaultOptions, queryParameters: queryParameters);
     }
 
     // print('api + ${response}');
@@ -84,9 +72,14 @@ class APIManager {
 
   void setToken() async {
     defaultOptions.headers = {
-      'Accept' : 'application/json',
+      'Accept': 'application/json',
       'authorization': await storage.read(key: accessTokenKey),
     };
+  }
+
+  void deleteToken() {
+    storage.delete(key: refreshTokenKey);
+    storage.delete(key: accessTokenKey);
   }
 
   Future<bool> checkToken() async {
