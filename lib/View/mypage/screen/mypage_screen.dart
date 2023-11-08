@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/Model/model/mypage/profile_response.dart';
 import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/Presenter/mypage/mypage_service.dart';
@@ -17,17 +19,7 @@ class MypageScreen extends StatefulWidget {
 }
 
 class _MypageScreen extends State<MypageScreen> {
-  late final ProfileResponse profile;
-
-  void getProfile() {
-    Future<dynamic> result = MypageService().getProfile();
-    result.then((value) => {
-          if (value is ProfileResponseModel)
-            {profile = value.data}
-          else
-            {showAlert(value)}
-        });
-  }
+  late final ProfileResponse data;
 
   @override
   void initState() {
@@ -36,12 +28,28 @@ class _MypageScreen extends State<MypageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getProfile();
     return Scaffold(
         appBar: const SubAppBar(titleText: "내정보"), body: renderBody());
   }
 
   Widget renderBody() {
+    return FutureBuilder(
+        future: MypageService().getProfile(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            data = ProfileResponse(name: "이름", role: "역할");
+          }
+
+          if (snapshot.hasData) {
+            data = ProfileResponseModel.fromJson(snapshot.data).data;
+            return mypageBody(data);
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
+  }
+
+  Widget mypageBody(ProfileResponse profile) {
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
       color: Colors.white,
@@ -64,10 +72,9 @@ class _MypageScreen extends State<MypageScreen> {
                     Container(
                       width: 11,
                     ),
-                    const Text(
-                      "이름",
-                      // profile == null ? "이름" : profile.name,
-                      style: TextStyle(
+                    Text(
+                      profile.name,
+                      style: const TextStyle(
                         color: Color(0xFF4C4C4C),
                         fontSize: 20,
                         fontFamily: 'NanumSquare_ac',
@@ -90,11 +97,10 @@ class _MypageScreen extends State<MypageScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    "역할",
-                    // profile == null ? "역할" : profile.role,
+                  child: Text(
+                    profile.role,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
                       fontFamily: 'NanumSquare_ac',

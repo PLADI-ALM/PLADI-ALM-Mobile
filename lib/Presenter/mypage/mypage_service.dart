@@ -14,23 +14,24 @@ class MypageService {
   }
 
   Future<dynamic> getProfile() async {
-    try {
-      final response =
-          APIManager().request(RequestType.get, profileURL, null, null, null);
+    // try {
+    final response =
+        APIManager().request(RequestType.get, profileURL, null, null, null);
+    return response;
 
-      if (response != null) {
-        final data = ProfileResponseModel.fromJson(response);
-        print(data);
-        // return data;
-      }
-    } on DioError catch (e) {
-      final response = e.response;
-      if (response != null) {
-        print(response);
-        final error = GeneralModel.fromJson(response.data);
-        return error.message;
-      }
-    }
+    //   if (response != null) {
+    //     final data = ProfileResponseModel.fromJson(response);
+    //     print(data);
+    //     // return data;
+    //   }
+    // } on DioError catch (e) {
+    //   final response = e.response;
+    //   if (response != null) {
+    //     print(response);
+    //     final error = GeneralModel.fromJson(response.data);
+    //     return error.message;
+    //   }
+    // }
   }
 
   Future<dynamic> logout() async {
