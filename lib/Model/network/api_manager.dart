@@ -17,6 +17,7 @@ class APIManager {
   /// Variables
   final dio = Dio();
   Options defaultOptions = Options();
+  bool isAdmin = false;
 
   /// Request methods
   dynamic request(
@@ -64,7 +65,8 @@ class APIManager {
   }
 
   /// Methods of Token
-  void writeToken(String accessToken, String refreshToken) async {
+  void writeToken(String accessToken, String refreshToken, String role) async {
+    isAdmin = (role == 'ADMIN');
     await storage.write(key: accessTokenKey, value: accessToken);
     await storage.write(key: refreshTokenKey, value: refreshToken);
     setToken();
