@@ -111,7 +111,7 @@ class ResourceService {
     try {
       final response = await APIManager().request(
           RequestType.post,
-          '$resourceURL/$resourceId/booking',
+          '$resourceURL/$resourceId',
           null, null,
           body.toJson()
       );
