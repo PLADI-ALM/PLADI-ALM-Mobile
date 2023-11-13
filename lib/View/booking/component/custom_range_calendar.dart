@@ -60,6 +60,16 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
         selectedDecoration: BoxDecoration(
           color: purple.withOpacity(0.6),
         ),
+        rangeHighlightScale : 1.0,
+        rangeHighlightColor: purple,
+        rangeStartDecoration : const BoxDecoration(
+          color: purple,
+          shape: BoxShape.circle,
+        ),
+        rangeEndDecoration : const BoxDecoration(
+            color: purple,
+            shape: BoxShape.circle,
+        ),
       ),
       calendarBuilders: CalendarBuilders(
         dowBuilder: (context, day) {
