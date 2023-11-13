@@ -5,6 +5,7 @@ import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../Model/model/booking/resource_model.dart';
 import '../../../Model/model/general_model.dart';
 import '../../colors.dart';
 import '../../common/component/purple_bottom_button.dart';
@@ -27,6 +28,7 @@ class BookingResourceScreen extends StatefulWidget {
 
 class _BookingResourceScreenState extends State<BookingResourceScreen> {
 
+  List<String> bookedDayList = [];
   List<List<int>> bookedTimeList = [];
 
   DateTime? startDate;
@@ -40,6 +42,21 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   TextEditingController memoController = TextEditingController();
 
   TextStyle titleStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black);
+
+  @override
+  void initState() {
+    super.initState();
+    getBookedTimeListInfo();
+  }
+
+  void getBookedTimeListInfo() async {
+    dynamic response = await ResourceService().getBookedTimeList(widget.resourceId, DateTime.now(), null);
+    if (response != null) {
+      ResourceBookedList data = ResourceBookedList.fromJson(response);
+      setState(() { bookedDayList = data.data; });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +119,11 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
               color: Color(0xFFF2F2F2),
               borderRadius: BorderRadius.all(Radius.circular(10))
           ),
-          child: CustomRangeCalender(changedDate: changedDate, changedDateRange: (DateTime start, DateTime end) {  },)
+          child: CustomRangeCalender(
+            changedStartDate: changedStartDate,
+            changedEndDate: changedEndDate,
+            bookedDayList: bookedDayList,
+          )
         ),
         const Divider(thickness: 1.0,),
 
@@ -252,13 +273,15 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     setState(() { isSettingStart = false; });
   }
 
-  void changedDate(DateTime time) {
+  void changedStartDate(DateTime? time) {
     setState(() {
-      if (isSettingStart) {
-        startDate = DateTime(time.year, time.month, time.day);
-      } else {
-        endDate = DateTime(time.year, time.month, time.day);
-      }
+      startDate = (time == null) ? null : DateTime(time.year, time.month, time.day);
+    });
+  }
+
+  void changedEndDate(DateTime? time) {
+    setState(() {
+      endDate = (time == null) ? null : DateTime(time.year, time.month, time.day);
     });
   }
 

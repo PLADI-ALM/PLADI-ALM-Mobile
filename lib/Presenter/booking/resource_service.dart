@@ -49,15 +49,20 @@ class ResourceService {
     return response;
   }
 
-  Future<dynamic> getBookedTimeList(int resourceId, DateTime selectedMonth) async {
+  Future<dynamic> getBookedTimeList(int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
     String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
+    String selectedDayStr = (selectedDay != null) ? DateFormat('yyyy-MM-dd').format(selectedDay!) : '';
+
+    print('selectedMonthStr - $selectedMonthStr');
+    print('selectedDayStr - $selectedDayStr');
+
     final response = await APIManager().request(
         RequestType.get,
         '$resourceURL/$resourceId/booking-state',
         null,
         {
-          'date':'2023-10-23', // TODO: 이게 뭘까,,,,
-          'month':selectedMonthStr
+          'month':selectedMonthStr,
+          // 'date':selectedDayStr
         },
         null
     );

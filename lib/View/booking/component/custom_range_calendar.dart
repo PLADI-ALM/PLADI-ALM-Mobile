@@ -1,19 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../colors.dart';
 
-typedef SetSelectedDateRange = void Function(DateTime start, DateTime end);
-typedef SetSelectedDate = void Function(DateTime date);
+typedef SetSelectedStartDate = void Function(DateTime? date);
+typedef SetSelectedEndDate = void Function(DateTime? date);
 
 class CustomRangeCalender extends StatefulWidget {
-  final SetSelectedDateRange changedDateRange;
-  final SetSelectedDate changedDate;
+  final SetSelectedStartDate changedStartDate;
+  final SetSelectedEndDate changedEndDate;
   final double? calendarDayHeight;
+  final List<String> bookedDayList;
 
   const CustomRangeCalender({
-    required this.changedDateRange,
-    required this.changedDate,
+    required this.changedStartDate,
+    required this.changedEndDate,
+    required this.bookedDayList,
     this.calendarDayHeight,
     Key? key
   }) : super(key: key);
@@ -30,7 +34,6 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
   DateTime focusedDay = DateTime.now();
   DateTime? focusedStartDay;
   DateTime? focusedEndDay;
-  // DateTime focusedEndDay = DateTime.now();
 
   TextStyle weekdayStyle = const TextStyle(fontSize: 11, color: purple);
 
@@ -66,7 +69,6 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
       onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
         setState(() {
           focusedDay = selectedDay;
-          // widget.changedDate(focusedDay);
         });
       },
       rangeStartDay: focusedStartDay,
@@ -76,20 +78,27 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
         setState(() {
           if (focusedStartDay == null) {
             focusedStartDay = focusedDay;
+            widget.changedStartDate(focusedDay);
+          } else if (focusedEndDay == null) {
             focusedEndDay = focusedDay;
+            widget.changedEndDate(focusedDay);
+          } else {
+            focusedStartDay = focusedDay;
+            focusedEndDay = null;
+            widget.changedStartDate(focusedDay);
+            widget.changedEndDate(null);
           }
-          else {
-            focusedEndDay = focusedDay;
-          }
-          widget.changedDate(focusedDay);
         });
-        // print('start - $start');
-        // print('end - $end');
-        // print('focusedDay - $focusedDay');
       },
-      selectedDayPredicate: (DateTime day) {
-        return isSameDay(selectedDay, day);
-      },
+      selectedDayPredicate: (DateTime day) { return isSameDay(selectedDay, day); },
+      enabledDayPredicate: (DateTime day) { return isBookedDay(day); },
     );
+  }
+
+  bool isBookedDay(DateTime dateTime) {
+    for (var element in widget.bookedDayList) {
+      if (DateFormat('yyyy-MM-dd').format(dateTime) == element) { return false; }
+    }
+    return true;
   }
 }

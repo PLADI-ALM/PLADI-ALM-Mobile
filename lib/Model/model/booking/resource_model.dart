@@ -104,6 +104,22 @@ class ResourceDetailInfo {
   => _$ResourceDetailInfoFromJson(json);
 }
 
+/// 장비 예약 현황 데이터 모델
+@JsonSerializable()
+class ResourceBookedList extends GeneralModel {
+  List<String> data;
+
+  ResourceBookedList({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory ResourceBookedList.fromJson(Map<String, dynamic> json)
+  => _$ResourceBookedListFromJson(json);
+}
+
 /// 장비 예약 데이터 모델
 @JsonSerializable()
 class ResourceBookingRequest {
