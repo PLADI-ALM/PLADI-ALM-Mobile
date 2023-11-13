@@ -200,7 +200,7 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
     if (data == null) {
       Fluttertoast.showToast(msg: '장비 정보를 불러올 수 없으므로 예약이 불가능합니다.');
     } else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingResourceScreen()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingResourceScreen(resourceId: widget.id,)));
     }
   }
 }

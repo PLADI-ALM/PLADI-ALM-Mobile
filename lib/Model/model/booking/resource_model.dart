@@ -103,3 +103,19 @@ class ResourceDetailInfo {
   factory ResourceDetailInfo.fromJson(Map<String, dynamic> json)
   => _$ResourceDetailInfoFromJson(json);
 }
+
+/// 장비 예약 데이터 모델
+@JsonSerializable()
+class ResourceBookingRequest {
+  String startDateTime;
+  String endDateTime;
+  String memo;
+
+  ResourceBookingRequest({
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.memo,
+  });
+
+  Map<String, dynamic> toJson() => _$ResourceBookingRequestToJson(this);
+}

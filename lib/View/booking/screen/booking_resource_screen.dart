@@ -1,16 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../Model/model/general_model.dart';
 import '../../colors.dart';
 import '../../common/component/purple_bottom_button.dart';
 import '../../common/component/sub_app_bar.dart';
 import '../component/custom_range_calendar.dart';
+import 'booking_success_screen.dart';
 
 class BookingResourceScreen extends StatefulWidget {
-  const BookingResourceScreen({Key? key}) : super(key: key);
+
+  final int resourceId;
+
+  const BookingResourceScreen({
+    required this.resourceId,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<BookingResourceScreen> createState() => _BookingResourceScreenState();
@@ -296,9 +305,21 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     });
   }
 
-  void didTapBookingButton() {
+  void didTapBookingButton() async {
     print('startDateTime -> ${DateFormat('yyyy-MM-dd HH').format(startDate!)}');
     print('endDateTime -> ${DateFormat('yyyy-MM-dd HH').format(endDate!)}');
-    print('memeo -> ${memoController.value.text}');
+    print('memo -> ${memoController.value.text}');
+
+    dynamic response = await ResourceService().bookResource(widget.resourceId, startDate!, endDate!, memoController.value.text ?? '');
+    if (response != null) {
+      if (response.runtimeType == GeneralModel) {
+        if (response.status == 200) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const BookingSuccessScreen()), (route) => false);
+        }
+        else { Fluttertoast.showToast(msg: response.message); }
+      }
+      else { Fluttertoast.showToast(msg: response); }
+    }
   }
 }

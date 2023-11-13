@@ -112,3 +112,19 @@ Map<String, dynamic> _$ResourceDetailInfoToJson(ResourceDetailInfo instance) =>
       'responsibilityName': instance.responsibilityName,
       'responsibilityPhone': instance.responsibilityPhone,
     };
+
+ResourceBookingRequest _$ResourceBookingRequestFromJson(
+        Map<String, dynamic> json) =>
+    ResourceBookingRequest(
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+      memo: json['memo'] as String,
+    );
+
+Map<String, dynamic> _$ResourceBookingRequestToJson(
+        ResourceBookingRequest instance) =>
+    <String, dynamic>{
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+      'memo': instance.memo,
+    };
