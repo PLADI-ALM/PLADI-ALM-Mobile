@@ -83,6 +83,20 @@ class ResourceService {
     return response;
   }
 
+  Future<dynamic> getBookedDetailInfo(int resourceId, DateTime selectedDate, int selectedTime) async {
+    String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String startTimeStr = (selectedTime < 10) ? '0$startTime:00' : '$startTime:00';
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$resourceURL/$resourceId/booking',
+        null,
+        {'date':selectedDateStr, 'time':startTimeStr},
+        null
+    );
+    return response;
+  }
+
   Future<dynamic> bookResource(int resourceId, DateTime startDate, DateTime endDate, String memo) async {
 
     String startDateStr = DateFormat('yyyy-MM-dd HH').format(startDate);
