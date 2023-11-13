@@ -3,28 +3,34 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../colors.dart';
 
+typedef SetSelectedDateRange = void Function(DateTime start, DateTime end);
 typedef SetSelectedDate = void Function(DateTime date);
 
-class CustomCalender extends StatefulWidget {
+class CustomRangeCalender extends StatefulWidget {
+  final SetSelectedDateRange changedDateRange;
   final SetSelectedDate changedDate;
   final double? calendarDayHeight;
 
-  const CustomCalender({
+  const CustomRangeCalender({
+    required this.changedDateRange,
     required this.changedDate,
     this.calendarDayHeight,
     Key? key
   }) : super(key: key);
 
   @override
-  State<CustomCalender> createState() => _CustomCalenderState();
+  State<CustomRangeCalender> createState() => _CustomRangeCalenderState();
 }
 
-class _CustomCalenderState extends State<CustomCalender> {
+class _CustomRangeCalenderState extends State<CustomRangeCalender> {
 
   static const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   DateTime? selectedDay;
   DateTime focusedDay = DateTime.now();
+  DateTime? focusedStartDay;
+  DateTime? focusedEndDay;
+  // DateTime focusedEndDay = DateTime.now();
 
   TextStyle weekdayStyle = const TextStyle(fontSize: 11, color: purple);
 
@@ -59,10 +65,27 @@ class _CustomCalenderState extends State<CustomCalender> {
       ),
       onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
         setState(() {
-          this.selectedDay = selectedDay;
-          this.focusedDay = selectedDay;
-          widget.changedDate(this.selectedDay!);
+          focusedDay = selectedDay;
+          // widget.changedDate(focusedDay);
         });
+      },
+      rangeStartDay: focusedStartDay,
+      rangeEndDay: focusedEndDay,
+      rangeSelectionMode: RangeSelectionMode.enforced,
+      onRangeSelected: (DateTime? start, DateTime? end, DateTime focusedDay) {
+        setState(() {
+          if (focusedStartDay == null) {
+            focusedStartDay = focusedDay;
+            focusedEndDay = focusedDay;
+          }
+          else {
+            focusedEndDay = focusedDay;
+          }
+          widget.changedDate(focusedDay);
+        });
+        // print('start - $start');
+        // print('end - $end');
+        // print('focusedDay - $focusedDay');
       },
       selectedDayPredicate: (DateTime day) {
         return isSameDay(selectedDay, day);
