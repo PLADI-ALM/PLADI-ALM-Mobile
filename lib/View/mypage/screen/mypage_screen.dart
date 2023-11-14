@@ -38,6 +38,7 @@ class _MypageScreen extends State<MypageScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             data = ProfileResponse(name: "이름", role: "역할");
+            return mypageBody(data);
           }
 
           if (snapshot.hasData) {
