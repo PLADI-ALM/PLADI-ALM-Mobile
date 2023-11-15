@@ -101,3 +101,58 @@ class CarDetailInfo {
   factory CarDetailInfo.fromJson(Map<String, dynamic> json)
   => _$CarDetailInfoFromJson(json);
 }
+
+/// 차량 예약 목록 조회 데이터 모델
+@JsonSerializable()
+class CarBookingHistoryResponse extends GeneralModel {
+
+  CarBookingHistoryData data;
+
+  CarBookingHistoryResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory CarBookingHistoryResponse.fromJson(Map<String, dynamic> json)
+  => _$CarBookingHistoryResponseFromJson(json);
+}
+
+@JsonSerializable()
+class CarBookingHistoryData {
+
+  List<CarBookingHistory> content;
+
+  CarBookingHistoryData({
+    required this.content,
+  });
+
+  factory CarBookingHistoryData.fromJson(Map<String, dynamic> json)
+  => _$CarBookingHistoryDataFromJson(json);
+}
+
+@JsonSerializable()
+class CarBookingHistory {
+
+  int id;
+  String name;
+  String detailInfo;
+  String startDateTime;
+  String endDateTime;
+  String memo;
+  String status;
+
+  CarBookingHistory({
+    required this.id,
+    required this.name,
+    required this.detailInfo,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.memo,
+    required this.status,
+  });
+
+  factory CarBookingHistory.fromJson(Map<String, dynamic> json)
+  => _$CarBookingHistoryFromJson(json);
+}
