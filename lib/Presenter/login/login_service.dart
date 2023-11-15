@@ -11,6 +11,7 @@ class LoginService {
   final loginURL = '/users/login';
   final emailUrl = '/users/email';
   final emailCodeUrl = '/users/email-code';
+  final passwordUrl = '/users/password';
 
   static final LoginService _loginService = LoginService._();
   LoginService._();
@@ -71,6 +72,28 @@ class LoginService {
     try {
       final response = await APIManager()
           .request(RequestType.post, emailCodeUrl, null, null, body);
+
+      if (response != null) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error =
+            GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
+  Future<dynamic> changePassword(String email, String password) async {
+    final body = LoginRequest(email: email, password: password).toJson();
+
+    try {
+      final response = await APIManager()
+          .request(RequestType.patch, passwordUrl, null, null, body);
 
       if (response != null) {
         return true;

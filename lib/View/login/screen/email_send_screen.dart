@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Presenter/login/login_service.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
+import 'package:frontend/View/login/screen/password_screen.dart';
 
 class EmailSendScreen extends StatefulWidget {
   const EmailSendScreen({Key? key}) : super(key: key);
@@ -17,9 +18,17 @@ class _EmailSendScreen extends State<EmailSendScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController codeController = TextEditingController();
 
+  bool emailEdit = false;
+
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    emailEdit = true;
+    super.setState(fn);
   }
 
   @override
@@ -80,6 +89,7 @@ class _EmailSendScreen extends State<EmailSendScreen> {
                     maxLines: 1,
                     focusNode: emailFocusNode,
                     obscureText: false,
+                    readOnly: emailEdit,
                     controller: emailController,
                     decoration: const InputDecoration(
                         focusedBorder: UnderlineInputBorder(
@@ -188,7 +198,9 @@ class _EmailSendScreen extends State<EmailSendScreen> {
     var email = emailController.text;
     Future<dynamic> result = LoginService().requestEmail(email);
     result.then((value) => {
-          if (value == false)
+          if (value == true)
+            {setState(() {})}
+          else if (value == false)
             {showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
           else
             {showAlert(value)}
@@ -201,7 +213,10 @@ class _EmailSendScreen extends State<EmailSendScreen> {
     Future<dynamic> result = LoginService().requestEmailCode(email, code);
     result.then((value) => {
           if (value == true)
-            {showAlert("성공")}
+            {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => PasswordScreen(email: email)))
+            }
           else if (value == false)
             {showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
           else
