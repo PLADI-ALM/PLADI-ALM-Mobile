@@ -106,3 +106,58 @@ Map<String, dynamic> _$CarDetailInfoToJson(CarDetailInfo instance) =>
       'responsibilityName': instance.responsibilityName,
       'responsibilityPhone': instance.responsibilityPhone,
     };
+
+CarBookingHistoryResponse _$CarBookingHistoryResponseFromJson(
+        Map<String, dynamic> json) =>
+    CarBookingHistoryResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data:
+          CarBookingHistoryData.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CarBookingHistoryResponseToJson(
+        CarBookingHistoryResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+CarBookingHistoryData _$CarBookingHistoryDataFromJson(
+        Map<String, dynamic> json) =>
+    CarBookingHistoryData(
+      content: (json['content'] as List<dynamic>)
+          .map((e) => CarBookingHistory.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$CarBookingHistoryDataToJson(
+        CarBookingHistoryData instance) =>
+    <String, dynamic>{
+      'content': instance.content,
+    };
+
+CarBookingHistory _$CarBookingHistoryFromJson(Map<String, dynamic> json) =>
+    CarBookingHistory(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      detailInfo: json['detailInfo'] as String,
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+      memo: json['memo'] as String,
+      status: json['status'] as String,
+    );
+
+Map<String, dynamic> _$CarBookingHistoryToJson(CarBookingHistory instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'detailInfo': instance.detailInfo,
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+      'memo': instance.memo,
+      'status': instance.status,
+    };
