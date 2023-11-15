@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/View/mybooking/component/booking_status_item.dart';
 
 import '../../booking/screen/booking_screen.dart';
 import '../../colors.dart';
 import '../../common/component/main_app_bar.dart';
+import '../component/booking_item_card.dart';
 
 class MyBookingScreen extends StatefulWidget {
   const MyBookingScreen({Key? key}) : super(key: key);
@@ -48,6 +51,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
       child: Column(
         children: [
           renderTabBar(),
+          const SizedBox(height: 10,),
           Expanded(
             child: TabBarView(
               controller: controller,
@@ -107,12 +111,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
         scrollDirection: Axis.vertical,
         itemCount: 12,
         itemBuilder: (BuildContext context, int index) {
-          // return renderItem(categoryName);
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            height: 230,
-            color: Colors.red,
-          );
+          return BookingItemCard();
         },
       ),
     );
@@ -127,9 +126,6 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
         case 1: currentType = BookingType.resource;
         case 2: currentType = BookingType.car;
       }
-      // OfficeService().keyword = '';
-      // ResourceService().keyword = '';
-      // CarService().keyword = '';
     });
   }
 }
