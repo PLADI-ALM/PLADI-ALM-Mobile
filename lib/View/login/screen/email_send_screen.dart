@@ -89,7 +89,7 @@ class _EmailSendScreen extends State<EmailSendScreen> {
                     maxLines: 1,
                     focusNode: emailFocusNode,
                     obscureText: false,
-                    readOnly: emailEdit,
+                    enabled: !emailEdit,
                     controller: emailController,
                     decoration: const InputDecoration(
                         focusedBorder: UnderlineInputBorder(
@@ -199,7 +199,11 @@ class _EmailSendScreen extends State<EmailSendScreen> {
     Future<dynamic> result = LoginService().requestEmail(email);
     result.then((value) => {
           if (value == true)
-            {setState(() {})}
+            {
+              setState(() {
+                emailEdit = true;
+              })
+            }
           else if (value == false)
             {showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
           else
