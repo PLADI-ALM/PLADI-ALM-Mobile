@@ -108,7 +108,10 @@ class _BookingItemCardState extends State<BookingItemCard> {
       return Row(
         children: [
           Expanded(child: Container()),
-          TextButton(onPressed: didTapCancelButton, child: Text('취소', style: buttonStyle,))
+          TextButton(
+            child: Text('취소', style: buttonStyle,),
+            onPressed: () { showCancelBookingBottomSheet(); },
+          )
         ],
       );
     } else {
@@ -116,12 +119,81 @@ class _BookingItemCardState extends State<BookingItemCard> {
     }
   }
 
+  void showCancelBookingBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),),
+        builder: (BuildContext context) {
+          return Container(
+            height: 180,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 30,),
+                const Text('예약을 취소하시겠습니까?', style: TextStyle(fontSize: 16, color: Color(0xFF656565)),),
+                const SizedBox(height: 30,),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        height: 42,
+                        width: (MediaQuery.of(context).size.width - 30)/2,
+                        child: Expanded(
+                          child: ElevatedButton(
+                            onPressed: didTapCancelButton,
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: const BorderSide(color: Color(0xFFC9C9C9))
+                              )
+                            ),
+                            child: const Text('취소', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10,),
+                      SizedBox(
+                        height: 42,
+                        width: (MediaQuery.of(context).size.width - 30)/2,
+                        child: Expanded(
+                          child: ElevatedButton(
+                            onPressed: didTapRemoveBookingButton,
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: purple,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                              )
+                            ),
+                            child: const Text('확인', style: TextStyle(fontSize: 14, color: Colors.white),),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+    );
+  }
+
   /// Event Methods
   void didTapDetailButton() {
     print('didTapDetailButton');
   }
 
-  void didTapCancelButton() {
-    print('didTapCancelButton');
+  void didTapCancelButton() { Navigator.of(context).pop(); }
+
+  void didTapRemoveBookingButton() {
+    print('didTapRemoveBookingButton');
   }
 }
