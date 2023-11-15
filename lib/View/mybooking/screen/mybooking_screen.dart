@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/View/mybooking/component/booking_status_item.dart';
+import 'package:frontend/Model/model/booking/office_model.dart';
 
+import '../../../Presenter/booking/office_service.dart';
 import '../../booking/screen/booking_screen.dart';
 import '../../colors.dart';
 import '../../common/component/main_app_bar.dart';
@@ -22,6 +22,8 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
   late final TabController controller;
   int selectedTab = 0;
 
+  bool isLoading = true;
+  dynamic data;
 
   @override
   void initState() {
@@ -35,6 +37,22 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
     super.dispose();
     controller.dispose();
   }
+
+  Future<dynamic> fetchData() async {
+    isLoading = true;
+    dynamic response;
+    switch (currentType) {
+      case BookingType.office:
+        response = await OfficeService().getOfficeBookingHistoryList();
+      case BookingType.resource:
+        response = await OfficeService().getOfficeBookingHistoryList();
+      case BookingType.car:
+        response = await OfficeService().getOfficeBookingHistoryList();
+    }
+    isLoading = false;
+    return response;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,28 +122,62 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
   }
 
   Widget renderItems(String categoryName) {
-    return Container(
-      height: 250 * 12,
-      color: Colors.white,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: 12,
-        itemBuilder: (BuildContext context, int index) {
-          return BookingItemCard();
-        },
-      ),
+    return FutureBuilder<dynamic>(
+        future: fetchData(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (isLoading) { return const Center(child: CircularProgressIndicator(color: purple,),); }
+          else {
+            if (snapshot.hasError || snapshot.data == null) {
+              return const Center(
+                child: Text('정보를 불러오지 못 하였습니다.', style: TextStyle(fontSize: 16, color: purple),),
+              );
+            }
+            else {
+              data = configureData(snapshot.data);
+              return Container(
+                height: 300.0 * data.data.content.length,
+                color: Colors.white,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: data.data.content.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return BookingItemCard(
+                      type: currentType,
+                      name: data.data.content[index].name,
+                      detailInfo: data.data.content[index].detailInfo,
+                      startDateTime: data.data.content[index].startDateTime,
+                      endDateTime: data.data.content[index].endDateTime,
+                      status: data.data.content[index].status,
+                    );
+                  },
+                ),
+              );
+            }
+          }
+
+        }
     );
   }
 
   /// Helper Methods
   void tabListener() {
     setState(() {
-      FocusScope.of(context).unfocus();
       switch (controller.index) {
         case 0: currentType = BookingType.office;
         case 1: currentType = BookingType.resource;
         case 2: currentType = BookingType.car;
       }
     });
+  }
+
+  dynamic configureData(dynamic response) {
+    switch (currentType) {
+      case BookingType.office:
+        return OfficeBookingHistoryResponse.fromJson(response);
+      case BookingType.resource:
+        return OfficeBookingHistoryResponse.fromJson(response);
+      case BookingType.car:
+        return OfficeBookingHistoryResponse.fromJson(response);
+    }
   }
 }

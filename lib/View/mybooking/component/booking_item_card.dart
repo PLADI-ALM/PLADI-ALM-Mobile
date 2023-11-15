@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/View/booking/screen/booking_screen.dart';
 
 import '../../colors.dart';
 import 'booking_status_item.dart';
 
 class BookingItemCard extends StatefulWidget {
-  const BookingItemCard({Key? key}) : super(key: key);
+  final BookingType type;
+  final String name;
+  final String detailInfo;
+  final String startDateTime;
+  final String endDateTime;
+  final String status;
+
+  const BookingItemCard({
+    required this.type,
+    required this.name,
+    required this.detailInfo,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.status,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<BookingItemCard> createState() => _BookingItemCardState();
@@ -37,16 +53,16 @@ class _BookingItemCardState extends State<BookingItemCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 5,),
-                  Text('회의실1', style: nameStyle,),
+                  Text(widget.name, style: nameStyle,),
                   const SizedBox(height: 2,),
-                  Text('401호', style: locationStyle,)
+                  Text(widget.detailInfo, style: locationStyle,)
                 ],
               ),
               Expanded(child: Container()),
               SizedBox(
                 child: IconButton(
                     style: IconButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: didTapDetailButton, icon: Icon(Icons.arrow_forward_ios, size: 16,)),
+                    onPressed: didTapDetailButton, icon: const Icon(Icons.arrow_forward_ios, size: 16,)),
               )
             ],
           ),
@@ -61,7 +77,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text('예약일시', style: titleStyle,),
                 ),
-                Text('2023.11.01 17:00 ~ 2023.11.10 01:00', style: contentStyle, overflow: TextOverflow.ellipsis)
+                Text('${widget.startDateTime} ~ ${widget.endDateTime}', style: contentStyle, overflow: TextOverflow.ellipsis)
               ],
             ),
           ),
@@ -90,13 +106,13 @@ class _BookingItemCardState extends State<BookingItemCard> {
                   child: Text('예약상태', style: titleStyle,),
                 ),
                 Expanded(child: Container()),
-                BookingStatusItem(status: '예약중'),
+                BookingStatusItem(status: widget.status),
               ],
             ),
           ),
 
           /// 취소, 반납 버튼
-          renderCancelButton('예약중')
+          renderCancelButton(widget.status)
         ],
       ),
     );

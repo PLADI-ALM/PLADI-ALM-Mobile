@@ -8,6 +8,7 @@ import '../../Model/network/api_manager.dart';
 
 class OfficeService {
   final officeURL = '/offices';
+  final officeBookingHistoryURL = '/bookings/offices';
 
   DateTime? selectedDate;
   DateTime? startTime;
@@ -108,6 +109,16 @@ class OfficeService {
         return error.message;
       }
     }
+  }
+
+  // 회의실 예약 목록 조회
+  Future<dynamic> getOfficeBookingHistoryList() async {
+    final response = await APIManager().request(
+        RequestType.get,
+        officeBookingHistoryURL,
+        null, null, null
+    );
+    return response;
   }
 
   /// Helper Methods

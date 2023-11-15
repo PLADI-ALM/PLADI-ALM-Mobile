@@ -47,7 +47,7 @@ class OfficeResponse extends GeneralListModel {
 @JsonSerializable()
 class OfficeInfo {
   String location;
-  int capacity;
+  String capacity;
   String description;
   List<String?> facilityList;
   String imgUrl;
@@ -206,4 +206,57 @@ class OfficeBookingRequest {
   });
 
   Map<String, dynamic> toJson() => _$OfficeBookingRequestToJson(this);
+}
+
+/// 회의실 예약 목록 조회 데이터 모델
+@JsonSerializable()
+class OfficeBookingHistoryResponse extends GeneralModel {
+
+  OfficeBookingHistoryData data;
+
+  OfficeBookingHistoryResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory OfficeBookingHistoryResponse.fromJson(Map<String, dynamic> json)
+  => _$OfficeBookingHistoryResponseFromJson(json);
+}
+
+@JsonSerializable()
+class OfficeBookingHistoryData {
+
+  List<OfficeBookingHistory> content;
+
+  OfficeBookingHistoryData({
+    required this.content,
+  });
+
+  factory OfficeBookingHistoryData.fromJson(Map<String, dynamic> json)
+  => _$OfficeBookingHistoryDataFromJson(json);
+}
+
+@JsonSerializable()
+class OfficeBookingHistory {
+
+  int id;
+  String name;
+  String detailInfo;
+  String startDateTime;
+  String endDateTime;
+  String status;
+
+  OfficeBookingHistory({
+    required this.id,
+    required this.name,
+    required this.detailInfo,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.status,
+  });
+
+  factory OfficeBookingHistory.fromJson(Map<String, dynamic> json)
+  => _$OfficeBookingHistoryFromJson(json);
 }

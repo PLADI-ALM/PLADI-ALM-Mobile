@@ -57,7 +57,7 @@ Map<String, dynamic> _$OfficeResponseToJson(OfficeResponse instance) =>
 
 OfficeInfo _$OfficeInfoFromJson(Map<String, dynamic> json) => OfficeInfo(
       location: json['location'] as String,
-      capacity: json['capacity'] as int,
+      capacity: json['capacity'] as String,
       description: json['description'] as String,
       facilityList: (json['facilityList'] as List<dynamic>)
           .map((e) => e as String?)
@@ -215,4 +215,59 @@ Map<String, dynamic> _$OfficeBookingRequestToJson(
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'memo': instance.memo,
+    };
+
+OfficeBookingHistoryResponse _$OfficeBookingHistoryResponseFromJson(
+        Map<String, dynamic> json) =>
+    OfficeBookingHistoryResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: OfficeBookingHistoryData.fromJson(
+          json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$OfficeBookingHistoryResponseToJson(
+        OfficeBookingHistoryResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+OfficeBookingHistoryData _$OfficeBookingHistoryDataFromJson(
+        Map<String, dynamic> json) =>
+    OfficeBookingHistoryData(
+      content: (json['content'] as List<dynamic>)
+          .map((e) => OfficeBookingHistory.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$OfficeBookingHistoryDataToJson(
+        OfficeBookingHistoryData instance) =>
+    <String, dynamic>{
+      'content': instance.content,
+    };
+
+OfficeBookingHistory _$OfficeBookingHistoryFromJson(
+        Map<String, dynamic> json) =>
+    OfficeBookingHistory(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      detailInfo: json['detailInfo'] as String,
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+      status: json['status'] as String,
+    );
+
+Map<String, dynamic> _$OfficeBookingHistoryToJson(
+        OfficeBookingHistory instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'detailInfo': instance.detailInfo,
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+      'status': instance.status,
     };
