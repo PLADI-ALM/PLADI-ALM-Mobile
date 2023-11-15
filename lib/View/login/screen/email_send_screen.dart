@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Presenter/login/login_service.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 
@@ -143,7 +144,68 @@ class _EmailSendScreen extends State<EmailSendScreen> {
     );
   }
 
-  void getCode() {}
+  void showAlert(String content) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            title: const Column(
+              children: <Widget>[
+                Text("이메일 인증 요청 오류"),
+              ],
+            ),
+            //
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(content),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text(
+                  "확인",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
 
-  void moveChangePw() {}
+  void getCode() {
+    var email = emailController.text;
+    Future<dynamic> result = LoginService().requestEmail(email);
+    result.then((value) => {
+          if (value == false)
+            {showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
+          else
+            {showAlert(value)}
+        });
+  }
+
+  void moveChangePw() {
+    var email = emailController.text;
+    var code = codeController.text;
+    Future<dynamic> result = LoginService().requestEmailCode(email, code);
+    result.then((value) => {
+          if (value == true)
+            {showAlert("성공")}
+          else if (value == false)
+            {showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
+          else
+            {showAlert(value)}
+        });
+  }
 }
