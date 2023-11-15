@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../colors.dart';
@@ -12,7 +11,7 @@ class CustomCalender extends StatefulWidget {
 
   const CustomCalender({
     required this.changedDate,
-    required this.calendarDayHeight,
+    this.calendarDayHeight,
     Key? key
   }) : super(key: key);
 
@@ -63,7 +62,6 @@ class _CustomCalenderState extends State<CustomCalender> {
           this.selectedDay = selectedDay;
           this.focusedDay = selectedDay;
           widget.changedDate(this.selectedDay!);
-          // hintText = DateFormat('yyyy-MM-dd').format(this.selectedDay!);
         });
       },
       selectedDayPredicate: (DateTime day) {

@@ -1,7 +1,10 @@
 
 
+import 'package:dio/dio.dart';
+import 'package:frontend/Model/model/booking/resource_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../Model/model/general_model.dart';
 import '../../Model/network/api_manager.dart';
 
 class ResourceService {
@@ -44,6 +47,88 @@ class ResourceService {
         null, null, null
     );
     return response;
+  }
+
+  Future<dynamic> getBookedTimeList(int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
+    String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
+    String selectedDayStr = (selectedDay != null) ? DateFormat('yyyy-MM-dd').format(selectedDay!) : '';
+
+    print('selectedMonthStr - $selectedMonthStr');
+    print('selectedDayStr - $selectedDayStr');
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$resourceURL/$resourceId/booking-state',
+        null,
+        {
+          'month':selectedMonthStr,
+          // 'date':selectedDayStr
+        },
+        null
+    );
+    return response;
+  }
+
+  Future<dynamic> getBookedInfo(int resourceId, DateTime selectedDate, int selectedTime) async {
+    String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String selectedTimeStr = (selectedTime < 10) ? '0$selectedTime:00' : '$selectedTime:00';
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$resourceURL/$resourceId/booking',
+        null,
+        {'dateTime':'$selectedDateStr $selectedTimeStr'},
+        null
+    );
+    return response;
+  }
+
+  Future<dynamic> getBookedDetailInfo(int resourceId, DateTime selectedDate, int selectedTime) async {
+    String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String startTimeStr = (selectedTime < 10) ? '0$startTime:00' : '$startTime:00';
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$resourceURL/$resourceId/booking',
+        null,
+        {'date':selectedDateStr, 'time':startTimeStr},
+        null
+    );
+    return response;
+  }
+
+  Future<dynamic> bookResource(int resourceId, DateTime startDate, DateTime endDate, String memo) async {
+
+    String startDateStr = DateFormat('yyyy-MM-dd HH').format(startDate);
+    String endDateStr = DateFormat('yyyy-MM-dd HH').format(endDate);
+
+    ResourceBookingRequest body = ResourceBookingRequest(
+        startDateTime: startDateStr,
+        endDateTime: endDateStr,
+        memo: memo,
+    );
+
+    try {
+      final response = await APIManager().request(
+          RequestType.post,
+          '$resourceURL/$resourceId',
+          null, null,
+          body.toJson()
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
   }
 
   /// Helper Methods

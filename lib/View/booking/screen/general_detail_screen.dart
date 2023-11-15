@@ -10,6 +10,7 @@ import '../../../Presenter/booking/resource_service.dart';
 import '../../colors.dart';
 import '../../common/component/purple_bottom_button.dart';
 import '../../common/component/sub_app_bar.dart';
+import 'booking_resource_screen.dart';
 
 class GeneralDetailScreen extends StatefulWidget {
   final BookingType type;
@@ -197,9 +198,9 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
 
   void didTapBookingButton() {
     if (data == null) {
-      Fluttertoast.showToast(msg: '회의실 정보를 불러올 수 없으므로 예약이 불가능합니다.');
+      Fluttertoast.showToast(msg: '장비 정보를 불러올 수 없으므로 예약이 불가능합니다.');
     } else {
-      // Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingResourceScreen()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingResourceScreen(resourceId: widget.id,)));
     }
   }
 }
