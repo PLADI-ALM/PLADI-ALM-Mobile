@@ -246,6 +246,7 @@ class OfficeBookingHistory {
   String detailInfo;
   String startDateTime;
   String endDateTime;
+  String memo;
   String status;
 
   OfficeBookingHistory({
@@ -254,6 +255,7 @@ class OfficeBookingHistory {
     required this.detailInfo,
     required this.startDateTime,
     required this.endDateTime,
+    required this.memo,
     required this.status,
   });
 

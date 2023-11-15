@@ -13,6 +13,7 @@ class BookingItemCard extends StatefulWidget {
   final String detailInfo;
   final String startDateTime;
   final String endDateTime;
+  final String memo;
   final String status;
 
   const BookingItemCard({
@@ -22,6 +23,7 @@ class BookingItemCard extends StatefulWidget {
     required this.detailInfo,
     required this.startDateTime,
     required this.endDateTime,
+    required this.memo,
     required this.status,
     Key? key
   }) : super(key: key);
@@ -95,7 +97,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text('이용목적', style: titleStyle,),
                 ),
-                Expanded(child: Text('이용목적입니다. 이용목적입니다. 이용목적입니다. 이용목적입니다. 이용목적입니다. 이용목적입니다. ', style: contentStyle, textAlign: TextAlign.justify,))
+                Expanded(child: Text(widget.memo, style: contentStyle, textAlign: TextAlign.justify,))
               ],
             ),
           ),

@@ -148,6 +148,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
                       detailInfo: data.data.content[index].detailInfo,
                       startDateTime: data.data.content[index].startDateTime,
                       endDateTime: data.data.content[index].endDateTime,
+                      memo: data.data.content[index].memo,
                       status: data.data.content[index].status,
                     );
                   },

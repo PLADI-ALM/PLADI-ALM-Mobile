@@ -258,6 +258,7 @@ OfficeBookingHistory _$OfficeBookingHistoryFromJson(
       detailInfo: json['detailInfo'] as String,
       startDateTime: json['startDateTime'] as String,
       endDateTime: json['endDateTime'] as String,
+      memo: json['memo'] as String,
       status: json['status'] as String,
     );
 
@@ -269,5 +270,6 @@ Map<String, dynamic> _$OfficeBookingHistoryToJson(
       'detailInfo': instance.detailInfo,
       'startDateTime': instance.startDateTime,
       'endDateTime': instance.endDateTime,
+      'memo': instance.memo,
       'status': instance.status,
     };
