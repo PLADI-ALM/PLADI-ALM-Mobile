@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Presenter/login/login_service.dart';
+import 'package:frontend/View/login/screen/email_send_screen.dart';
 
 import '../../common/screen/root_tab.dart';
 
@@ -232,6 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void findPw() {
-    print("find pw");
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const EmailSendScreen()));
   }
 }
