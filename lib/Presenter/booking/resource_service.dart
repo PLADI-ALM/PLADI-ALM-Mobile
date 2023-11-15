@@ -9,6 +9,7 @@ import '../../Model/network/api_manager.dart';
 
 class ResourceService {
   final resourceURL = '/resources';
+  final resourceBookingHistoryURL = '/bookings/resources';
 
   DateTime? startDate;
   DateTime? startTime;
@@ -129,6 +130,16 @@ class ResourceService {
         return error.message;
       }
     }
+  }
+
+  // 장비 예약 목록 조회
+  Future<dynamic> getResourceBookingHistoryList() async {
+    final response = await APIManager().request(
+        RequestType.get,
+        resourceBookingHistoryURL,
+        null, null, null
+    );
+    return response;
   }
 
   /// Helper Methods

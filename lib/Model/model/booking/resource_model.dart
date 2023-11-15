@@ -135,3 +135,58 @@ class ResourceBookingRequest {
 
   Map<String, dynamic> toJson() => _$ResourceBookingRequestToJson(this);
 }
+
+/// 장비 예약 목록 조회 데이터 모델
+@JsonSerializable()
+class ResourceBookingHistoryResponse extends GeneralModel {
+
+  ResourceBookingHistoryData data;
+
+  ResourceBookingHistoryResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory ResourceBookingHistoryResponse.fromJson(Map<String, dynamic> json)
+  => _$ResourceBookingHistoryResponseFromJson(json);
+}
+
+@JsonSerializable()
+class ResourceBookingHistoryData {
+
+  List<ResourceBookingHistory> content;
+
+  ResourceBookingHistoryData({
+    required this.content,
+  });
+
+  factory ResourceBookingHistoryData.fromJson(Map<String, dynamic> json)
+  => _$ResourceBookingHistoryDataFromJson(json);
+}
+
+@JsonSerializable()
+class ResourceBookingHistory {
+
+  int id;
+  String name;
+  String detailInfo;
+  String startDateTime;
+  String endDateTime;
+  String memo;
+  String status;
+
+  ResourceBookingHistory({
+    required this.id,
+    required this.name,
+    required this.detailInfo,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.memo,
+    required this.status,
+  });
+
+  factory ResourceBookingHistory.fromJson(Map<String, dynamic> json)
+  => _$ResourceBookingHistoryFromJson(json);
+}

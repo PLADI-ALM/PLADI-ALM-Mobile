@@ -136,9 +136,19 @@ class _BookingItemCardState extends State<BookingItemCard> {
           )
         ],
       );
-    } else {
-      return const SizedBox(height: 0,);
-    }
+    } else if ((widget.type == BookingType.resource) || (widget.type == BookingType.car)) {
+      if ((bookingStatus == '사용중')) {
+        return Row(
+          children: [
+            Expanded(child: Container()),
+            TextButton(
+              child: Text('반납', style: buttonStyle,),
+              onPressed: () { print('반납 버튼 클릭함'); },
+            )
+          ],
+        );
+      } else { return const SizedBox(height: 0,); }
+    } else { return const SizedBox(height: 0,); }
   }
 
   void showCancelBookingBottomSheet() {

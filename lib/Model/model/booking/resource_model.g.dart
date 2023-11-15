@@ -144,3 +144,61 @@ Map<String, dynamic> _$ResourceBookingRequestToJson(
       'endDateTime': instance.endDateTime,
       'memo': instance.memo,
     };
+
+ResourceBookingHistoryResponse _$ResourceBookingHistoryResponseFromJson(
+        Map<String, dynamic> json) =>
+    ResourceBookingHistoryResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: ResourceBookingHistoryData.fromJson(
+          json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ResourceBookingHistoryResponseToJson(
+        ResourceBookingHistoryResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+ResourceBookingHistoryData _$ResourceBookingHistoryDataFromJson(
+        Map<String, dynamic> json) =>
+    ResourceBookingHistoryData(
+      content: (json['content'] as List<dynamic>)
+          .map(
+              (e) => ResourceBookingHistory.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ResourceBookingHistoryDataToJson(
+        ResourceBookingHistoryData instance) =>
+    <String, dynamic>{
+      'content': instance.content,
+    };
+
+ResourceBookingHistory _$ResourceBookingHistoryFromJson(
+        Map<String, dynamic> json) =>
+    ResourceBookingHistory(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      detailInfo: json['detailInfo'] as String,
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+      memo: json['memo'] as String,
+      status: json['status'] as String,
+    );
+
+Map<String, dynamic> _$ResourceBookingHistoryToJson(
+        ResourceBookingHistory instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'detailInfo': instance.detailInfo,
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+      'memo': instance.memo,
+      'status': instance.status,
+    };

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
+import 'package:frontend/Presenter/booking/resource_service.dart';
 
+import '../../../Model/model/booking/resource_model.dart';
 import '../../../Presenter/booking/office_service.dart';
 import '../../booking/screen/booking_screen.dart';
 import '../../colors.dart';
@@ -45,7 +47,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
       case BookingType.office:
         response = await OfficeService().getOfficeBookingHistoryList();
       case BookingType.resource:
-        response = await OfficeService().getOfficeBookingHistoryList();
+        response = await ResourceService().getResourceBookingHistoryList();
       case BookingType.car:
         response = await OfficeService().getOfficeBookingHistoryList();
     }
@@ -177,7 +179,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
       case BookingType.office:
         return OfficeBookingHistoryResponse.fromJson(response);
       case BookingType.resource:
-        return OfficeBookingHistoryResponse.fromJson(response);
+        return ResourceBookingHistoryResponse.fromJson(response);
       case BookingType.car:
         return OfficeBookingHistoryResponse.fromJson(response);
     }
