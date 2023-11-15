@@ -143,6 +143,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
                   itemBuilder: (BuildContext context, int index) {
                     return BookingItemCard(
                       type: currentType,
+                      id: data.data.content[index].id,
                       name: data.data.content[index].name,
                       detailInfo: data.data.content[index].detailInfo,
                       startDateTime: data.data.content[index].startDateTime,

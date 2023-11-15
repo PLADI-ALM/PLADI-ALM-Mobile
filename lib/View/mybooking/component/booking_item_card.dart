@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/View/booking/screen/booking_screen.dart';
+import 'package:frontend/View/booking/screen/office_detail_screen.dart';
 
+import '../../booking/screen/general_detail_screen.dart';
 import '../../colors.dart';
 import 'booking_status_item.dart';
 
 class BookingItemCard extends StatefulWidget {
   final BookingType type;
+  final int id;
   final String name;
   final String detailInfo;
   final String startDateTime;
@@ -14,6 +17,7 @@ class BookingItemCard extends StatefulWidget {
 
   const BookingItemCard({
     required this.type,
+    required this.id,
     required this.name,
     required this.detailInfo,
     required this.startDateTime,
@@ -204,7 +208,13 @@ class _BookingItemCardState extends State<BookingItemCard> {
 
   /// Event Methods
   void didTapDetailButton() {
-    print('didTapDetailButton');
+    StatefulWidget screen;
+    switch(widget.type) {
+      case BookingType.office: screen = OfficeDetailScreen(officeId: widget.id);
+      case BookingType.resource: screen = GeneralDetailScreen(type: BookingType.resource, id: widget.id,);
+      case BookingType.car: screen = GeneralDetailScreen(type: BookingType.car, id: widget.id,);
+    }
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
   }
 
   void didTapCancelButton() { Navigator.of(context).pop(); }

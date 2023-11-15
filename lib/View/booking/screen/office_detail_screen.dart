@@ -39,7 +39,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       backgroundColor: Colors.white,
       appBar: const SubAppBar(titleText: '',),
       body: renderBody(),
-      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: didTapBookingButton,),
+      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: (data==null) ? null : didTapBookingButton,),
     );
   }
 
@@ -50,57 +50,58 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
         future: fetchData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError || snapshot.data == null) {
+            print('snapshot.hasError -> ${snapshot.hasError}');
+            print('snapshot.error -> ${snapshot.error}');
+            print('snapshot.data -> ${snapshot.data}');
+            isLoading = false;
             return const Center(
-              child: Text('정보를 불러오지 못 하였습니다.',
-                style: TextStyle(fontSize: 16, color: purple),),
+              child: Text('정보를 불러오지 못 하였습니다.', style: TextStyle(fontSize: 16, color: purple),),
             );
-          }
-          else {
-            if (isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: purple,),);
+          } else {
+            if (isLoading) { return const Center(child: CircularProgressIndicator(color: purple,),); }
+            else {
+                data = OfficeDetailResponse.fromJson(snapshot.data);
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 800,
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 232,
+                        child: Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(data.data.name, style: nameStyle,),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Row(
+                          children: [
+                            infoCardItem(Icons.location_on_outlined, '위치', data.data.location),
+                            const SizedBox(width: 20,),
+                            infoCardItem(CupertinoIcons.person_2, '수용인원', '${data.data.capacity}'),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Text('상세정보', style: nameStyle,),
+                      ),
+
+                      renderFacilityListInfo(),
+                      const SizedBox(height: 15,),
+                      renderDescription(),
+                    ],
+                  ),
+                );
+              }
             }
-            data = OfficeDetailResponse.fromJson(snapshot.data);
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 800,
-              child: ListView(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 232,
-                    child: Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(data.data.name, style: nameStyle,),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Row(
-                      children: [
-                        infoCardItem(Icons.location_on_outlined, '위치', data.data.location),
-                        const SizedBox(width: 20,),
-                        infoCardItem(CupertinoIcons.person_2, '수용인원', '${data.data.capacity}'),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text('상세정보', style: nameStyle,),
-                  ),
-
-                  renderFacilityListInfo(),
-                  const SizedBox(height: 15,),
-                  renderDescription(),
-                ],
-              ),
-            );
           }
-        }
     );
   }
 
