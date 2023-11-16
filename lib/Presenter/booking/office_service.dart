@@ -121,6 +121,21 @@ class OfficeService {
     return response;
   }
 
+  // 회의실 예약 취소
+  Future<dynamic> cancelBooking(int bookingId) async {
+    final response = await APIManager().request(
+        RequestType.patch,
+        '$officeBookingHistoryURL/$bookingId/cancel',
+        null, null, null
+    );
+    if (response == null) { return null; }
+    else {
+      GeneralModel result = GeneralModel.fromJson(response);
+      if (result.status == 200) { return true; }
+      else { return result.message; }
+    }
+  }
+
   /// Helper Methods
   void setDate(DateTime date) {
     selectedDate = date;
