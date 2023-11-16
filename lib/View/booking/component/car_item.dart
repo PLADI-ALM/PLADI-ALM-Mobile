@@ -63,7 +63,7 @@ class _CarItemState extends State<CarItem> {
           ),
           Flexible(child: Container()),
           Text(
-            widget.data.location,
+            widget.data.location ?? '',
             style: const TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,

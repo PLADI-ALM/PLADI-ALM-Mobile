@@ -45,7 +45,7 @@ class CarResponse extends GeneralListModel {
 @JsonSerializable()
 class CarInfo {
   String description;
-  String location;
+  String? location;
   String imgUrl;
   String name;
   int carId;

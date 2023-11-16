@@ -55,7 +55,7 @@ Map<String, dynamic> _$CarResponseToJson(CarResponse instance) =>
 
 CarInfo _$CarInfoFromJson(Map<String, dynamic> json) => CarInfo(
       description: json['description'] as String,
-      location: json['location'] as String,
+      location: json['location'] as String?,
       imgUrl: json['imgUrl'] as String,
       name: json['name'] as String,
       carId: json['carId'] as int,

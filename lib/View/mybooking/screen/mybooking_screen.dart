@@ -196,12 +196,9 @@ class MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProvi
 
   dynamic configureData(dynamic response) {
     switch (currentType) {
-      case BookingType.office:
-        return OfficeBookingHistoryResponse.fromJson(response);
-      case BookingType.resource:
-        return ResourceBookingHistoryResponse.fromJson(response);
-      case BookingType.car:
-        return CarBookingHistoryResponse.fromJson(response);
+      case BookingType.office: return OfficeBookingHistoryResponse.fromJson(response);
+      case BookingType.resource: return ResourceBookingHistoryResponse.fromJson(response);
+      case BookingType.car: return CarBookingHistoryResponse.fromJson(response);
     }
   }
 }
