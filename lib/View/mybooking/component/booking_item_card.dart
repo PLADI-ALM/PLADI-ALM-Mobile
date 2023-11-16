@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/Model/model/general_model.dart';
+import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:frontend/View/booking/screen/booking_screen.dart';
 import 'package:frontend/View/booking/screen/office_detail_screen.dart';
 
+import '../../../Presenter/booking/car_service.dart';
+import '../../../Presenter/booking/office_service.dart';
 import '../../booking/screen/general_detail_screen.dart';
 import '../../colors.dart';
+import '../screen/mybooking_screen.dart';
 import 'booking_status_item.dart';
 
 class BookingItemCard extends StatefulWidget {
@@ -39,6 +45,14 @@ class _BookingItemCardState extends State<BookingItemCard> {
 
   TextStyle titleStyle = const TextStyle(fontSize: 12, color: Color(0xFF959595));
   TextStyle contentStyle = const TextStyle(fontSize: 12, color: Color(0xFF1B2128));
+
+  MyBookingScreenState? parent;
+
+  @override
+  void initState() {
+    super.initState();
+    parent = context.findAncestorStateOfType<MyBookingScreenState>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +210,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
                         width: (MediaQuery.of(context).size.width - 30)/2,
                         child: Expanded(
                           child: ElevatedButton(
-                            onPressed: didTapRemoveBookingButton,
+                            onPressed: didTapCancelBookingButton,
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               backgroundColor: purple,
@@ -231,7 +245,17 @@ class _BookingItemCardState extends State<BookingItemCard> {
 
   void didTapCancelButton() { Navigator.of(context).pop(); }
 
-  void didTapRemoveBookingButton() {
-    print('didTapRemoveBookingButton');
+  void didTapCancelBookingButton() async {
+    Navigator.of(context).pop();
+    parent!.changeLoadingStatus(true);
+    dynamic response;
+    switch(widget.type) {
+      case BookingType.office: response = await OfficeService().cancelBooking(widget.id);
+      case BookingType.resource: response = await ResourceService().cancelBooking(widget.id);
+      case BookingType.car: response = await CarService().cancelBooking(widget.id);
+    }
+    parent!.changeLoadingStatus(false);
+    parent!.reloadData(response);
   }
+
 }

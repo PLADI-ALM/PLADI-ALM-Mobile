@@ -142,6 +142,40 @@ class ResourceService {
     return response;
   }
 
+  // 장비 예약 취소
+  Future<dynamic> cancelBooking(int bookingId) async {
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          '$resourceBookingHistoryURL/$bookingId/cancel',
+          null, null, null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
+  // 장비 예약 반납
+  Future<dynamic> returnBooking(int bookingId) async {
+    final response = await APIManager().request(
+        RequestType.patch,
+        '$resourceBookingHistoryURL/$bookingId',
+        null, null, null
+    );
+    return response;
+  }
+
   /// Helper Methods
   void setStartInfo(DateTime date, DateTime time) {
     startDate = date;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Presenter/booking/resource_service.dart';
 
@@ -15,10 +16,10 @@ class MyBookingScreen extends StatefulWidget {
   const MyBookingScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyBookingScreen> createState() => _MyBookingScreenState();
+  State<MyBookingScreen> createState() => MyBookingScreenState();
 }
 
-class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProviderStateMixin {
+class MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProviderStateMixin {
 
   static const category = ['회의실', '장비', '차량'];
   BookingType currentType = BookingType.office;
@@ -169,6 +170,19 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
     );
   }
 
+  void reloadData(dynamic result) {
+    if (result == null) { Fluttertoast.showToast(msg: '예약 취소에 실패하였습니다.'); }
+    else if (result.runtimeType == String) { Fluttertoast.showToast(msg: result); }
+    else {
+      Fluttertoast.showToast(msg: result.message);
+      setState(() { fetchData(); });
+    }
+  }
+
+  void changeLoadingStatus(bool loadingStatus) {
+    setState(() { isLoading = loadingStatus; });
+  }
+
   /// Helper Methods
   void tabListener() {
     setState(() {
@@ -182,12 +196,9 @@ class _MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProv
 
   dynamic configureData(dynamic response) {
     switch (currentType) {
-      case BookingType.office:
-        return OfficeBookingHistoryResponse.fromJson(response);
-      case BookingType.resource:
-        return ResourceBookingHistoryResponse.fromJson(response);
-      case BookingType.car:
-        return CarBookingHistoryResponse.fromJson(response);
+      case BookingType.office: return OfficeBookingHistoryResponse.fromJson(response);
+      case BookingType.resource: return ResourceBookingHistoryResponse.fromJson(response);
+      case BookingType.car: return CarBookingHistoryResponse.fromJson(response);
     }
   }
 }
