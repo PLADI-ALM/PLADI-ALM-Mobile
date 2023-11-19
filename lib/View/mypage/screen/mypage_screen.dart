@@ -119,6 +119,10 @@ class _MypageScreen extends State<MypageScreen> {
             color: Colors.grey.withOpacity(0.3),
           ),
           GestureDetector(
+            onTap: moveToEdit,
+            child: const MypageCell(title: "내 정보 수정"),
+          ),
+          GestureDetector(
             onTap: moveToService,
             child: const MypageCell(title: "서비스 이용약관"),
           ),
@@ -196,6 +200,8 @@ class _MypageScreen extends State<MypageScreen> {
           );
         });
   }
+
+  void moveToEdit() {}
 
   void moveToService() {}
 
