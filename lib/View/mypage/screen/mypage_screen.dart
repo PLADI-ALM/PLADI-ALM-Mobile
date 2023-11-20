@@ -10,6 +10,7 @@ import 'package:frontend/Presenter/mypage/mypage_service.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:frontend/View/login/screen/login_screen.dart';
 import 'package:frontend/View/mypage/component/mypage_cell.dart';
+import 'package:frontend/View/mypage/screen/myinfo_edit_screen.dart';
 
 class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
@@ -201,7 +202,10 @@ class _MypageScreen extends State<MypageScreen> {
         });
   }
 
-  void moveToEdit() {}
+  void moveToEdit() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const MyInfoEditScreen()));
+  }
 
   void moveToService() {}
 
