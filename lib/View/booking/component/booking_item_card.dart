@@ -6,6 +6,7 @@ import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
 import '../../colors.dart';
 import '../screen/booking_history_screen.dart';
+import '../screen/booking_return_screen.dart';
 import 'booking_status_item.dart';
 
 enum BookingManageType { cancel, giveBack, reject, allow  }  // 취소, 반납, 반려, 허가
@@ -209,64 +210,69 @@ class _BookingItemCardState extends State<BookingItemCard> {
   }
 
   void showCancelBookingBottomSheet(BookingManageType type) {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),),
-        builder: (BuildContext context) {
-          return Container(
-            height: 180,
-            decoration: const BoxDecoration(
+    if (type == BookingManageType.giveBack) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingReturnScreen()));
+
+    } else {
+      showModalBottomSheet(
+          context: context,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),),
+          builder: (BuildContext context) {
+            return Container(
+              height: 180,
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                 color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 30,),
-                Text('예약을 ${getManageBookingTypeStr(type)}하시겠습니까?',
-                  style: const TextStyle(fontSize: 16, color: Color(0xFF656565)),
-                ),
-                const SizedBox(height: 30,),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: didTapCancelButton,
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                side: const BorderSide(color: Color(0xFFC9C9C9))
-                            )
-                          ),
-                          child: const Text('취소', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),),
-                        ),
-                      ),
-                      const SizedBox(width: 10,),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: getManageBookingTypeEvent(type),
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                            )
-                          ),
-                          child: const Text('확인', style: TextStyle(fontSize: 14, color: Colors.white),),
-                        ),
-                      ),
-                    ],
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 30,),
+                  Text('예약을 ${getManageBookingTypeStr(type)}하시겠습니까?',
+                    style: const TextStyle(fontSize: 16, color: Color(0xFF656565)),
                   ),
-                )
-              ],
-            ),
-          );
-        }
-    );
+                  const SizedBox(height: 30,),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: didTapCancelButton,
+                            style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: const BorderSide(color: Color(0xFFC9C9C9))
+                                )
+                            ),
+                            child: const Text('취소', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),),
+                          ),
+                        ),
+                        const SizedBox(width: 10,),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: getManageBookingTypeEvent(type),
+                            style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: purple,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                )
+                            ),
+                            child: const Text('확인', style: TextStyle(fontSize: 14, color: Colors.white),),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+      );
+    }
   }
 
   String getManageBookingTypeStr(BookingManageType type) {
@@ -282,7 +288,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
     switch (type) {
       case BookingManageType.cancel: return didTapCancelBookingButton;
       case BookingManageType.reject: return didTapRejectBookingButton;
-      case BookingManageType.giveBack: return didTapGiveBackBookingButton;
+      case BookingManageType.giveBack: return (){};
       case BookingManageType.allow: return didTapAllowBookingButton;
     }
   }
@@ -317,7 +323,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
   }
 
   void didTapGiveBackBookingButton() {
-    print('didTapGiveBackBookingButton');
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingReturnScreen()));
   }
 
   void didTapAllowBookingButton() async {

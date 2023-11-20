@@ -177,7 +177,6 @@ class BookingHistoryScreenState extends State<BookingHistoryScreen> with SingleT
   }
 
   void reloadData(dynamic result) {
-    print('reloadData called');
     if (result == null) { Fluttertoast.showToast(msg: '요청에 실패하였습니다.'); }
     else if (result.runtimeType == String) { Fluttertoast.showToast(msg: result); }
     else {
