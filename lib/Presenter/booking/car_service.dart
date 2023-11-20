@@ -86,13 +86,43 @@ class CarService {
   }
 
   // 차량 예약 반납
-  Future<dynamic> returnBooking(int bookingId) async {
-    final response = await APIManager().request(
-        RequestType.patch,
-        '$carBookingHistoryURL/$bookingId',
-        null, null, null
-    );
-    return response;
+  Future<dynamic> returnBooking(bool isAdmin, int bookingId, String location, String? remark) async {
+    // final response = await APIManager().request(
+    //     RequestType.patch,
+    //     '$carBookingHistoryURL/$bookingId',
+    //     null, null, null
+    // );
+    // return response;
+
+
+    String url = isAdmin
+        ? '$carAdminBookingHistoryURL/$bookingId/return'
+        : '$carBookingHistoryURL/$bookingId';
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          url,
+          null,
+          {
+            'returnLocation': location,
+            'remark': remark
+          },
+          null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
   }
 
   // 차량 예약 반려

@@ -169,13 +169,35 @@ class ResourceService {
   }
 
   // 장비 예약 반납
-  Future<dynamic> returnBooking(int bookingId) async {
-    final response = await APIManager().request(
-        RequestType.patch,
-        '$resourceBookingHistoryURL/$bookingId',
-        null, null, null
-    );
-    return response;
+  Future<dynamic> returnBooking(bool isAdmin, int bookingId, String location, String? remark) async {
+    String url = isAdmin
+        ? '$resourceAdminBookingHistoryURL/$bookingId/return'
+        : '$resourceBookingHistoryURL/$bookingId';
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          url,
+          null,
+          {
+            'returnLocation': location,
+            'remark': remark
+          },
+          null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
   }
 
   // 장비 예약 반려

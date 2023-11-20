@@ -211,7 +211,9 @@ class _BookingItemCardState extends State<BookingItemCard> {
 
   void showCancelBookingBottomSheet(BookingManageType type) {
     if (type == BookingManageType.giveBack) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingReturnScreen()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => BookingReturnScreen(isAdmin: widget.isAdmin,type: widget.type, bookingId: widget.id, parent: parent!,))
+      );
 
     } else {
       showModalBottomSheet(
@@ -320,10 +322,6 @@ class _BookingItemCardState extends State<BookingItemCard> {
     }
     parent!.changeLoadingStatus(false);
     parent!.reloadData(response);
-  }
-
-  void didTapGiveBackBookingButton() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BookingReturnScreen()));
   }
 
   void didTapAllowBookingButton() async {
