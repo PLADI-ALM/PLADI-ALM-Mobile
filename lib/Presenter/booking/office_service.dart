@@ -142,12 +142,11 @@ class OfficeService {
   }
 
   // 회의실 예약 반려
-  // TODO: 이후 검토 및 수정 (API 아직 안 나옴)
   Future<dynamic> rejectBooking(int bookingId) async {
     try {
       final response = await APIManager().request(
           RequestType.patch,
-          '$officeAdminBookingHistoryURL/$bookingId/reject',
+          '$officeAdminBookingHistoryURL/$bookingId/cancel',
           null, null, null
       );
 
