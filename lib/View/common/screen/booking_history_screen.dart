@@ -9,18 +9,21 @@ import '../../../Presenter/booking/office_service.dart';
 import '../../../Presenter/booking/resource_service.dart';
 import '../../booking/screen/booking_screen.dart';
 import '../../colors.dart';
-import '../../common/component/main_app_bar.dart';
 import '../../mybooking/component/booking_item_card.dart';
+import '../component/main_app_bar.dart';
 
-class AdminScreen extends StatefulWidget {
-  const AdminScreen({Key? key}) : super(key: key);
+class BookingHistoryScreen extends StatefulWidget {
+  final bool isAdmin;
+  const BookingHistoryScreen({
+    required this.isAdmin,
+    Key? key
+  }) : super(key: key);
 
   @override
-  State<AdminScreen> createState() => AdminScreenState();
+  State<BookingHistoryScreen> createState() => BookingHistoryScreenState();
 }
 
-class AdminScreenState extends State<AdminScreen> with SingleTickerProviderStateMixin {
-
+class BookingHistoryScreenState extends State<BookingHistoryScreen> with SingleTickerProviderStateMixin {
   static const category = ['회의실', '장비', '차량'];
   BookingType currentType = BookingType.office;
 
@@ -48,11 +51,11 @@ class AdminScreenState extends State<AdminScreen> with SingleTickerProviderState
     dynamic response;
     switch (currentType) {
       case BookingType.office:
-        response = await OfficeService().getOfficeBookingHistoryList(true);
+        response = await OfficeService().getOfficeBookingHistoryList(widget.isAdmin);
       case BookingType.resource:
-        response = await ResourceService().getResourceBookingHistoryList(true);
+        response = await ResourceService().getResourceBookingHistoryList(widget.isAdmin);
       case BookingType.car:
-        response = await CarService().getCarBookingHistoryList(true);
+        response = await CarService().getCarBookingHistoryList(widget.isAdmin);
     }
     isLoading = false;
     return response;
@@ -151,7 +154,7 @@ class AdminScreenState extends State<AdminScreen> with SingleTickerProviderState
                   itemCount: data.data.content.length,
                   itemBuilder: (BuildContext context, int index) {
                     return BookingItemCard(
-                      isAdmin: true,
+                      isAdmin: widget.isAdmin,
                       type: currentType,
                       id: data.data.content[index].id,
                       name: data.data.content[index].name,
@@ -174,7 +177,8 @@ class AdminScreenState extends State<AdminScreen> with SingleTickerProviderState
   }
 
   void reloadData(dynamic result) {
-    if (result == null) { Fluttertoast.showToast(msg: '예약 취소에 실패하였습니다.'); }
+    print('reloadData called');
+    if (result == null) { Fluttertoast.showToast(msg: '요청에 실패하였습니다.'); }
     else if (result.runtimeType == String) { Fluttertoast.showToast(msg: result); }
     else {
       Fluttertoast.showToast(msg: result.message);

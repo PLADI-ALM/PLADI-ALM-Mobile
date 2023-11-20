@@ -95,6 +95,30 @@ class CarService {
     return response;
   }
 
+  // 차량 예약 반려
+  Future<dynamic> rejectBooking(int bookingId) async {
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          '$carAdminBookingHistoryURL/$bookingId/reject',
+          null, null, null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
   /// Helper Methods
   void setStartInfo(DateTime date, DateTime time) {
     startDate = date;

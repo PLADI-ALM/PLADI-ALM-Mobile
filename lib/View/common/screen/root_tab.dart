@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/View/colors.dart';
 
-import '../../admin/screen/admin_screen.dart';
 import '../../booking/screen/booking_screen.dart';
-import '../../mybooking/screen/mybooking_screen.dart';
 import '../component/tabbar_item.dart';
+import 'booking_history_screen.dart';
 
 class RootTab extends StatefulWidget {
 
@@ -73,14 +72,14 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
       return [
         const BookingScreen(),
         const BookingScreen(),
-        const MyBookingScreen(),
-        const AdminScreen(),
+        const BookingHistoryScreen(isAdmin: false,),
+        const BookingHistoryScreen(isAdmin: true,),
       ];
     } else {
       return [
         const BookingScreen(),
         const BookingScreen(),
-        const MyBookingScreen(),
+        const BookingHistoryScreen(isAdmin: false,),
       ];
     }
   }

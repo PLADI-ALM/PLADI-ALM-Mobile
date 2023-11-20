@@ -4,7 +4,9 @@ import 'package:frontend/View/booking/screen/booking_screen.dart';
 
 import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
+import '../../admin/screen/admin_screen.dart';
 import '../../colors.dart';
+import '../../common/screen/booking_history_screen.dart';
 import '../screen/mybooking_screen.dart';
 import 'booking_status_item.dart';
 
@@ -46,12 +48,12 @@ class _BookingItemCardState extends State<BookingItemCard> {
   TextStyle titleStyle = const TextStyle(fontSize: 12, color: Color(0xFF959595));
   TextStyle contentStyle = const TextStyle(fontSize: 12, color: Color(0xFF1B2128));
 
-  MyBookingScreenState? parent;
+  BookingHistoryScreenState? parent;
 
   @override
   void initState() {
     super.initState();
-    parent = context.findAncestorStateOfType<MyBookingScreenState>();
+    parent = context.findAncestorStateOfType<BookingHistoryScreenState>();
   }
 
   @override
@@ -295,7 +297,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
     parent!.changeLoadingStatus(true);
     dynamic response;
     switch(widget.type) {
-      case BookingType.office: response = await OfficeService().cancelBooking(widget.id);
+      case BookingType.office: response = await OfficeService().cancelBooking(widget.id, widget.isAdmin);
       case BookingType.resource: response = await ResourceService().cancelBooking(widget.id);
       case BookingType.car: response = await CarService().cancelBooking(widget.id);
     }
@@ -303,8 +305,18 @@ class _BookingItemCardState extends State<BookingItemCard> {
     parent!.reloadData(response);
   }
 
-  void didTapRejectBookingButton() {
+  void didTapRejectBookingButton() async {
     print('didTapRejectBookingButton');
+    Navigator.of(context).pop();
+    parent!.changeLoadingStatus(true);
+    dynamic response;
+    switch(widget.type) {
+      case BookingType.office: response = await OfficeService().rejectBooking(widget.id);
+      case BookingType.resource: response = await ResourceService().rejectBooking(widget.id);
+      case BookingType.car: response = await CarService().rejectBooking(widget.id);
+    }
+    parent!.changeLoadingStatus(false);
+    parent!.reloadData(response);
   }
 
   void didTapGiveBackBookingButton() {
