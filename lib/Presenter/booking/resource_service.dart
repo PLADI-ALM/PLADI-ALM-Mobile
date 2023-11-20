@@ -202,6 +202,30 @@ class ResourceService {
     }
   }
 
+  // 장비 예약 허가
+  Future<dynamic> allowBooking(int bookingId) async {
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          '$resourceAdminBookingHistoryURL/$bookingId/allow',
+          null, null, null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
   /// Helper Methods
   void setStartInfo(DateTime date, DateTime time) {
     startDate = date;

@@ -4,13 +4,11 @@ import 'package:frontend/View/booking/screen/booking_screen.dart';
 
 import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
-import '../../admin/screen/admin_screen.dart';
 import '../../colors.dart';
 import '../../common/screen/booking_history_screen.dart';
-import '../screen/mybooking_screen.dart';
 import 'booking_status_item.dart';
 
-enum BookingManageType { cancel, giveBack, reject, permit  }  // 취소, 반납, 반려, 허가
+enum BookingManageType { cancel, giveBack, reject, allow  }  // 취소, 반납, 반려, 허가
 
 class BookingItemCard extends StatefulWidget {
   final bool isAdmin;
@@ -171,8 +169,8 @@ class _BookingItemCardState extends State<BookingItemCard> {
             children: [
               Expanded(child: Container()),
               TextButton(
-                child: Text(getManageBookingTypeStr(BookingManageType.permit), style: buttonStyle,),
-                onPressed: () { showCancelBookingBottomSheet(BookingManageType.permit); },
+                child: Text(getManageBookingTypeStr(BookingManageType.allow), style: buttonStyle,),
+                onPressed: () { showCancelBookingBottomSheet(BookingManageType.allow); },
               ),
               TextButton(
                 child: Text(getManageBookingTypeStr(BookingManageType.reject), style: buttonStyle,),
@@ -276,7 +274,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
       case BookingManageType.cancel: return '취소';
       case BookingManageType.reject: return '반려';
       case BookingManageType.giveBack: return '반납';
-      case BookingManageType.permit: return '허가';
+      case BookingManageType.allow: return '허가';
    }
   }
 
@@ -285,7 +283,7 @@ class _BookingItemCardState extends State<BookingItemCard> {
       case BookingManageType.cancel: return didTapCancelBookingButton;
       case BookingManageType.reject: return didTapRejectBookingButton;
       case BookingManageType.giveBack: return didTapGiveBackBookingButton;
-      case BookingManageType.permit: return didTapPermitBookingButton;
+      case BookingManageType.allow: return didTapAllowBookingButton;
     }
   }
 
@@ -306,7 +304,6 @@ class _BookingItemCardState extends State<BookingItemCard> {
   }
 
   void didTapRejectBookingButton() async {
-    print('didTapRejectBookingButton');
     Navigator.of(context).pop();
     parent!.changeLoadingStatus(true);
     dynamic response;
@@ -323,8 +320,16 @@ class _BookingItemCardState extends State<BookingItemCard> {
     print('didTapGiveBackBookingButton');
   }
 
-  void didTapPermitBookingButton() {
-    print('didTapPermitBookingButton');
+  void didTapAllowBookingButton() async {
+    Navigator.of(context).pop();
+    parent!.changeLoadingStatus(true);
+    dynamic response;
+    switch(widget.type) {
+      case BookingType.resource: response = await ResourceService().allowBooking(widget.id);
+      default: return;
+    }
+    parent!.changeLoadingStatus(false);
+    parent!.reloadData(response);
   }
 
 }
