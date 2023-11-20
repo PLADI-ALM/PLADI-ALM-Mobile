@@ -9,6 +9,7 @@ import '../../Model/network/api_manager.dart';
 class CarService {
   final carURL = '/cars';
   final carBookingHistoryURL = '/bookings/cars';
+  final carAdminBookingHistoryURL = '/admin/bookings/cars';
 
   DateTime? startDate;
   DateTime? startTime;
@@ -50,10 +51,11 @@ class CarService {
   }
 
   // 차량 예약 목록 조회
-  Future<dynamic> getCarBookingHistoryList() async {
+  Future<dynamic> getCarBookingHistoryList(bool isAdmin) async {
+    String url = isAdmin ? carAdminBookingHistoryURL : carBookingHistoryURL;
     final response = await APIManager().request(
         RequestType.get,
-        carBookingHistoryURL,
+        url,
         null, null, null
     );
     return response;

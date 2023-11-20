@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/View/colors.dart';
 
+import '../../admin/screen/admin_screen.dart';
 import '../../booking/screen/booking_screen.dart';
 import '../../mybooking/screen/mybooking_screen.dart';
 import '../component/tabbar_item.dart';
@@ -73,7 +74,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         const BookingScreen(),
         const BookingScreen(),
         const MyBookingScreen(),
-        const BookingScreen(),
+        const AdminScreen(),
       ];
     } else {
       return [

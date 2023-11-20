@@ -10,6 +10,7 @@ import '../../Model/network/api_manager.dart';
 class ResourceService {
   final resourceURL = '/resources';
   final resourceBookingHistoryURL = '/bookings/resources';
+  final resourceAdminBookingHistoryURL = '/admin/bookings/resources';
 
   DateTime? startDate;
   DateTime? startTime;
@@ -133,10 +134,11 @@ class ResourceService {
   }
 
   // 장비 예약 목록 조회
-  Future<dynamic> getResourceBookingHistoryList() async {
+  Future<dynamic> getResourceBookingHistoryList(bool isAdmin) async {
+    String url = isAdmin ? resourceAdminBookingHistoryURL : resourceBookingHistoryURL;
     final response = await APIManager().request(
         RequestType.get,
-        resourceBookingHistoryURL,
+        url,
         null, null, null
     );
     return response;

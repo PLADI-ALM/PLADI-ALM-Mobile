@@ -255,10 +255,10 @@ OfficeBookingHistory _$OfficeBookingHistoryFromJson(
     OfficeBookingHistory(
       id: json['id'] as int,
       name: json['name'] as String,
-      detailInfo: json['detailInfo'] as String,
+      detailInfo: json['detailInfo'] as String?,
       startDateTime: json['startDateTime'] as String,
       endDateTime: json['endDateTime'] as String,
-      memo: json['memo'] as String,
+      memo: json['memo'] as String?,
       status: json['status'] as String,
     );
 

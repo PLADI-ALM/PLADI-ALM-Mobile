@@ -243,19 +243,19 @@ class OfficeBookingHistory {
 
   int id;
   String name;
-  String detailInfo;
+  String? detailInfo;
   String startDateTime;
   String endDateTime;
-  String memo;
+  String? memo;
   String status;
 
   OfficeBookingHistory({
     required this.id,
     required this.name,
-    required this.detailInfo,
+    this.detailInfo,
     required this.startDateTime,
     required this.endDateTime,
-    required this.memo,
+    this.memo,
     required this.status,
   });
 

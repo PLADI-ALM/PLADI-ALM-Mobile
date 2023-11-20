@@ -137,19 +137,19 @@ class CarBookingHistory {
 
   int id;
   String name;
-  String detailInfo;
+  String? location;
   String startDateTime;
   String endDateTime;
-  String memo;
+  String? memo;
   String status;
 
   CarBookingHistory({
     required this.id,
     required this.name,
-    required this.detailInfo,
+    this.location,
     required this.startDateTime,
     required this.endDateTime,
-    required this.memo,
+    this.memo,
     required this.status,
   });
 
