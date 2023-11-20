@@ -182,9 +182,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
     }
   }
 
-  void changeLoadingStatus(bool loadingStatus) {
-    setState(() { isLoading = loadingStatus; });
-  }
+  void changeLoadingStatus(bool loadingStatus) { setState(() { isLoading = loadingStatus; }); }
 
   /// Helper Methods
   void tabListener() {
