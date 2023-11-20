@@ -4,7 +4,7 @@ import 'package:frontend/View/colors.dart';
 
 import '../../booking/screen/booking_screen.dart';
 import '../component/tabbar_item.dart';
-import 'booking_history_screen.dart';
+import '../../booking/screen/booking_history_screen.dart';
 
 class RootTab extends StatefulWidget {
 

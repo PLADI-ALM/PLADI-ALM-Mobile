@@ -7,10 +7,10 @@ import '../../../Model/model/booking/resource_model.dart';
 import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
 import '../../../Presenter/booking/resource_service.dart';
-import '../../booking/screen/booking_screen.dart';
+import 'booking_screen.dart';
 import '../../colors.dart';
-import '../../mybooking/component/booking_item_card.dart';
-import '../component/main_app_bar.dart';
+import '../component/booking_item_card.dart';
+import '../../common/component/main_app_bar.dart';
 
 class BookingHistoryScreen extends StatefulWidget {
   final bool isAdmin;

@@ -5,7 +5,7 @@ import 'package:frontend/View/booking/screen/booking_screen.dart';
 import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
 import '../../colors.dart';
-import '../../common/screen/booking_history_screen.dart';
+import '../screen/booking_history_screen.dart';
 import 'booking_status_item.dart';
 
 enum BookingManageType { cancel, giveBack, reject, allow  }  // 취소, 반납, 반려, 허가
