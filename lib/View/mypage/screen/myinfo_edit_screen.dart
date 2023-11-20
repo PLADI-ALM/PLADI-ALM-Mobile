@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:frontend/Model/model/mypage/profile_response.dart';
+import 'package:frontend/Model/model/mypage/myinfo_response.dart';
 import 'package:frontend/Presenter/mypage/mypage_service.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
-import 'package:frontend/View/login/screen/login_screen.dart';
-import 'package:frontend/View/mypage/component/mypage_cell.dart';
 
 class MyInfoEditScreen extends StatefulWidget {
   const MyInfoEditScreen({super.key});
@@ -16,6 +13,8 @@ class MyInfoEditScreen extends StatefulWidget {
 }
 
 class _MyInfoEditScreen extends State<MyInfoEditScreen> {
+  late final MyInfoResponse data;
+
   FocusNode nameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode assetsFocusNode = FocusNode();
@@ -48,13 +47,50 @@ class _MyInfoEditScreen extends State<MyInfoEditScreen> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: const SubAppBar(titleText: "내 정보 수정"),
-          body: renderBody(),
+          body: myInfoBody(),
           backgroundColor: Colors.white,
           bottomNavigationBar: PurpleBottomButton(
             title: "수정",
             onPressed: changeMyInfo,
           ),
         ));
+  }
+
+  Widget myInfoBody() {
+    return FutureBuilder(
+        future: MypageService().getMyInfo(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return noDataBody();
+          }
+
+          if (snapshot.hasData) {
+            data = MyInfoResponseModel.fromJson(snapshot.data).data;
+            if (data.name != null) {
+              nameController.text = data.name!;
+            }
+            if (data.phone != null) {
+              phoneController.text = data.phone!;
+            }
+            if (data.assets != null) {
+              assetController.text = data.assets!;
+            }
+            return renderBody();
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
+  }
+
+  Widget noDataBody() {
+    return Center(
+        child: Container(
+      width: double.infinity,
+      height: double.infinity,
+      alignment: Alignment.center,
+      child: const Text("정보를 불러 올 수 없습니다. \n다시 시도해주세요.",
+          style: TextStyle(fontSize: 16, color: Colors.purple)),
+    ));
   }
 
   Widget renderBody() {
@@ -85,7 +121,7 @@ class _MyInfoEditScreen extends State<MyInfoEditScreen> {
               child: TextField(
                 maxLines: 1,
                 focusNode: nameFocusNode,
-                obscureText: true,
+                obscureText: false,
                 controller: nameController,
                 decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(

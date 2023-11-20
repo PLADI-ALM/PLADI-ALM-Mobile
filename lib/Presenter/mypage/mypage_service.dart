@@ -6,6 +6,7 @@ import 'package:frontend/Model/network/api_manager.dart';
 class MypageService {
   final profileURL = '/users/position';
   final logoutURL = '/users/logout';
+  final myInfoURL = '/users';
 
   static final MypageService _mypageService = MypageService._();
   MypageService._();
@@ -35,5 +36,9 @@ class MypageService {
         return error.message;
       }
     }
+  }
+
+  Future<dynamic> getMyInfo() {
+    return APIManager().request(RequestType.get, myInfoURL, null, null, null);
   }
 }
