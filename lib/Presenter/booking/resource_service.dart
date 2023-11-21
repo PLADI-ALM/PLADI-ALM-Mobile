@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:frontend/Model/model/booking/resource_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../Model/model/booking/return_booking_model.dart';
 import '../../Model/model/general_model.dart';
 import '../../Model/network/api_manager.dart';
 
@@ -173,16 +174,16 @@ class ResourceService {
     String url = isAdmin
         ? '$resourceAdminBookingHistoryURL/$bookingId/return'
         : '$resourceBookingHistoryURL/$bookingId';
+
+    ReturnBookingRequest body = ReturnBookingRequest(remark: remark, returnLocation: location);
+
     try {
       final response = await APIManager().request(
           RequestType.patch,
           url,
           null,
-          {
-            'returnLocation': location,
-            'remark': remark
-          },
-          null
+          null,
+          body.toJson()
       );
 
       if (response != null) {

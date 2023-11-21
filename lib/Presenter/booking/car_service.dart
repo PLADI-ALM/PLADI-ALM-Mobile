@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
+import '../../Model/model/booking/return_booking_model.dart';
 import '../../Model/model/general_model.dart';
 import '../../Model/network/api_manager.dart';
 
@@ -87,27 +88,19 @@ class CarService {
 
   // 차량 예약 반납
   Future<dynamic> returnBooking(bool isAdmin, int bookingId, String location, String? remark) async {
-    // final response = await APIManager().request(
-    //     RequestType.patch,
-    //     '$carBookingHistoryURL/$bookingId',
-    //     null, null, null
-    // );
-    // return response;
-
-
     String url = isAdmin
         ? '$carAdminBookingHistoryURL/$bookingId/return'
         : '$carBookingHistoryURL/$bookingId';
+
+    ReturnBookingRequest body = ReturnBookingRequest(remark: remark, returnLocation: location);
+
     try {
       final response = await APIManager().request(
           RequestType.patch,
           url,
           null,
-          {
-            'returnLocation': location,
-            'remark': remark
-          },
-          null
+          null,
+          body.toJson()
       );
 
       if (response != null) {
