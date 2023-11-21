@@ -90,7 +90,7 @@ class CarService {
   Future<dynamic> returnBooking(bool isAdmin, int bookingId, String location, String? remark) async {
     String url = isAdmin
         ? '$carAdminBookingHistoryURL/$bookingId/return'
-        : '$carBookingHistoryURL/$bookingId';
+        : '$carBookingHistoryURL/$bookingId/return';
 
     ReturnBookingRequest body = ReturnBookingRequest(remark: remark, returnLocation: location);
 

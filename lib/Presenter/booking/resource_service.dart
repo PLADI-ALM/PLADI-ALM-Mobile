@@ -173,7 +173,7 @@ class ResourceService {
   Future<dynamic> returnBooking(bool isAdmin, int bookingId, String location, String? remark) async {
     String url = isAdmin
         ? '$resourceAdminBookingHistoryURL/$bookingId/return'
-        : '$resourceBookingHistoryURL/$bookingId';
+        : '$resourceBookingHistoryURL/$bookingId/return';
 
     ReturnBookingRequest body = ReturnBookingRequest(remark: remark, returnLocation: location);
 

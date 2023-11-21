@@ -52,12 +52,13 @@ class _BookingReturnScreenState extends State<BookingReturnScreen> {
     TextStyle hintStyle = const TextStyle(fontSize: 13, color: Color(0xFFC9C9C9));
 
     return isLoading
-        ? const Center(
+        ? Center(
             child: Column(
               children: [
-                CircularProgressIndicator(color: purple,),
-                SizedBox(height: 15,),
-                Text('반납 요청 중입니다. 잠시만 기다려주세요.', style: TextStyle(fontSize: 14, color: purple))
+                SizedBox(height: MediaQuery.of(context).size.height / 4,),
+                const CircularProgressIndicator(color: purple,),
+                const SizedBox(height: 15,),
+                const Text('반납 요청 중입니다. 잠시만 기다려주세요.', style: TextStyle(fontSize: 14, color: purple))
               ],
             )
           )
