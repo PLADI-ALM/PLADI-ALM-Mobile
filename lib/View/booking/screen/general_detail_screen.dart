@@ -16,19 +16,19 @@ class GeneralDetailScreen extends StatefulWidget {
   final BookingType type;
   final int id;
 
-  const GeneralDetailScreen({
-    required this.type,
-    required this.id,
-    Key? key
-  }) : super(key: key);
+  const GeneralDetailScreen({required this.type, required this.id, Key? key})
+      : super(key: key);
 
   @override
   State<GeneralDetailScreen> createState() => _GeneralDetailScreenState();
 }
 
 class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
+  TextStyle nameStyle = const TextStyle(
+      fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
 
-  TextStyle nameStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
+  TextStyle manufacturerStyle = const TextStyle(
+      fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black);
 
   bool isLoading = true;
   dynamic data;
@@ -41,7 +41,8 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
         response = await ResourceService().getResourceDetailData(widget.id);
       case BookingType.car:
         response = await CarService().getCarDetailData(widget.id);
-      default: return;
+      default:
+        return;
     }
     // dynamic response = await ResourceService().getResourceDetailData(widget.resourceId);
     isLoading = false;
@@ -52,9 +53,14 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const SubAppBar(titleText: '',),
+      appBar: const SubAppBar(
+        titleText: '',
+      ),
       body: renderBody(),
-      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: didTapBookingButton,),
+      bottomNavigationBar: PurpleBottomButton(
+        title: '예약',
+        onPressed: didTapBookingButton,
+      ),
     );
   }
 
@@ -64,7 +70,8 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
         data = ResourceDetailResponse.fromJson(snapshotData);
       case BookingType.car:
         data = CarDetailResponse.fromJson(snapshotData);
-      default: return;
+      default:
+        return;
     }
   }
 
@@ -74,13 +81,18 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError || snapshot.data == null) {
             return const Center(
-              child: Text('정보를 불러오지 못 하였습니다.',
-                style: TextStyle(fontSize: 16, color: purple),),
+              child: Text(
+                '정보를 불러오지 못 하였습니다.',
+                style: TextStyle(fontSize: 16, color: purple),
+              ),
             );
-          }
-          else {
+          } else {
             if (isLoading) {
-              return const Center(child: CircularProgressIndicator(color: purple,),);
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: purple,
+                ),
+              );
             }
             // data = ResourceDetailResponse.fromJson(snapshot.data);
             configure(snapshot.data);
@@ -93,42 +105,71 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
                     width: MediaQuery.of(context).size.width,
                     height: 232,
                     child: (data.data.imgUrl == null)
-                        ? const Center(child: Text('이미지를 불러올 수 없습니다.', style: TextStyle(fontSize: 16, color: purple),),)
-                        : Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
+                        ? const Center(
+                            child: Text(
+                              '이미지를 불러올 수 없습니다.',
+                              style: TextStyle(fontSize: 16, color: purple),
+                            ),
+                          )
+                        : Image.network(
+                            data.data.imgUrl,
+                            fit: BoxFit.fitWidth,
+                          ),
                   ),
-
                   Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(data.data.name, style: nameStyle,),
-                  ),
-
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Text(
+                            data.data.name ?? "이름",
+                            style: nameStyle,
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            data.data.manufacturer ?? "",
+                            style: manufacturerStyle,
+                          ),
+                        ],
+                      )),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       children: [
-                        infoCardItem(Icons.location_on_outlined, '위치', data.data.location, null),
-                        const SizedBox(width: 20,),
-                        infoCardItem(Icons.phone_in_talk_outlined, '책임자', data.data.responsibilityName, didTapPhoneItem),
+                        infoCardItem(Icons.location_on_outlined, '위치',
+                            data.data.location ?? "위치", null),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        infoCardItem(
+                            Icons.phone_in_talk_outlined,
+                            '책임자',
+                            data.data.responsibilityName ?? "책임자",
+                            didTapPhoneItem),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10,),
-
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Text('상세정보', style: nameStyle,),
+                    child: Text(
+                      '상세정보',
+                      style: nameStyle,
+                    ),
                   ),
-
                   renderDescription(),
                 ],
               ),
             );
           }
-        }
-    );
+        });
   }
 
-  Widget infoCardItem(IconData iconData, String info, String content, VoidCallback? onTap) {
+  Widget infoCardItem(
+      IconData iconData, String info, String content, VoidCallback? onTap) {
     TextStyle infoStyle = const TextStyle(fontSize: 12, color: darkGrey);
     TextStyle contentStyle = const TextStyle(fontSize: 15, color: Colors.black);
 
@@ -139,27 +180,40 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
         height: 60,
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
-            border: Border.all(color: const Color(0xFF939393))
-        ),
+            border: Border.all(color: const Color(0xFF939393))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Container(
-              width: 34, height: 34,
+              width: 34,
+              height: 34,
               decoration: const BoxDecoration(
                   color: Color(0xFFF3ECFB),
-                  borderRadius: BorderRadius.all(Radius.circular(17))
+                  borderRadius: BorderRadius.all(Radius.circular(17))),
+              child: Icon(
+                iconData,
+                color: Colors.black,
+                size: 24,
               ),
-              child: Icon(iconData, color: Colors.black, size: 24,),
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(info, style: infoStyle,),
-                Text(content, style: contentStyle,),
+                Text(
+                  info,
+                  style: infoStyle,
+                ),
+                Text(
+                  content,
+                  style: contentStyle,
+                ),
               ],
             )
           ],
@@ -177,12 +231,20 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('설명', style: TextStyle(fontSize: 14, color: darkGrey),),
-          const SizedBox(width: 30,),
+          const Text(
+            '설명',
+            style: TextStyle(fontSize: 14, color: darkGrey),
+          ),
+          const SizedBox(
+            width: 30,
+          ),
           SizedBox(
               width: MediaQuery.of(context).size.width - 100,
-              child: Text(data.data.description, maxLines: 30, style: contentStyle,)
-          )
+              child: Text(
+                data.data.description ?? "설명",
+                maxLines: 30,
+                style: contentStyle,
+              ))
         ],
       ),
     );
@@ -190,17 +252,24 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
 
   /// Event Methods
   void didTapPhoneItem() async {
-    Uri uri = Uri.parse("tel:${data.data.responsibilityPhone.replaceAll('-','')}");
+    Uri uri =
+        Uri.parse("tel:${data.data.responsibilityPhone.replaceAll('-', '')}");
 
-    if (await canLaunchUrl(uri)) { await launchUrl(uri); }
-    else { Fluttertoast.showToast(msg: '전화 앱에 연결할 수 없습니다.'); }
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      Fluttertoast.showToast(msg: '전화 앱에 연결할 수 없습니다.');
+    }
   }
 
   void didTapBookingButton() {
     if (data == null) {
       Fluttertoast.showToast(msg: '장비 정보를 불러올 수 없으므로 예약이 불가능합니다.');
     } else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingResourceScreen(resourceId: widget.id,)));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => BookingResourceScreen(
+                resourceId: widget.id,
+              )));
     }
   }
 }

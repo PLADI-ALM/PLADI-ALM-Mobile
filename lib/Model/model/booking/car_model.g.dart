@@ -88,20 +88,21 @@ Map<String, dynamic> _$CarDetailResponseToJson(CarDetailResponse instance) =>
 
 CarDetailInfo _$CarDetailInfoFromJson(Map<String, dynamic> json) =>
     CarDetailInfo(
-      description: json['description'] as String,
+      description: json['description'] as String?,
       imgUrl: json['imgUrl'] as String?,
-      location: json['location'] as String,
-      name: json['name'] as String,
-      responsibilityId: json['responsibilityId'] as int,
-      responsibilityName: json['responsibilityName'] as String,
-      responsibilityPhone: json['responsibilityPhone'] as String,
-    );
+      location: json['location'] as String?,
+      name: json['name'] as String?,
+      responsibilityId: json['responsibilityId'] as int?,
+      responsibilityName: json['responsibilityName'] as String?,
+      responsibilityPhone: json['responsibilityPhone'] as String?,
+    )..manufacturer = json['manufacturer'] as String?;
 
 Map<String, dynamic> _$CarDetailInfoToJson(CarDetailInfo instance) =>
     <String, dynamic>{
       'description': instance.description,
       'imgUrl': instance.imgUrl,
       'location': instance.location,
+      'manufacturer': instance.manufacturer,
       'name': instance.name,
       'responsibilityId': instance.responsibilityId,
       'responsibilityName': instance.responsibilityName,

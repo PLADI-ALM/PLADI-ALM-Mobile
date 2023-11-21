@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../colors.dart';
-
 class SubAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String? titleText;
   final List<Widget>? rightItems;
@@ -10,12 +8,12 @@ class SubAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   static const double appBarHeight = 50;
 
-  const SubAppBar(
-      {required this.titleText,
-      this.rightItems,
-      this.isBackItemHidden,
-      Key? key})
-      : super(key: key);
+  const SubAppBar({
+    required this.titleText,
+    this.rightItems,
+    this.isBackItemHidden,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SubAppBar> createState() => _SubAppBarState();

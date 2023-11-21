@@ -16,8 +16,8 @@ class CarResponseModel extends GeneralModel {
     required this.data,
   });
 
-  factory CarResponseModel.fromJson(Map<String, dynamic> json)
-  => _$CarResponseModelFromJson(json);
+  factory CarResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$CarResponseModelFromJson(json);
 }
 
 @JsonSerializable()
@@ -38,8 +38,8 @@ class CarResponse extends GeneralListModel {
     required this.content,
   });
 
-  factory CarResponse.fromJson(Map<String, dynamic> json)
-  => _$CarResponseFromJson(json);
+  factory CarResponse.fromJson(Map<String, dynamic> json) =>
+      _$CarResponseFromJson(json);
 }
 
 @JsonSerializable()
@@ -59,8 +59,8 @@ class CarInfo {
     required this.carId,
   });
 
-  factory CarInfo.fromJson(Map<String, dynamic> json)
-  => _$CarInfoFromJson(json);
+  factory CarInfo.fromJson(Map<String, dynamic> json) =>
+      _$CarInfoFromJson(json);
 }
 
 /// 차량 세부 조회용 데이터 모델
@@ -75,19 +75,20 @@ class CarDetailResponse extends GeneralModel {
     required this.data,
   });
 
-  factory CarDetailResponse.fromJson(Map<String, dynamic> json)
-  => _$CarDetailResponseFromJson(json);
+  factory CarDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$CarDetailResponseFromJson(json);
 }
 
 @JsonSerializable()
 class CarDetailInfo {
-  String description;
+  String? description;
   String? imgUrl;
-  String location;
-  String name;
-  int responsibilityId;
-  String responsibilityName;
-  String responsibilityPhone;
+  String? location;
+  String? manufacturer;
+  String? name;
+  int? responsibilityId;
+  String? responsibilityName;
+  String? responsibilityPhone;
 
   CarDetailInfo({
     required this.description,
@@ -99,14 +100,13 @@ class CarDetailInfo {
     required this.responsibilityPhone,
   });
 
-  factory CarDetailInfo.fromJson(Map<String, dynamic> json)
-  => _$CarDetailInfoFromJson(json);
+  factory CarDetailInfo.fromJson(Map<String, dynamic> json) =>
+      _$CarDetailInfoFromJson(json);
 }
 
 /// 차량 예약 목록 조회 데이터 모델
 @JsonSerializable()
 class CarBookingHistoryResponse extends GeneralModel {
-
   CarBookingHistoryData data;
 
   CarBookingHistoryResponse({
@@ -116,26 +116,24 @@ class CarBookingHistoryResponse extends GeneralModel {
     required this.data,
   });
 
-  factory CarBookingHistoryResponse.fromJson(Map<String, dynamic> json)
-  => _$CarBookingHistoryResponseFromJson(json);
+  factory CarBookingHistoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$CarBookingHistoryResponseFromJson(json);
 }
 
 @JsonSerializable()
 class CarBookingHistoryData {
-
   List<CarBookingHistory> content;
 
   CarBookingHistoryData({
     required this.content,
   });
 
-  factory CarBookingHistoryData.fromJson(Map<String, dynamic> json)
-  => _$CarBookingHistoryDataFromJson(json);
+  factory CarBookingHistoryData.fromJson(Map<String, dynamic> json) =>
+      _$CarBookingHistoryDataFromJson(json);
 }
 
 @JsonSerializable()
 class CarBookingHistory {
-
   int id;
   String name;
   String? location;
@@ -154,6 +152,6 @@ class CarBookingHistory {
     required this.status,
   });
 
-  factory CarBookingHistory.fromJson(Map<String, dynamic> json)
-  => _$CarBookingHistoryFromJson(json);
+  factory CarBookingHistory.fromJson(Map<String, dynamic> json) =>
+      _$CarBookingHistoryFromJson(json);
 }

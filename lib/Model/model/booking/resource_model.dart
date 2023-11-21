@@ -5,7 +5,6 @@ import '../general_model.dart';
 
 part 'resource_model.g.dart';
 
-
 /// 장비 목록 조회용 데이터 모델
 @JsonSerializable()
 class ResourceResponseModel extends GeneralModel {
@@ -18,8 +17,8 @@ class ResourceResponseModel extends GeneralModel {
     required this.data,
   });
 
-  factory ResourceResponseModel.fromJson(Map<String, dynamic> json)
-  => _$ResourceResponseModelFromJson(json);
+  factory ResourceResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$ResourceResponseModelFromJson(json);
 }
 
 @JsonSerializable()
@@ -40,15 +39,14 @@ class ResourceResponse extends GeneralListModel {
     required this.content,
   });
 
-  factory ResourceResponse.fromJson(Map<String, dynamic> json)
-  => _$ResourceResponseFromJson(json);
+  factory ResourceResponse.fromJson(Map<String, dynamic> json) =>
+      _$ResourceResponseFromJson(json);
 }
 
 @JsonSerializable()
 class ResourceInfo {
   String? description;
   String? location;
-  String? manufacturer;
   String? imgUrl;
   String name;
   int resourceId;
@@ -56,14 +54,13 @@ class ResourceInfo {
   ResourceInfo({
     this.description,
     this.location,
-    this.manufacturer,
     this.imgUrl,
     required this.name,
     required this.resourceId,
   });
 
-  factory ResourceInfo.fromJson(Map<String, dynamic> json)
-  => _$ResourceInfoFromJson(json);
+  factory ResourceInfo.fromJson(Map<String, dynamic> json) =>
+      _$ResourceInfoFromJson(json);
 }
 
 /// 장비 세부 조회용 데이터 모델
@@ -78,19 +75,20 @@ class ResourceDetailResponse extends GeneralModel {
     required this.data,
   });
 
-  factory ResourceDetailResponse.fromJson(Map<String, dynamic> json)
-  => _$ResourceDetailResponseFromJson(json);
+  factory ResourceDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$ResourceDetailResponseFromJson(json);
 }
 
 @JsonSerializable()
 class ResourceDetailInfo {
-  String description;
-  String location;
+  String? description;
+  String? location;
   String? imgUrl;
-  String name;
-  int responsibilityId;
-  String responsibilityName;
-  String responsibilityPhone;
+  String? name;
+  int? responsibilityId;
+  String? responsibilityName;
+  String? responsibilityPhone;
+  String? manufacturer;
 
   ResourceDetailInfo({
     required this.description,
@@ -100,10 +98,11 @@ class ResourceDetailInfo {
     required this.responsibilityId,
     required this.responsibilityName,
     required this.responsibilityPhone,
+    required this.manufacturer,
   });
 
-  factory ResourceDetailInfo.fromJson(Map<String, dynamic> json)
-  => _$ResourceDetailInfoFromJson(json);
+  factory ResourceDetailInfo.fromJson(Map<String, dynamic> json) =>
+      _$ResourceDetailInfoFromJson(json);
 }
 
 /// 장비 예약 현황 데이터 모델
@@ -118,8 +117,8 @@ class ResourceBookedList extends GeneralModel {
     required this.data,
   });
 
-  factory ResourceBookedList.fromJson(Map<String, dynamic> json)
-  => _$ResourceBookedListFromJson(json);
+  factory ResourceBookedList.fromJson(Map<String, dynamic> json) =>
+      _$ResourceBookedListFromJson(json);
 }
 
 /// 장비 예약 데이터 모델
@@ -141,7 +140,6 @@ class ResourceBookingRequest {
 /// 장비 예약 목록 조회 데이터 모델
 @JsonSerializable()
 class ResourceBookingHistoryResponse extends GeneralModel {
-
   ResourceBookingHistoryData data;
 
   ResourceBookingHistoryResponse({
@@ -151,26 +149,24 @@ class ResourceBookingHistoryResponse extends GeneralModel {
     required this.data,
   });
 
-  factory ResourceBookingHistoryResponse.fromJson(Map<String, dynamic> json)
-  => _$ResourceBookingHistoryResponseFromJson(json);
+  factory ResourceBookingHistoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$ResourceBookingHistoryResponseFromJson(json);
 }
 
 @JsonSerializable()
 class ResourceBookingHistoryData {
-
   List<ResourceBookingHistory> content;
 
   ResourceBookingHistoryData({
     required this.content,
   });
 
-  factory ResourceBookingHistoryData.fromJson(Map<String, dynamic> json)
-  => _$ResourceBookingHistoryDataFromJson(json);
+  factory ResourceBookingHistoryData.fromJson(Map<String, dynamic> json) =>
+      _$ResourceBookingHistoryDataFromJson(json);
 }
 
 @JsonSerializable()
 class ResourceBookingHistory {
-
   int id;
   String name;
   String? location;
@@ -189,6 +185,6 @@ class ResourceBookingHistory {
     required this.status,
   });
 
-  factory ResourceBookingHistory.fromJson(Map<String, dynamic> json)
-  => _$ResourceBookingHistoryFromJson(json);
+  factory ResourceBookingHistory.fromJson(Map<String, dynamic> json) =>
+      _$ResourceBookingHistoryFromJson(json);
 }
