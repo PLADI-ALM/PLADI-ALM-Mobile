@@ -47,6 +47,7 @@ class ResourceResponse extends GeneralListModel {
 class ResourceInfo {
   String? description;
   String? location;
+  String? manufacturer;
   String? imgUrl;
   String name;
   int resourceId;
@@ -54,6 +55,7 @@ class ResourceInfo {
   ResourceInfo({
     this.description,
     this.location,
+    this.manufacturer,
     this.imgUrl,
     required this.name,
     required this.resourceId,
