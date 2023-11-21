@@ -10,6 +10,7 @@ import 'package:frontend/Presenter/mypage/mypage_service.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:frontend/View/login/screen/login_screen.dart';
 import 'package:frontend/View/mypage/component/mypage_cell.dart';
+import 'package:frontend/View/mypage/screen/myinfo_edit_screen.dart';
 
 class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
@@ -119,6 +120,10 @@ class _MypageScreen extends State<MypageScreen> {
             color: Colors.grey.withOpacity(0.3),
           ),
           GestureDetector(
+            onTap: moveToEdit,
+            child: const MypageCell(title: "내 정보 수정"),
+          ),
+          GestureDetector(
             onTap: moveToService,
             child: const MypageCell(title: "서비스 이용약관"),
           ),
@@ -195,6 +200,11 @@ class _MypageScreen extends State<MypageScreen> {
             ],
           );
         });
+  }
+
+  void moveToEdit() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const MyInfoEditScreen()));
   }
 
   void moveToService() {}

@@ -14,6 +14,6 @@ class GeneralModel {
     required this.message,
   });
 
-  factory GeneralModel.fromJson(Map<String, dynamic> json)
-  => _$GeneralModelFromJson(json);
+  factory GeneralModel.fromJson(Map<String, dynamic> json) =>
+      _$GeneralModelFromJson(json);
 }
