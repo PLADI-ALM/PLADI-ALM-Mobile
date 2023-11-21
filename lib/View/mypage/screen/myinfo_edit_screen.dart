@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/mypage/myinfo_response.dart';
 import 'package:frontend/Presenter/mypage/mypage_service.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
@@ -197,7 +198,7 @@ class _MyInfoEditScreen extends State<MyInfoEditScreen> {
             child: TextField(
               maxLines: 1,
               focusNode: assetsFocusNode,
-              obscureText: true,
+              obscureText: false,
               controller: assetController,
               decoration: const InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -216,7 +217,18 @@ class _MyInfoEditScreen extends State<MyInfoEditScreen> {
     );
   }
 
-  void changeMyInfo() {}
+  void changeMyInfo() {
+    Future<dynamic> result = MypageService().editMyInfo(
+        nameController.text, phoneController.text, assetController.text);
+    result.then((value) => {
+          if (value == true)
+            {Fluttertoast.showToast(msg: "내 정보가 수정되었습니다.")}
+          else if (value == false)
+            {Fluttertoast.showToast(msg: "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
+          else
+            {Fluttertoast.showToast(msg: value)}
+        });
+  }
 }
 
 class NumberFormatter extends TextInputFormatter {
