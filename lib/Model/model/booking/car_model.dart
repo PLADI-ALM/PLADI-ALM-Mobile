@@ -44,16 +44,17 @@ class CarResponse extends GeneralListModel {
 
 @JsonSerializable()
 class CarInfo {
-  String description;
+  String? description;
   String? location;
-  String imgUrl;
+  String? manufacturer;
+  String? imgUrl;
   String name;
   int carId;
 
   CarInfo({
-    required this.description,
-    required this.location,
-    required this.imgUrl,
+    this.description,
+    this.location,
+    this.imgUrl,
     required this.name,
     required this.carId,
   });
@@ -137,19 +138,19 @@ class CarBookingHistory {
 
   int id;
   String name;
-  String detailInfo;
+  String? location;
   String startDateTime;
   String endDateTime;
-  String memo;
+  String? memo;
   String status;
 
   CarBookingHistory({
     required this.id,
     required this.name,
-    required this.detailInfo,
+    this.location,
     required this.startDateTime,
     required this.endDateTime,
-    required this.memo,
+    this.memo,
     required this.status,
   });
 

@@ -40,10 +40,9 @@ class _CarItemState extends State<CarItem> {
                 width: MediaQuery.of(context).size.width,
                 height: 176,
                 margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                child: (widget.data.imgUrl == null ||
-                        widget.data.imgUrl.contains('null'))
+                child: (widget.data.imgUrl == null)
                     ? Image.asset('asset/image/pladi_icon.png')
-                    : Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)),
+                    : Image.network(widget.data.imgUrl!, fit: BoxFit.fitWidth)),
             renderResourceInfo(),
           ],
         ),
@@ -58,16 +57,17 @@ class _CarItemState extends State<CarItem> {
         children: [
           Text(
             widget.data.name,
-            style: const TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w600, color: purple),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: purple),
+          ),
+          const SizedBox(width: 10,),
+          Text(
+            widget.data.manufacturer ?? '제조사 미기입',
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),
           ),
           Flexible(child: Container()),
           Text(
-            widget.data.location ?? '',
-            style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF717171)),
+            widget.data.location ?? '보관장소 미기입',
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),
           )
         ],
       ),

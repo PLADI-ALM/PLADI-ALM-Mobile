@@ -56,15 +56,16 @@ Map<String, dynamic> _$OfficeResponseToJson(OfficeResponse instance) =>
     };
 
 OfficeInfo _$OfficeInfoFromJson(Map<String, dynamic> json) => OfficeInfo(
-      location: json['location'] as String,
+      location: json['location'] as String?,
       capacity: json['capacity'] as String,
-      description: json['description'] as String,
-      facilityList: (json['facilityList'] as List<dynamic>)
-          .map((e) => e as String?)
+      description: json['description'] as String?,
+      facilityList: (json['facilityList'] as List<dynamic>?)
+          ?.map((e) => e as String?)
           .toList(),
-      imgUrl: json['imgUrl'] as String,
+      imgUrl: json['imgUrl'] as String?,
       name: json['name'] as String,
       officeId: json['officeId'] as int,
+      isActive: json['isActive'] as bool?,
     );
 
 Map<String, dynamic> _$OfficeInfoToJson(OfficeInfo instance) =>
@@ -76,6 +77,7 @@ Map<String, dynamic> _$OfficeInfoToJson(OfficeInfo instance) =>
       'imgUrl': instance.imgUrl,
       'name': instance.name,
       'officeId': instance.officeId,
+      'isActive': instance.isActive,
     };
 
 OfficeDetailResponse _$OfficeDetailResponseFromJson(
@@ -255,10 +257,10 @@ OfficeBookingHistory _$OfficeBookingHistoryFromJson(
     OfficeBookingHistory(
       id: json['id'] as int,
       name: json['name'] as String,
-      detailInfo: json['detailInfo'] as String,
+      detailInfo: json['detailInfo'] as String?,
       startDateTime: json['startDateTime'] as String,
       endDateTime: json['endDateTime'] as String,
-      memo: json['memo'] as String,
+      memo: json['memo'] as String?,
       status: json['status'] as String,
     );
 

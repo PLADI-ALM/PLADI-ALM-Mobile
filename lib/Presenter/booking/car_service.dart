@@ -3,12 +3,14 @@
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
+import '../../Model/model/booking/return_booking_model.dart';
 import '../../Model/model/general_model.dart';
 import '../../Model/network/api_manager.dart';
 
 class CarService {
   final carURL = '/cars';
   final carBookingHistoryURL = '/bookings/cars';
+  final carAdminBookingHistoryURL = '/admin/bookings/cars';
 
   DateTime? startDate;
   DateTime? startTime;
@@ -50,10 +52,11 @@ class CarService {
   }
 
   // 차량 예약 목록 조회
-  Future<dynamic> getCarBookingHistoryList() async {
+  Future<dynamic> getCarBookingHistoryList(bool isAdmin) async {
+    String url = isAdmin ? carAdminBookingHistoryURL : carBookingHistoryURL;
     final response = await APIManager().request(
         RequestType.get,
-        carBookingHistoryURL,
+        url,
         null, null, null
     );
     return response;
@@ -84,13 +87,59 @@ class CarService {
   }
 
   // 차량 예약 반납
-  Future<dynamic> returnBooking(int bookingId) async {
-    final response = await APIManager().request(
-        RequestType.patch,
-        '$carBookingHistoryURL/$bookingId',
-        null, null, null
-    );
-    return response;
+  Future<dynamic> returnBooking(bool isAdmin, int bookingId, String location, String? remark) async {
+    String url = isAdmin
+        ? '$carAdminBookingHistoryURL/$bookingId/return'
+        : '$carBookingHistoryURL/$bookingId/return';
+
+    ReturnBookingRequest body = ReturnBookingRequest(remark: remark, returnLocation: location);
+
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          url,
+          null,
+          null,
+          body.toJson()
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
+  // 차량 예약 반려
+  Future<dynamic> rejectBooking(int bookingId) async {
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          '$carAdminBookingHistoryURL/$bookingId/reject',
+          null, null, null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
   }
 
   /// Helper Methods

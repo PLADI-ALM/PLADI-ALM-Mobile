@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:frontend/Model/model/booking/office_model.dart';
-import 'package:frontend/Presenter/booking/resource_service.dart';
 
 import '../../../Model/model/booking/car_model.dart';
+import '../../../Model/model/booking/office_model.dart';
 import '../../../Model/model/booking/resource_model.dart';
 import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
-import '../../booking/screen/booking_screen.dart';
+import '../../../Presenter/booking/resource_service.dart';
+import 'booking_screen.dart';
 import '../../colors.dart';
-import '../../common/component/main_app_bar.dart';
 import '../component/booking_item_card.dart';
+import '../../common/component/main_app_bar.dart';
 
-class MyBookingScreen extends StatefulWidget {
-  const MyBookingScreen({Key? key}) : super(key: key);
+class BookingHistoryScreen extends StatefulWidget {
+  final bool isAdmin;
+  const BookingHistoryScreen({
+    required this.isAdmin,
+    Key? key
+  }) : super(key: key);
 
   @override
-  State<MyBookingScreen> createState() => MyBookingScreenState();
+  State<BookingHistoryScreen> createState() => BookingHistoryScreenState();
 }
 
-class MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProviderStateMixin {
-
+class BookingHistoryScreenState extends State<BookingHistoryScreen> with SingleTickerProviderStateMixin {
   static const category = ['회의실', '장비', '차량'];
   BookingType currentType = BookingType.office;
 
@@ -48,11 +51,11 @@ class MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProvi
     dynamic response;
     switch (currentType) {
       case BookingType.office:
-        response = await OfficeService().getOfficeBookingHistoryList();
+        response = await OfficeService().getOfficeBookingHistoryList(widget.isAdmin);
       case BookingType.resource:
-        response = await ResourceService().getResourceBookingHistoryList();
+        response = await ResourceService().getResourceBookingHistoryList(widget.isAdmin);
       case BookingType.car:
-        response = await CarService().getCarBookingHistoryList();
+        response = await CarService().getCarBookingHistoryList(widget.isAdmin);
     }
     isLoading = false;
     return response;
@@ -140,29 +143,32 @@ class MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProvi
             else {
               data = configureData(snapshot.data);
               return (data.data.content.length == 0)
-                ? const Center(
-                    child: Text('예약 목록이 비어있습니다.', style: TextStyle(fontSize: 16, color: purple),),
-                  )
-                : Container(
-                    height: 300.0 * data.data.content.length,
-                    color: Colors.white,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: data.data.content.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return BookingItemCard(
-                          type: currentType,
-                          id: data.data.content[index].id,
-                          name: data.data.content[index].name,
-                          detailInfo: data.data.content[index].detailInfo,
-                          startDateTime: data.data.content[index].startDateTime,
-                          endDateTime: data.data.content[index].endDateTime,
-                          memo: data.data.content[index].memo,
-                          status: data.data.content[index].status,
-                        );
-                      },
-                    ),
-                  );
+                  ? const Center(
+                child: Text('예약 목록이 비어있습니다.', style: TextStyle(fontSize: 16, color: purple),),
+              )
+                  : Container(
+                height: 300.0 * data.data.content.length,
+                color: Colors.white,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: data.data.content.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return BookingItemCard(
+                      isAdmin: widget.isAdmin,
+                      type: currentType,
+                      id: data.data.content[index].id,
+                      name: data.data.content[index].name,
+                      location: (currentType == BookingType.office)
+                          ? data.data.content[index].detailInfo
+                          : data.data.content[index].location,
+                      startDateTime: data.data.content[index].startDateTime,
+                      endDateTime: data.data.content[index].endDateTime,
+                      memo: data.data.content[index].memo,
+                      status: data.data.content[index].status,
+                    );
+                  },
+                ),
+              );
             }
           }
 
@@ -171,7 +177,7 @@ class MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProvi
   }
 
   void reloadData(dynamic result) {
-    if (result == null) { Fluttertoast.showToast(msg: '예약 취소에 실패하였습니다.'); }
+    if (result == null) { Fluttertoast.showToast(msg: '요청에 실패하였습니다.'); }
     else if (result.runtimeType == String) { Fluttertoast.showToast(msg: result); }
     else {
       Fluttertoast.showToast(msg: result.message);
@@ -179,9 +185,7 @@ class MyBookingScreenState extends State<MyBookingScreen> with SingleTickerProvi
     }
   }
 
-  void changeLoadingStatus(bool loadingStatus) {
-    setState(() { isLoading = loadingStatus; });
-  }
+  void changeLoadingStatus(bool loadingStatus) { setState(() { isLoading = loadingStatus; }); }
 
   /// Helper Methods
   void tabListener() {

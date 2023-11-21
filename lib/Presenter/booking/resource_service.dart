@@ -4,12 +4,14 @@ import 'package:dio/dio.dart';
 import 'package:frontend/Model/model/booking/resource_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../Model/model/booking/return_booking_model.dart';
 import '../../Model/model/general_model.dart';
 import '../../Model/network/api_manager.dart';
 
 class ResourceService {
   final resourceURL = '/resources';
   final resourceBookingHistoryURL = '/bookings/resources';
+  final resourceAdminBookingHistoryURL = '/admin/bookings/resources';
 
   DateTime? startDate;
   DateTime? startTime;
@@ -133,10 +135,11 @@ class ResourceService {
   }
 
   // 장비 예약 목록 조회
-  Future<dynamic> getResourceBookingHistoryList() async {
+  Future<dynamic> getResourceBookingHistoryList(bool isAdmin) async {
+    String url = isAdmin ? resourceAdminBookingHistoryURL : resourceBookingHistoryURL;
     final response = await APIManager().request(
         RequestType.get,
-        resourceBookingHistoryURL,
+        url,
         null, null, null
     );
     return response;
@@ -167,13 +170,83 @@ class ResourceService {
   }
 
   // 장비 예약 반납
-  Future<dynamic> returnBooking(int bookingId) async {
-    final response = await APIManager().request(
-        RequestType.patch,
-        '$resourceBookingHistoryURL/$bookingId',
-        null, null, null
-    );
-    return response;
+  Future<dynamic> returnBooking(bool isAdmin, int bookingId, String location, String? remark) async {
+    String url = isAdmin
+        ? '$resourceAdminBookingHistoryURL/$bookingId/return'
+        : '$resourceBookingHistoryURL/$bookingId/return';
+
+    ReturnBookingRequest body = ReturnBookingRequest(remark: remark, returnLocation: location);
+
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          url,
+          null,
+          null,
+          body.toJson()
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
+  // 장비 예약 반려
+  Future<dynamic> rejectBooking(int bookingId) async {
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          '$resourceAdminBookingHistoryURL/$bookingId/reject',
+          null, null, null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
+  // 장비 예약 허가
+  Future<dynamic> allowBooking(int bookingId) async {
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          '$resourceAdminBookingHistoryURL/$bookingId/allow',
+          null, null, null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
   }
 
   /// Helper Methods

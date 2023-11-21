@@ -46,22 +46,24 @@ class OfficeResponse extends GeneralListModel {
 
 @JsonSerializable()
 class OfficeInfo {
-  String location;
+  String? location;
   String capacity;
-  String description;
-  List<String?> facilityList;
-  String imgUrl;
+  String? description;
+  List<String?>? facilityList;
+  String? imgUrl;
   String name;
   int officeId;
+  bool? isActive;
 
   OfficeInfo({
-    required this.location,
+    this.location,
     required this.capacity,
-    required this.description,
-    required this.facilityList,
-    required this.imgUrl,
+    this.description,
+    this.facilityList,
+    this.imgUrl,
     required this.name,
     required this.officeId,
+    this.isActive,
   });
 
   factory OfficeInfo.fromJson(Map<String, dynamic> json)
@@ -243,19 +245,19 @@ class OfficeBookingHistory {
 
   int id;
   String name;
-  String detailInfo;
+  String? detailInfo;
   String startDateTime;
   String endDateTime;
-  String memo;
+  String? memo;
   String status;
 
   OfficeBookingHistory({
     required this.id,
     required this.name,
-    required this.detailInfo,
+    this.detailInfo,
     required this.startDateTime,
     required this.endDateTime,
-    required this.memo,
+    this.memo,
     required this.status,
   });
 

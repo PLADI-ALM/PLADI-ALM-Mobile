@@ -9,6 +9,7 @@ import '../../Model/network/api_manager.dart';
 class OfficeService {
   final officeURL = '/offices';
   final officeBookingHistoryURL = '/bookings/offices';
+  final officeAdminBookingHistoryURL = '/admin/bookings/offices';
 
   DateTime? selectedDate;
   DateTime? startTime;
@@ -112,20 +113,24 @@ class OfficeService {
   }
 
   // 회의실 예약 목록 조회
-  Future<dynamic> getOfficeBookingHistoryList() async {
+  Future<dynamic> getOfficeBookingHistoryList(bool isAdmin) async {
+    String url = isAdmin ? officeAdminBookingHistoryURL : officeBookingHistoryURL;
     final response = await APIManager().request(
         RequestType.get,
-        officeBookingHistoryURL,
+        url,
         null, null, null
     );
     return response;
   }
 
   // 회의실 예약 취소
-  Future<dynamic> cancelBooking(int bookingId) async {
+  Future<dynamic> cancelBooking(int bookingId, bool isAdmin) async {
+    String url = isAdmin
+        ? '$officeAdminBookingHistoryURL/$bookingId/cancel'
+        : '$officeBookingHistoryURL/$bookingId/cancel';
     final response = await APIManager().request(
         RequestType.patch,
-        '$officeBookingHistoryURL/$bookingId/cancel',
+        url,
         null, null, null
     );
     if (response == null) { return null; }
@@ -133,6 +138,30 @@ class OfficeService {
       GeneralModel result = GeneralModel.fromJson(response);
       if (result.status == 200) { return true; }
       else { return result.message; }
+    }
+  }
+
+  // 회의실 예약 반려
+  Future<dynamic> rejectBooking(int bookingId) async {
+    try {
+      final response = await APIManager().request(
+          RequestType.patch,
+          '$officeAdminBookingHistoryURL/$bookingId/cancel',
+          null, null, null
+      );
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
     }
   }
 
