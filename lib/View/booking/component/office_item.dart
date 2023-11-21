@@ -43,9 +43,9 @@ class _OfficeItemState extends State<OfficeItem> {
               width: MediaQuery.of(context).size.width,
               height: 176,
               margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                child: (widget.data.imgUrl == null || widget.data.imgUrl.contains('null'))
+                child: (widget.data.imgUrl == null)
                     ? Image.asset('asset/image/pladi_icon.png')
-                    : Image.network(widget.data.imgUrl, fit: BoxFit.fitWidth)
+                    : Image.network(widget.data.imgUrl!, fit: BoxFit.fitWidth)
             ),
             renderOfficeInfo(),
           ],
@@ -63,14 +63,14 @@ class _OfficeItemState extends State<OfficeItem> {
             children: [
               Text(widget.data.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: purple),),
               const SizedBox(width: 8,),
-              Text(widget.data.location, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),),
+              Text(widget.data.location ?? '장소 미기입', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),),
               Flexible(child: Container()),
               Text('${widget.data.capacity}명', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFF717171)),)
             ],
           ),
           Divider(color: const Color(0xFF4C4C4C).withOpacity(0.6),),
           const SizedBox(height: 3,),
-          renderFacilityRow(widget.data.facilityList)
+          renderFacilityRow(widget.data.facilityList ?? [])
         ],
       ),
     );

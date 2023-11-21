@@ -46,16 +46,18 @@ class ResourceResponse extends GeneralListModel {
 
 @JsonSerializable()
 class ResourceInfo {
-  String description;
-  String location;
+  String? description;
+  String? location;
+  String? manufacturer;
   String? imgUrl;
   String name;
   int resourceId;
 
   ResourceInfo({
-    required this.description,
-    required this.location,
-    required this.imgUrl,
+    this.description,
+    this.location,
+    this.manufacturer,
+    this.imgUrl,
     required this.name,
     required this.resourceId,
   });

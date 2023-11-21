@@ -60,13 +60,15 @@ class _ResourceItemState extends State<ResourceItem> {
             style: const TextStyle(
                 fontSize: 15, fontWeight: FontWeight.w600, color: purple),
           ),
+          const SizedBox(width: 10,),
+          Text(
+            widget.data.manufacturer ?? '제조사 미기입',
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),
+          ),
           Flexible(child: Container()),
           Text(
-            widget.data.location,
-            style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF717171)),
+            widget.data.location ?? '보관장소 미기입',
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF717171)),
           )
         ],
       ),

@@ -46,22 +46,24 @@ class OfficeResponse extends GeneralListModel {
 
 @JsonSerializable()
 class OfficeInfo {
-  String location;
+  String? location;
   String capacity;
-  String description;
-  List<String?> facilityList;
-  String imgUrl;
+  String? description;
+  List<String?>? facilityList;
+  String? imgUrl;
   String name;
   int officeId;
+  bool? isActive;
 
   OfficeInfo({
-    required this.location,
+    this.location,
     required this.capacity,
-    required this.description,
-    required this.facilityList,
-    required this.imgUrl,
+    this.description,
+    this.facilityList,
+    this.imgUrl,
     required this.name,
     required this.officeId,
+    this.isActive,
   });
 
   factory OfficeInfo.fromJson(Map<String, dynamic> json)
