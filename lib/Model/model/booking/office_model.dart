@@ -1,4 +1,3 @@
-
 import 'package:frontend/Model/model/general_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -18,8 +17,8 @@ class OfficeResponseModel extends GeneralModel {
     required this.data,
   });
 
-  factory OfficeResponseModel.fromJson(Map<String, dynamic> json)
-  => _$OfficeResponseModelFromJson(json);
+  factory OfficeResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$OfficeResponseModelFromJson(json);
 }
 
 @JsonSerializable()
@@ -40,8 +39,8 @@ class OfficeResponse extends GeneralListModel {
     required this.content,
   });
 
-  factory OfficeResponse.fromJson(Map<String, dynamic> json)
-  => _$OfficeResponseFromJson(json);
+  factory OfficeResponse.fromJson(Map<String, dynamic> json) =>
+      _$OfficeResponseFromJson(json);
 }
 
 @JsonSerializable()
@@ -66,14 +65,13 @@ class OfficeInfo {
     this.isActive,
   });
 
-  factory OfficeInfo.fromJson(Map<String, dynamic> json)
-  => _$OfficeInfoFromJson(json);
+  factory OfficeInfo.fromJson(Map<String, dynamic> json) =>
+      _$OfficeInfoFromJson(json);
 }
 
 /// 회의실 개별 조회를 위한 데이터 모델
 @JsonSerializable()
 class OfficeDetailResponse extends GeneralModel {
-
   OfficeDetailInfo data;
 
   OfficeDetailResponse({
@@ -83,20 +81,20 @@ class OfficeDetailResponse extends GeneralModel {
     required this.data,
   });
 
-  factory OfficeDetailResponse.fromJson(Map<String, dynamic> json)
-  => _$OfficeDetailResponseFromJson(json);
+  factory OfficeDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$OfficeDetailResponseFromJson(json);
 }
 
 @JsonSerializable()
 class OfficeDetailInfo {
-  String location;
-  int capacity;
-  String description;
+  String? location;
+  String? capacity;
+  String? description;
   List<String?> facilityList;
-  String imgUrl;
-  String name;
-  int officeId;
-  bool isActive;
+  String? imgUrl;
+  String? name;
+  int? officeId;
+  bool? isActive;
 
   OfficeDetailInfo({
     required this.location,
@@ -109,14 +107,13 @@ class OfficeDetailInfo {
     required this.isActive,
   });
 
-  factory OfficeDetailInfo.fromJson(Map<String, dynamic> json)
-  => _$OfficeDetailInfoFromJson(json);
+  factory OfficeDetailInfo.fromJson(Map<String, dynamic> json) =>
+      _$OfficeDetailInfoFromJson(json);
 }
 
 /// 회의실 예약 현황 데이터 모델
 @JsonSerializable()
 class OfficeBookingResponse extends GeneralModel {
-
   OfficeBookingInfo data;
 
   OfficeBookingResponse({
@@ -126,26 +123,24 @@ class OfficeBookingResponse extends GeneralModel {
     required this.data,
   });
 
-  factory OfficeBookingResponse.fromJson(Map<String, dynamic> json)
-  => _$OfficeBookingResponseFromJson(json);
+  factory OfficeBookingResponse.fromJson(Map<String, dynamic> json) =>
+      _$OfficeBookingResponseFromJson(json);
 }
 
 @JsonSerializable()
 class OfficeBookingInfo {
-
   List<BookingTime?> bookedTimes;
 
   OfficeBookingInfo({
     required this.bookedTimes,
   });
 
-  factory OfficeBookingInfo.fromJson(Map<String, dynamic> json)
-  => _$OfficeBookingInfoFromJson(json);
+  factory OfficeBookingInfo.fromJson(Map<String, dynamic> json) =>
+      _$OfficeBookingInfoFromJson(json);
 }
 
 @JsonSerializable()
 class BookingTime {
-
   String startTime;
   String endTime;
 
@@ -154,13 +149,12 @@ class BookingTime {
     required this.endTime,
   });
 
-  factory BookingTime.fromJson(Map<String, dynamic> json)
-  => _$BookingTimeFromJson(json);
+  factory BookingTime.fromJson(Map<String, dynamic> json) =>
+      _$BookingTimeFromJson(json);
 }
 
 @JsonSerializable()
 class BookingDetailResponse extends GeneralModel {
-
   BookingDetail? data;
 
   BookingDetailResponse({
@@ -170,13 +164,12 @@ class BookingDetailResponse extends GeneralModel {
     required this.data,
   });
 
-  factory BookingDetailResponse.fromJson(Map<String, dynamic> json)
-  => _$BookingDetailResponseFromJson(json);
+  factory BookingDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$BookingDetailResponseFromJson(json);
 }
 
 @JsonSerializable()
 class BookingDetail {
-
   String reservatorName;
   String reservatorPhone;
   String department;
@@ -187,14 +180,13 @@ class BookingDetail {
     required this.department,
   });
 
-  factory BookingDetail.fromJson(Map<String, dynamic> json)
-  => _$BookingDetailFromJson(json);
+  factory BookingDetail.fromJson(Map<String, dynamic> json) =>
+      _$BookingDetailFromJson(json);
 }
 
 /// 회의실 예약 데이터 모델
 @JsonSerializable()
 class OfficeBookingRequest {
-
   String date;
   String startTime;
   String endTime;
@@ -213,7 +205,6 @@ class OfficeBookingRequest {
 /// 회의실 예약 목록 조회 데이터 모델
 @JsonSerializable()
 class OfficeBookingHistoryResponse extends GeneralModel {
-
   OfficeBookingHistoryData data;
 
   OfficeBookingHistoryResponse({
@@ -223,26 +214,24 @@ class OfficeBookingHistoryResponse extends GeneralModel {
     required this.data,
   });
 
-  factory OfficeBookingHistoryResponse.fromJson(Map<String, dynamic> json)
-  => _$OfficeBookingHistoryResponseFromJson(json);
+  factory OfficeBookingHistoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$OfficeBookingHistoryResponseFromJson(json);
 }
 
 @JsonSerializable()
 class OfficeBookingHistoryData {
-
   List<OfficeBookingHistory> content;
 
   OfficeBookingHistoryData({
     required this.content,
   });
 
-  factory OfficeBookingHistoryData.fromJson(Map<String, dynamic> json)
-  => _$OfficeBookingHistoryDataFromJson(json);
+  factory OfficeBookingHistoryData.fromJson(Map<String, dynamic> json) =>
+      _$OfficeBookingHistoryDataFromJson(json);
 }
 
 @JsonSerializable()
 class OfficeBookingHistory {
-
   int id;
   String name;
   String? detailInfo;
@@ -261,6 +250,6 @@ class OfficeBookingHistory {
     required this.status,
   });
 
-  factory OfficeBookingHistory.fromJson(Map<String, dynamic> json)
-  => _$OfficeBookingHistoryFromJson(json);
+  factory OfficeBookingHistory.fromJson(Map<String, dynamic> json) =>
+      _$OfficeBookingHistoryFromJson(json);
 }

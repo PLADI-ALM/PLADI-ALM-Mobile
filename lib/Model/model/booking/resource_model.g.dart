@@ -59,7 +59,6 @@ Map<String, dynamic> _$ResourceResponseToJson(ResourceResponse instance) =>
 ResourceInfo _$ResourceInfoFromJson(Map<String, dynamic> json) => ResourceInfo(
       description: json['description'] as String?,
       location: json['location'] as String?,
-      manufacturer: json['manufacturer'] as String?,
       imgUrl: json['imgUrl'] as String?,
       name: json['name'] as String,
       resourceId: json['resourceId'] as int,
@@ -69,7 +68,6 @@ Map<String, dynamic> _$ResourceInfoToJson(ResourceInfo instance) =>
     <String, dynamic>{
       'description': instance.description,
       'location': instance.location,
-      'manufacturer': instance.manufacturer,
       'imgUrl': instance.imgUrl,
       'name': instance.name,
       'resourceId': instance.resourceId,
@@ -95,13 +93,14 @@ Map<String, dynamic> _$ResourceDetailResponseToJson(
 
 ResourceDetailInfo _$ResourceDetailInfoFromJson(Map<String, dynamic> json) =>
     ResourceDetailInfo(
-      description: json['description'] as String,
-      location: json['location'] as String,
+      description: json['description'] as String?,
+      location: json['location'] as String?,
       imgUrl: json['imgUrl'] as String?,
-      name: json['name'] as String,
-      responsibilityId: json['responsibilityId'] as int,
-      responsibilityName: json['responsibilityName'] as String,
-      responsibilityPhone: json['responsibilityPhone'] as String,
+      name: json['name'] as String?,
+      responsibilityId: json['responsibilityId'] as int?,
+      responsibilityName: json['responsibilityName'] as String?,
+      responsibilityPhone: json['responsibilityPhone'] as String?,
+      manufacturer: json['manufacturer'] as String?,
     );
 
 Map<String, dynamic> _$ResourceDetailInfoToJson(ResourceDetailInfo instance) =>
@@ -113,6 +112,7 @@ Map<String, dynamic> _$ResourceDetailInfoToJson(ResourceDetailInfo instance) =>
       'responsibilityId': instance.responsibilityId,
       'responsibilityName': instance.responsibilityName,
       'responsibilityPhone': instance.responsibilityPhone,
+      'manufacturer': instance.manufacturer,
     };
 
 ResourceBookedList _$ResourceBookedListFromJson(Map<String, dynamic> json) =>

@@ -9,20 +9,16 @@ import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 
 class OfficeDetailScreen extends StatefulWidget {
-
   final int officeId;
 
-  const OfficeDetailScreen({
-    required this.officeId,
-    Key? key
-  }) : super(key: key);
+  const OfficeDetailScreen({required this.officeId, Key? key})
+      : super(key: key);
 
   @override
   State<OfficeDetailScreen> createState() => _OfficeDetailScreenState();
 }
 
 class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
-
   bool isLoading = true;
   dynamic data;
 
@@ -37,14 +33,20 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const SubAppBar(titleText: '',),
+      appBar: const SubAppBar(
+        titleText: '',
+      ),
       body: renderBody(),
-      bottomNavigationBar: PurpleBottomButton(title: '예약', onPressed: (data==null) ? null : didTapBookingButton,),
+      bottomNavigationBar: PurpleBottomButton(
+        title: '예약',
+        onPressed: (data == null) ? null : didTapBookingButton,
+      ),
     );
   }
 
   Widget renderBody() {
-    TextStyle nameStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
+    TextStyle nameStyle = const TextStyle(
+        fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
 
     return FutureBuilder<dynamic>(
         future: fetchData(),
@@ -55,56 +57,74 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
             print('snapshot.data -> ${snapshot.data}');
             isLoading = false;
             return const Center(
-              child: Text('정보를 불러오지 못 하였습니다.', style: TextStyle(fontSize: 16, color: purple),),
+              child: Text(
+                '정보를 불러오지 못 하였습니다.',
+                style: TextStyle(fontSize: 16, color: purple),
+              ),
             );
           } else {
-            if (isLoading) { return const Center(child: CircularProgressIndicator(color: purple,),); }
-            else {
-                data = OfficeDetailResponse.fromJson(snapshot.data);
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 800,
-                  child: ListView(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: 232,
-                        child: Image.network(data.data.imgUrl, fit: BoxFit.fitWidth,),
+            if (isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: purple,
+                ),
+              );
+            } else {
+              data = OfficeDetailResponse.fromJson(snapshot.data);
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 800,
+                child: ListView(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 232,
+                      child: Image.network(
+                        data.data.imgUrl,
+                        fit: BoxFit.fitWidth,
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(data.data.name, style: nameStyle,),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Text(
+                        data.data.name ?? "회의실 이름",
+                        style: nameStyle,
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Row(
-                          children: [
-                            infoCardItem(Icons.location_on_outlined, '위치', data.data.location),
-                            const SizedBox(width: 20,),
-                            infoCardItem(CupertinoIcons.person_2, '수용인원', '${data.data.capacity}'),
-                          ],
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Row(
+                        children: [
+                          infoCardItem(Icons.location_on_outlined, '위치',
+                              data.data.location ?? "위치"),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          infoCardItem(CupertinoIcons.person_2, '수용인원',
+                              data.data.capacity ?? "수용인원"),
+                        ],
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Text('상세정보', style: nameStyle,),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Text(
+                        '상세정보',
+                        style: nameStyle,
                       ),
-
-                      renderFacilityListInfo(),
-                      const SizedBox(height: 15,),
-                      renderDescription(),
-                    ],
-                  ),
-                );
-              }
+                    ),
+                    renderFacilityListInfo(),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    renderDescription(),
+                  ],
+                ),
+              );
             }
           }
-    );
+        });
   }
-
 
   Widget infoCardItem(IconData iconData, String info, String content) {
     TextStyle infoStyle = const TextStyle(fontSize: 12, color: darkGrey);
@@ -115,27 +135,40 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       height: 60,
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(12)),
-          border: Border.all(color: const Color(0xFF939393))
-      ),
+          border: Border.all(color: const Color(0xFF939393))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Container(
-            width: 34, height: 34,
+            width: 34,
+            height: 34,
             decoration: const BoxDecoration(
                 color: Color(0xFFF3ECFB),
-                borderRadius: BorderRadius.all(Radius.circular(17))
+                borderRadius: BorderRadius.all(Radius.circular(17))),
+            child: Icon(
+              iconData,
+              color: Colors.black,
+              size: 24,
             ),
-            child: Icon(iconData, color: Colors.black, size: 24,),
           ),
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(info, style: infoStyle,),
-              Text(content, style: contentStyle,),
+              Text(
+                info,
+                style: infoStyle,
+              ),
+              Text(
+                content,
+                style: contentStyle,
+              ),
             ],
           )
         ],
@@ -150,16 +183,23 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('시설', style: TextStyle(fontSize: 14, color: darkGrey),),
-          const SizedBox(width: 30,),
+          const Text(
+            '시설',
+            style: TextStyle(fontSize: 14, color: darkGrey),
+          ),
+          const SizedBox(
+            width: 30,
+          ),
           SizedBox(
             width: MediaQuery.of(context).size.width - 100,
-            height: 30.0 * (data.data.facilityList.length/2),
+            height: 30.0 * (data.data.facilityList.length / 2),
             child: GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
-                  childAspectRatio: ((MediaQuery.of(context).size.width - 100) / 2) / 20, //item 의 가로 / 세로 비율
+                  childAspectRatio:
+                      ((MediaQuery.of(context).size.width - 100) / 2) /
+                          20, //item 의 가로 / 세로 비율
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 0,
                 ),
@@ -168,10 +208,12 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                   return SizedBox(
                       width: (MediaQuery.of(context).size.width - 100) / 2,
                       height: 20,
-                      child: Text(data.data.facilityList[index], style: TextStyle(fontSize: 14, color: Colors.black),)
-                  );
-                }
-            ),
+                      child: Text(
+                        data.data.facilityList[index],
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.black),
+                      ));
+                }),
           ),
         ],
       ),
@@ -187,12 +229,20 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('설명', style: TextStyle(fontSize: 14, color: darkGrey),),
-          const SizedBox(width: 30,),
+          const Text(
+            '설명',
+            style: TextStyle(fontSize: 14, color: darkGrey),
+          ),
+          const SizedBox(
+            width: 30,
+          ),
           SizedBox(
               width: MediaQuery.of(context).size.width - 100,
-              child: Text(data.data.description, maxLines: 30, style: contentStyle,)
-          )
+              child: Text(
+                data.data.description,
+                maxLines: 30,
+                style: contentStyle,
+              ))
         ],
       ),
     );
@@ -203,7 +253,10 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
     if (data == null) {
       Fluttertoast.showToast(msg: '회의실 정보를 불러오지 못 하여 예약이 불가능합니다.');
     } else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingOfficeScreen(officeId: widget.officeId,)));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => BookingOfficeScreen(
+                officeId: widget.officeId,
+              )));
     }
   }
 }

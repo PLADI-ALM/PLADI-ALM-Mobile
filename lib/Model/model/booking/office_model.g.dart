@@ -100,16 +100,16 @@ Map<String, dynamic> _$OfficeDetailResponseToJson(
 
 OfficeDetailInfo _$OfficeDetailInfoFromJson(Map<String, dynamic> json) =>
     OfficeDetailInfo(
-      location: json['location'] as String,
-      capacity: json['capacity'] as int,
-      description: json['description'] as String,
+      location: json['location'] as String?,
+      capacity: json['capacity'] as String?,
+      description: json['description'] as String?,
       facilityList: (json['facilityList'] as List<dynamic>)
           .map((e) => e as String?)
           .toList(),
-      imgUrl: json['imgUrl'] as String,
-      name: json['name'] as String,
-      officeId: json['officeId'] as int,
-      isActive: json['isActive'] as bool,
+      imgUrl: json['imgUrl'] as String?,
+      name: json['name'] as String?,
+      officeId: json['officeId'] as int?,
+      isActive: json['isActive'] as bool?,
     );
 
 Map<String, dynamic> _$OfficeDetailInfoToJson(OfficeDetailInfo instance) =>

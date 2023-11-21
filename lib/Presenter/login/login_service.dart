@@ -30,6 +30,7 @@ class LoginService {
         final data = LoginResponseModel.fromJson(response);
         APIManager().writeToken(
             data.data.accessToken, data.data.refreshToken, data.data.role);
+
         return true;
       } else {
         return false;
