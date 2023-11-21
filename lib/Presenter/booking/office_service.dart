@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Model/model/general_model.dart';
@@ -20,7 +19,6 @@ class OfficeService {
   String startTimeStr = '';
   String endTimeStr = '';
 
-
   /// Singleton Pattern
   static final OfficeService _officeService = OfficeService._();
   OfficeService._();
@@ -35,18 +33,18 @@ class OfficeService {
         null,
         (keyword.isEmpty)
             ? null
-            : {"facilityName" : keyword, "startDate" : '$selectedDateStr $startTimeStr', "endDate" : '$selectedDateStr $endTimeStr'},
-        null
-    );
+            : {
+                "facilityName": keyword,
+                "startDate": '$selectedDateStr $startTimeStr',
+                "endDate": '$selectedDateStr $endTimeStr'
+              },
+        null);
     return response;
   }
 
   Future<dynamic> getOfficeInfoData(int officeId) async {
-    final response = await APIManager().request(
-        RequestType.get,
-        '$officeURL/$officeId',
-        null, null, null
-    );
+    final response = await APIManager()
+        .request(RequestType.get, '$officeURL/$officeId', null, null, null);
     return response;
   }
 
@@ -56,13 +54,13 @@ class OfficeService {
         RequestType.get,
         '$officeURL/$officeId/booking-state',
         null,
-        {'date':selectedDateStr},
-        null
-    );
+        {'date': selectedDateStr},
+        null);
     return response;
   }
 
-  Future<dynamic> getBookedInfo(int officeId, DateTime selectedDate, int startTime) async {
+  Future<dynamic> getBookedInfo(
+      int officeId, DateTime selectedDate, int startTime) async {
     String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
     String startTimeStr = (startTime < 10) ? '0$startTime:00' : '$startTime:00';
 
@@ -70,14 +68,13 @@ class OfficeService {
         RequestType.get,
         '$officeURL/$officeId/booking',
         null,
-        {'date':selectedDateStr, 'time':startTimeStr},
-        null
-    );
+        {'date': selectedDateStr, 'time': startTimeStr},
+        null);
     return response;
   }
 
-  Future<dynamic> bookOffice(int officeId, DateTime selectedDate, int startIdx, int endIdx, String memo) async {
-
+  Future<dynamic> bookOffice(int officeId, DateTime selectedDate, int startIdx,
+      int endIdx, String memo) async {
     String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
     String startTime = (startIdx < 10) ? '0$startIdx:00' : '$startIdx:00';
     String endTime = (endIdx < 10) ? '0$endIdx:00' : '$endIdx:00';
@@ -86,16 +83,11 @@ class OfficeService {
         date: selectedDateStr,
         startTime: startTime,
         endTime: endTime,
-        memo: memo
-    );
+        memo: memo);
 
     try {
-      final response = await APIManager().request(
-          RequestType.post,
-          '$officeURL/$officeId/booking',
-          null, null,
-          body.toJson()
-      );
+      final response = await APIManager().request(RequestType.post,
+          '$officeURL/$officeId/booking', null, null, body.toJson());
 
       if (response != null) {
         final data = GeneralModel.fromJson(response);
@@ -106,7 +98,8 @@ class OfficeService {
     } on DioError catch (e) {
       final response = e.response;
       if (response != null) {
-        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        final error =
+            GeneralModel.fromJson(response.data as Map<String, dynamic>);
         return error.message;
       }
     }
@@ -114,12 +107,17 @@ class OfficeService {
 
   // 회의실 예약 목록 조회
   Future<dynamic> getOfficeBookingHistoryList(bool isAdmin) async {
-    String url = isAdmin ? officeAdminBookingHistoryURL : officeBookingHistoryURL;
-    final response = await APIManager().request(
-        RequestType.get,
-        url,
-        null, null, null
-    );
+    String url =
+        isAdmin ? officeAdminBookingHistoryURL : officeBookingHistoryURL;
+    final response =
+        await APIManager().request(RequestType.get, url, null, null, null);
+    return response;
+  }
+
+  Future<dynamic> getAdminOfficeBookingHistoryList(int officeId) async {
+    String url = "/admin/offices/offices/$officeId";
+    final response =
+        await APIManager().request(RequestType.get, url, null, null, null);
     return response;
   }
 
@@ -128,27 +126,25 @@ class OfficeService {
     String url = isAdmin
         ? '$officeAdminBookingHistoryURL/$bookingId/cancel'
         : '$officeBookingHistoryURL/$bookingId/cancel';
-    final response = await APIManager().request(
-        RequestType.patch,
-        url,
-        null, null, null
-    );
-    if (response == null) { return null; }
-    else {
+    final response =
+        await APIManager().request(RequestType.patch, url, null, null, null);
+    if (response == null) {
+      return null;
+    } else {
       GeneralModel result = GeneralModel.fromJson(response);
-      if (result.status == 200) { return true; }
-      else { return result.message; }
+      if (result.status == 200) {
+        return true;
+      } else {
+        return result.message;
+      }
     }
   }
 
   // 회의실 예약 반려
   Future<dynamic> rejectBooking(int bookingId) async {
     try {
-      final response = await APIManager().request(
-          RequestType.patch,
-          '$officeAdminBookingHistoryURL/$bookingId/cancel',
-          null, null, null
-      );
+      final response = await APIManager().request(RequestType.patch,
+          '$officeAdminBookingHistoryURL/$bookingId/cancel', null, null, null);
 
       if (response != null) {
         final data = GeneralModel.fromJson(response);
@@ -159,7 +155,8 @@ class OfficeService {
     } on DioError catch (e) {
       final response = e.response;
       if (response != null) {
-        final error = GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        final error =
+            GeneralModel.fromJson(response.data as Map<String, dynamic>);
         return error.message;
       }
     }
@@ -170,16 +167,20 @@ class OfficeService {
     selectedDate = date;
     selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate!);
   }
+
   void setStartTime(DateTime time) {
     startTime = time;
     startTimeStr = DateFormat('HH:mm').format(startTime!);
   }
+
   void setEndTime(DateTime time) {
     endTime = time;
     endTimeStr = DateFormat('HH:mm').format(endTime!);
   }
 
   bool isFilterInfoEmpty() {
-    return (selectedDateStr.isEmpty || startTimeStr.isEmpty || endTimeStr.isEmpty);
+    return (selectedDateStr.isEmpty ||
+        startTimeStr.isEmpty ||
+        endTimeStr.isEmpty);
   }
 }
