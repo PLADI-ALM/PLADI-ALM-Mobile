@@ -190,3 +190,63 @@ class ResourceBookingHistory {
   factory ResourceBookingHistory.fromJson(Map<String, dynamic> json) =>
       _$ResourceBookingHistoryFromJson(json);
 }
+
+@JsonSerializable()
+class AdminResourceBookingHistoryResponse extends GeneralModel {
+  AdminResourceBookingHistory data;
+
+  AdminResourceBookingHistoryResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory AdminResourceBookingHistoryResponse.fromJson(
+          Map<String, dynamic> json) =>
+      _$AdminResourceBookingHistoryResponseFromJson(json);
+}
+
+@JsonSerializable()
+class AdminResourceBookingHistory {
+  int id;
+  String responsibilityName;
+  String responsibilityPhone;
+  String? description;
+  String imgUrl;
+  List<ResourcesList> productList;
+
+  AdminResourceBookingHistory({
+    required this.id,
+    required this.responsibilityName,
+    required this.responsibilityPhone,
+    required this.description,
+    required this.imgUrl,
+    required this.productList,
+  });
+
+  factory AdminResourceBookingHistory.fromJson(Map<String, dynamic> json) =>
+      _$AdminResourceBookingHistoryFromJson(json);
+}
+
+@JsonSerializable()
+class ResourcesList {
+  String reservatorName;
+  String reservatorPhone;
+  String startDateTime;
+  String endDateTime;
+  String? memo;
+  String bookingStatus;
+
+  ResourcesList({
+    required this.reservatorName,
+    required this.reservatorPhone,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.memo,
+    required this.bookingStatus,
+  });
+
+  factory ResourcesList.fromJson(Map<String, dynamic> json) =>
+      _$ResourcesListFromJson(json);
+}

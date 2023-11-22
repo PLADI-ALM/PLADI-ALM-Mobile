@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/Model/model/booking/car_model.dart';
+import 'package:frontend/Model/model/booking/resource_model.dart';
+import 'package:frontend/Presenter/booking/car_service.dart';
+import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:frontend/View/booking/component/admin_booking_history_cell.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 
@@ -35,9 +39,11 @@ class AdminBookingHistoryScreenState extends State<AdminBookingHistoryScreen>
       case BookingType.office:
         response =
             await OfficeService().getAdminOfficeBookingHistoryList(widget.id);
-      default:
-        response =
-            await OfficeService().getAdminOfficeBookingHistoryList(widget.id);
+      case BookingType.car:
+        response = await CarService().getAdminCarBookingHistoryList(widget.id);
+      case BookingType.resource:
+        response = await ResourceService()
+            .getAdminResourceBookingHistoryList(widget.id);
     }
     isLoading = false;
     return response;
@@ -88,11 +94,7 @@ class AdminBookingHistoryScreenState extends State<AdminBookingHistoryScreen>
                       color: Colors.white,
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
-                        itemCount: widget.currentType == BookingType.office
-                            ? data.data.officesLists.length
-                            : widget.currentType == BookingType.car
-                                ? data.data.officesLists.length
-                                : data.data.resourcesLists.length,
+                        itemCount: length,
                         itemBuilder: (BuildContext context, int index) {
                           return widget.currentType == BookingType.office
                               ? AdminBookingHistoryCell(
@@ -107,31 +109,18 @@ class AdminBookingHistoryScreenState extends State<AdminBookingHistoryScreen>
                                   goal: data.data.officesLists[index].goal,
                                   bookingStatus: data
                                       .data.officesLists[index].bookingStatus)
-                              : widget.currentType == BookingType.car
-                                  ? AdminBookingHistoryCell(
-                                      reservatorName: data.data
-                                          .officesLists[index].reservatorName,
-                                      reservatorPhone: data.data
-                                          .officesLists[index].reservatorPhone,
-                                      startDateTime: data.data
-                                          .officesLists[index].startDateTime,
-                                      endDateTime: data
-                                          .data.officesLists[index].endDateTime,
-                                      goal: data.data.officesLists[index].goal,
-                                      bookingStatus: data.data
-                                          .officesLists[index].bookingStatus)
-                                  : AdminBookingHistoryCell(
-                                      reservatorName: data.data
-                                          .officesLists[index].reservatorName,
-                                      reservatorPhone: data.data
-                                          .officesLists[index].reservatorPhone,
-                                      startDateTime: data.data
-                                          .officesLists[index].startDateTime,
-                                      endDateTime: data
-                                          .data.officesLists[index].endDateTime,
-                                      goal: data.data.officesLists[index].goal,
-                                      bookingStatus: data.data
-                                          .officesLists[index].bookingStatus);
+                              : AdminBookingHistoryCell(
+                                  reservatorName: data
+                                      .data.productList[index].reservatorName,
+                                  reservatorPhone: data
+                                      .data.productList[index].reservatorPhone,
+                                  startDateTime: data
+                                      .data.productList[index].startDateTime,
+                                  endDateTime:
+                                      data.data.productList[index].endDateTime,
+                                  goal: data.data.productList[index].memo,
+                                  bookingStatus: data
+                                      .data.productList[index].bookingStatus);
                         },
                       ),
                     );
@@ -165,9 +154,13 @@ class AdminBookingHistoryScreenState extends State<AdminBookingHistoryScreen>
         final data = AdminOfficeBookingHistoryResponse.fromJson(response);
         length = data.data.officesLists.length;
         return data;
-      default:
-        final data = AdminOfficeBookingHistoryResponse.fromJson(response);
-        length = data.data.officesLists.length;
+      case BookingType.car:
+        final data = AdminCarBookingHistoryResponse.fromJson(response);
+        length = data.data.productList.length;
+        return data;
+      case BookingType.resource:
+        final data = AdminResourceBookingHistoryResponse.fromJson(response);
+        length = data.data.productList.length;
         return data;
     }
   }

@@ -163,3 +163,64 @@ Map<String, dynamic> _$CarBookingHistoryToJson(CarBookingHistory instance) =>
       'memo': instance.memo,
       'status': instance.status,
     };
+
+AdminCarBookingHistoryResponse _$AdminCarBookingHistoryResponseFromJson(
+        Map<String, dynamic> json) =>
+    AdminCarBookingHistoryResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data:
+          AdminCarBookingHistory.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AdminCarBookingHistoryResponseToJson(
+        AdminCarBookingHistoryResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+AdminCarBookingHistory _$AdminCarBookingHistoryFromJson(
+        Map<String, dynamic> json) =>
+    AdminCarBookingHistory(
+      id: json['id'] as int,
+      responsibilityName: json['responsibilityName'] as String,
+      responsibilityPhone: json['responsibilityPhone'] as String,
+      description: json['description'] as String?,
+      imgUrl: json['imgUrl'] as String,
+      productList: (json['productList'] as List<dynamic>)
+          .map((e) => CarsList.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AdminCarBookingHistoryToJson(
+        AdminCarBookingHistory instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'responsibilityName': instance.responsibilityName,
+      'responsibilityPhone': instance.responsibilityPhone,
+      'description': instance.description,
+      'imgUrl': instance.imgUrl,
+      'productList': instance.productList,
+    };
+
+CarsList _$CarsListFromJson(Map<String, dynamic> json) => CarsList(
+      reservatorName: json['reservatorName'] as String,
+      reservatorPhone: json['reservatorPhone'] as String,
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+      memo: json['memo'] as String?,
+      bookingStatus: json['bookingStatus'] as String,
+    );
+
+Map<String, dynamic> _$CarsListToJson(CarsList instance) => <String, dynamic>{
+      'reservatorName': instance.reservatorName,
+      'reservatorPhone': instance.reservatorPhone,
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+      'memo': instance.memo,
+      'bookingStatus': instance.bookingStatus,
+    };
