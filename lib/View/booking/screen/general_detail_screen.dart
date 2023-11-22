@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/Presenter/booking/car_service.dart';
 import 'package:frontend/View/booking/component/admin_right_item.dart';
+import 'package:frontend/View/booking/screen/admin_booking_hisorty_screen.dart';
 import 'package:frontend/View/booking/screen/booking_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -54,8 +56,18 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const SubAppBar(
+      appBar: SubAppBar(
         titleText: '',
+        rightItems: [
+          APIManager().isAdmin
+              ? AdminRightButton(
+                  onPressed: moveToOfficeHistory,
+                )
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                )
+        ],
       ),
       body: renderBody(),
       bottomNavigationBar: PurpleBottomButton(
@@ -272,5 +284,13 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
                 resourceId: widget.id,
               )));
     }
+  }
+
+  void moveToOfficeHistory() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => AdminBookingHistoryScreen(
+              id: widget.id,
+              currentType: widget.type,
+            )));
   }
 }

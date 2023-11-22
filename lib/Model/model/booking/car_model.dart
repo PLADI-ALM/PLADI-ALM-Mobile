@@ -155,3 +155,62 @@ class CarBookingHistory {
   factory CarBookingHistory.fromJson(Map<String, dynamic> json) =>
       _$CarBookingHistoryFromJson(json);
 }
+
+@JsonSerializable()
+class AdminCarBookingHistoryResponse extends GeneralModel {
+  AdminCarBookingHistory data;
+
+  AdminCarBookingHistoryResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory AdminCarBookingHistoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$AdminCarBookingHistoryResponseFromJson(json);
+}
+
+@JsonSerializable()
+class AdminCarBookingHistory {
+  int id;
+  String responsibilityName;
+  String responsibilityPhone;
+  String? description;
+  String imgUrl;
+  List<CarsList> productList;
+
+  AdminCarBookingHistory({
+    required this.id,
+    required this.responsibilityName,
+    required this.responsibilityPhone,
+    required this.description,
+    required this.imgUrl,
+    required this.productList,
+  });
+
+  factory AdminCarBookingHistory.fromJson(Map<String, dynamic> json) =>
+      _$AdminCarBookingHistoryFromJson(json);
+}
+
+@JsonSerializable()
+class CarsList {
+  String reservatorName;
+  String reservatorPhone;
+  String startDateTime;
+  String endDateTime;
+  String? memo;
+  String bookingStatus;
+
+  CarsList({
+    required this.reservatorName,
+    required this.reservatorPhone,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.memo,
+    required this.bookingStatus,
+  });
+
+  factory CarsList.fromJson(Map<String, dynamic> json) =>
+      _$CarsListFromJson(json);
+}

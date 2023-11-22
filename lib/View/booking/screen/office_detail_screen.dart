@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
+import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/Presenter/booking/office_service.dart';
 import 'package:frontend/View/booking/component/admin_right_item.dart';
 import 'package:frontend/View/booking/screen/admin_booking_hisorty_screen.dart';
@@ -39,9 +40,14 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       appBar: SubAppBar(
         titleText: '',
         rightItems: [
-          AdminRightButton(
-            onPressed: moveToOfficeHistory,
-          )
+          APIManager().isAdmin
+              ? AdminRightButton(
+                  onPressed: moveToOfficeHistory,
+                )
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                )
         ],
       ),
       body: renderBody(),
