@@ -275,3 +275,71 @@ Map<String, dynamic> _$OfficeBookingHistoryToJson(
       'memo': instance.memo,
       'status': instance.status,
     };
+
+AdminOfficeBookingHistoryResponse _$AdminOfficeBookingHistoryResponseFromJson(
+        Map<String, dynamic> json) =>
+    AdminOfficeBookingHistoryResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: AdminOfficeBookingHistory.fromJson(
+          json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AdminOfficeBookingHistoryResponseToJson(
+        AdminOfficeBookingHistoryResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+AdminOfficeBookingHistory _$AdminOfficeBookingHistoryFromJson(
+        Map<String, dynamic> json) =>
+    AdminOfficeBookingHistory(
+      officeId: json['officeId'] as int,
+      name: json['name'] as String,
+      location: json['location'] as String?,
+      capacity: json['capacity'] as String,
+      facilityList: (json['facilityList'] as List<dynamic>)
+          .map((e) => e as String?)
+          .toList(),
+      description: json['description'] as String,
+      imgUrl: json['imgUrl'] as String,
+      officesLists: (json['officesLists'] as List<dynamic>)
+          .map((e) => OfficesList.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AdminOfficeBookingHistoryToJson(
+        AdminOfficeBookingHistory instance) =>
+    <String, dynamic>{
+      'officeId': instance.officeId,
+      'name': instance.name,
+      'location': instance.location,
+      'capacity': instance.capacity,
+      'facilityList': instance.facilityList,
+      'description': instance.description,
+      'imgUrl': instance.imgUrl,
+      'officesLists': instance.officesLists,
+    };
+
+OfficesList _$OfficesListFromJson(Map<String, dynamic> json) => OfficesList(
+      reservatorName: json['reservatorName'] as String,
+      reservatorPhone: json['reservatorPhone'] as String,
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+      goal: json['goal'] as String?,
+      bookingStatus: json['bookingStatus'] as String,
+    );
+
+Map<String, dynamic> _$OfficesListToJson(OfficesList instance) =>
+    <String, dynamic>{
+      'reservatorName': instance.reservatorName,
+      'reservatorPhone': instance.reservatorPhone,
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+      'goal': instance.goal,
+      'bookingStatus': instance.bookingStatus,
+    };

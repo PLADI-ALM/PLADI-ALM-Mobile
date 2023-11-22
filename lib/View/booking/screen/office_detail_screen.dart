@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Presenter/booking/office_service.dart';
+import 'package:frontend/View/booking/component/admin_right_item.dart';
+import 'package:frontend/View/booking/screen/admin_booking_hisorty_screen.dart';
 import 'package:frontend/View/booking/screen/booking_office_screen.dart';
+import 'package:frontend/View/booking/screen/booking_screen.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
@@ -33,8 +36,13 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const SubAppBar(
+      appBar: SubAppBar(
         titleText: '',
+        rightItems: [
+          AdminRightButton(
+            onPressed: moveToOfficeHistory,
+          )
+        ],
       ),
       body: renderBody(),
       bottomNavigationBar: PurpleBottomButton(
@@ -258,5 +266,13 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                 officeId: widget.officeId,
               )));
     }
+  }
+
+  void moveToOfficeHistory() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => AdminBookingHistoryScreen(
+              id: widget.officeId,
+              currentType: BookingType.office,
+            )));
   }
 }
