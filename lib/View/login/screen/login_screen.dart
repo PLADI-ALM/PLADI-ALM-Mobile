@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/Presenter/login/login_service.dart';
 import 'package:frontend/View/login/screen/email_send_screen.dart';
 
@@ -216,8 +217,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() {
     var email = emailController.text;
     var password = pwController.text;
+    var fcmToken = APIManager().getFcmToken();
 
-    Future<dynamic> result = LoginService().login(email, password);
+    Future<dynamic> result = LoginService().login(email, password, fcmToken);
     result.then((value) => {
           if (value == true)
             {

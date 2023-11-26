@@ -3,6 +3,7 @@ import 'package:frontend/Model/model/login/email_code_request.dart';
 import 'package:frontend/Model/model/login/email_request.dart';
 import 'package:frontend/Model/model/login/login_request.dart';
 import 'package:frontend/Model/model/login/login_response.dart';
+import 'package:frontend/Model/model/login/password_request.dart';
 
 import '../../Model/model/general_model.dart';
 import '../../Model/network/api_manager.dart';
@@ -19,8 +20,10 @@ class LoginService {
     return _loginService;
   }
 
-  Future<dynamic> login(String email, String password) async {
-    final body = LoginRequest(email: email, password: password).toJson();
+  Future<dynamic> login(String email, String password, String fcmToken) async {
+    final body =
+        LoginRequest(email: email, password: password, fcmToken: fcmToken)
+            .toJson();
 
     try {
       final response = await APIManager()
@@ -90,7 +93,7 @@ class LoginService {
   }
 
   Future<dynamic> changePassword(String email, String password) async {
-    final body = LoginRequest(email: email, password: password).toJson();
+    final body = PasswordRequest(email: email, password: password).toJson();
 
     try {
       final response = await APIManager()
