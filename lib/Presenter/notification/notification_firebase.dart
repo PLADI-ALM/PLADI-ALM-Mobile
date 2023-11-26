@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:frontend/Model/network/api_manager.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("백그라운드 메시지 처리 ${message.notification!.body}");
@@ -30,7 +31,9 @@ void initializeNotification() async {
 
 void getMyDeviceToken() async {
   final token = await FirebaseMessaging.instance.getToken();
-  print("토큰 : ${token}");
+  APIManager().setFcmToken(token as String);
+  print(APIManager().getFcmToken());
+  // print("토큰 : $token");
 }
 
 void showNotification() {

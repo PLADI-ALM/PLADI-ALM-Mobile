@@ -18,6 +18,7 @@ class APIManager {
   final dio = Dio();
   Options defaultOptions = Options();
   bool isAdmin = false;
+  String fcmToken = "";
 
   /// Request methods
   dynamic request(
@@ -96,5 +97,13 @@ class APIManager {
       setToken();
       return true;
     }
+  }
+
+  void setFcmToken(String fcmToken) {
+    this.fcmToken = fcmToken;
+  }
+
+  String getFcmToken() {
+    return fcmToken;
   }
 }
