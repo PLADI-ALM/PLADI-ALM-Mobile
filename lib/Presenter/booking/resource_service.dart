@@ -56,8 +56,20 @@ class ResourceService {
     return response;
   }
 
-  Future<dynamic> getBookedTimeList(
-      int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
+  Future<dynamic> getBookedTimeList(int resourceId, DateTime date) async {
+    String selectedDate = DateFormat('yyyy-MM-dd').format(date);
+    print('selectedDate - $selectedDate');
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$resourceURL/$resourceId/booking-time',
+        null,
+        {'date': selectedDate,},
+        null);
+    return response;
+  }
+
+  Future<dynamic> getBookedDateList(int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
     String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
     String selectedDayStr = (selectedDay != null)
         ? DateFormat('yyyy-MM-dd').format(selectedDay)

@@ -133,6 +133,24 @@ Map<String, dynamic> _$ResourceBookedListToJson(ResourceBookedList instance) =>
       'data': instance.data,
     };
 
+ResourceBookingOfDateResponse _$ResourceBookingOfDateResponseFromJson(
+        Map<String, dynamic> json) =>
+    ResourceBookingOfDateResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: (json['data'] as List<dynamic>).map((e) => e as String?).toList(),
+    );
+
+Map<String, dynamic> _$ResourceBookingOfDateResponseToJson(
+        ResourceBookingOfDateResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
 ResourceBookingRequest _$ResourceBookingRequestFromJson(
         Map<String, dynamic> json) =>
     ResourceBookingRequest(

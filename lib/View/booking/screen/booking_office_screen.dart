@@ -184,16 +184,14 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: darkGrey.withOpacity(0.3))
       ),
-      child: Flexible(
-        child: TextField(
-          controller: memoController,
-          maxLength: 100,
-          cursorColor: purple,
-          decoration: const InputDecoration(
-            hintText: '이용목적을 입력해주세요.',
-            hintStyle: TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
-            border: InputBorder.none,
-          ),
+      child: TextField(
+        controller: memoController,
+        maxLength: 100,
+        cursorColor: purple,
+        decoration: const InputDecoration(
+          hintText: '이용목적을 입력해주세요.',
+          hintStyle: TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
+          border: InputBorder.none,
         ),
       ),
     );
