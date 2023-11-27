@@ -235,16 +235,6 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     else { return const Color(0xFF939393); }
   }
 
-  // void setBookedTimeList(OfficeBookingResponse data) {
-  //   if (data.status == 200 && data.data.bookedTimes.isNotEmpty) {
-  //     for (var time in data.data.bookedTimes) {
-  //       setState(() {
-  //         bookedTimeList.add([getTimeWithString(time!.startTime), getTimeWithString(time!.endTime)]);
-  //       });
-  //     }
-  //   }
-  // }
-
   int getTimeWithString(String timeStr) {
     timeStr = timeStr.substring(0,2);
     if (timeStr[0] == '0') { return int.parse(timeStr[1]); }
