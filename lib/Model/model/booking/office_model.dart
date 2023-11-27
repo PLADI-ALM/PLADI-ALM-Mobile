@@ -172,12 +172,16 @@ class BookingDetailResponse extends GeneralModel {
 class BookingDetail {
   String reservatorName;
   String reservatorPhone;
-  String department;
+  String reservatorDepartment;
+  String startDateTime;
+  String endDateTime;
 
   BookingDetail({
     required this.reservatorName,
     required this.reservatorPhone,
-    required this.department,
+    required this.reservatorDepartment,
+    required this.startDateTime,
+    required this.endDateTime,
   });
 
   factory BookingDetail.fromJson(Map<String, dynamic> json) =>

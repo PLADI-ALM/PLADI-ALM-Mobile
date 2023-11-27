@@ -249,7 +249,7 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
                           width: 85,
                           child: Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
                       ),
-                      Text(info.department, style: const TextStyle(fontSize: 14, color: Colors.black),),
+                      Text(info.reservatorDepartment, style: const TextStyle(fontSize: 14, color: Colors.black),),
                     ],
                   ),
                 ),
