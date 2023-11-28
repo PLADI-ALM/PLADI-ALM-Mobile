@@ -133,7 +133,7 @@ platform :ios do
   lane :send_slack_test do |options|
     slack(
       message: "iOS 앱이 Testflight에 성공적으로 업로드 되었습니다.",
-      channel: "#2-app-fastlane",
+      channel: "#2-app-fastlane-ios",
       slack_url: ENV["SLACK_WEBHOOK_URL"],
       payload: {
         "Version": options[:version]
@@ -144,7 +144,7 @@ platform :ios do
   lane :send_slack_appstore do |options|
     slack(
       message: "iOS 앱이 Appstore에 성공적으로 업로드 되었습니다.",
-      channel: "#2-app-fastlane",
+      channel: "#2-app-fastlane-ios",
       slack_url: ENV["SLACK_WEBHOOK_URL"],
       payload: {
         "Version": options[:version]

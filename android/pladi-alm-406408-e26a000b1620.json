@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pladi-alm-406408",
+  "private_key_id": "e26a000b1620723c8ae8248697deed77ccb2c6d1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCU5gQxvZ+3Jwk1\nHq2k0MCdLPktS4W+T46tUMBSUoclaxfvuCDtnpbsV3QvOShNUwj7/0TETo1Qr9Xk\ncDMCgj1xUinL8MxcFteJCx1eS3vkoOEuaDB3KJ7MQM5qNkgTvwo+qCYKAqFCcs29\nLgEIVsdsKuGoFCjO0zDXEEXeLSmvK+7vZY8QxSaS8IhcPDTg46ih2+7J6ot1OHGl\nLSqtm83FBTZtqPRsuBAUCV+9ih3Wa1v+q1wAjtl8l0uscqEJ1V/9oZ6h8dwj0YiA\ndIIa3uiZ67IIOp9sG+KdfC5Jp3/oytDv7/oI4rCvdIEeIab01iBcyfP5WERfEpz8\nrcKjDGJJAgMBAAECgf8Qj9H0aZy6SPB22B+FLzMKSImIYD4gGcYYJ3ZwGBd8/sx9\n/YN46r4ey7UNcge2XuYNuyo+K5gywVwpOWs/4pZMl7cBpQCvvY3iNtPgosTFFjmP\naXqULN1JtGunpLufqdnNEY1cz64TYtgMX6TKjw+sS5jBLHzdhHm9cjHs5IxRnFKw\nST8Xg6y0BjEZI+yRaYWeR32gXLCoR4g1pZMe7ZtykHfKrEFb8qUAyClXbqSdKaWw\ntWVS0d4KvydL6w5mIZQ6+Crs/tj5Ka+bgklD2y4ZXKVsdl91y9GubcyvOon/BFI8\ng8/7hUqF9+Py2KZd7td6817C9uhDBm1+HVi5OhECgYEAzp4MzamcvVIKD9tM30jr\nJdC3klZ5GYXtuMSv5J4bLK9kmPQMAaZ8SVpUcXauZzsj9dOu88IUzcbUpfMIewlt\nQlFL2sXFvrXPIYqUpr4dj4E4+MiHf1Rv0Kg94YdZCHEriRBFKOAGvnB+Pni9PW5N\nE1M+uVcVF886yjIRxv47JxECgYEAuHxrGFuZF4IXScb+3fJya54caeKsaIuMcmbc\nQ24ZqZ6JU3myGkS+jWdurOLlvdVwp4vOAepG4gYY/soTl1m/vri1+r6cSN0r5jdT\nNxKnUdtpRS2kUnXmPqmEmJtk9KjKgLVQBnNn+71qj8+Kon7SsaqKGe8LCimC9Xgx\nGEtgt7kCgYEAlUEa4p45uZE/74BtoYZdR23kjfOle0iCF00N+sozuy3gL5Vr7u1D\nLwHvqh8fkTbpnTUTVsbGnHebOV28rJR8tsFfWGQxmrhfLk2bYHBJjla8vwqsxtBK\nDaLbQMWzDSQjXNnB++sJNByzNZGmsm+xgdpKnzxG4nIyd8l/ig4w0OECgYBaz8PX\n5Z7iV4MnKfFjR2jTWK0b4hyECc1EsyVRe+zd9dAbaxgknho+eN+d8sKsQ1iE4Oiz\nQKNLtzyujsI+Cku8kifiGdnMdDKbzDgGMAR04tBa4TC19psz1TYT+MolNMEZwiZ2\nRnC1FnRR/hN8EXmdQxlf0q9YfT6dnmBsWQ5u4QKBgGS5Oy5xqxLmh7JEdig3ioIH\nioVUL5wqlzgaPEogZfREop3RTMTLIuc1/fQh+dNRf4Aocz/udRyy00cVFcj7lcQo\nU6dQ9bbCVSb6A8ATON1ge7igas1Ohj0FKE+Cxgvl0/2lhc7dlAKqj/+bksJkSYlw\nJLfQkMSytjagJScu8Vb5\n-----END PRIVATE KEY-----\n",
+  "client_email": "fastlane2@pladi-alm-406408.iam.gserviceaccount.com",
+  "client_id": "115190270402256656311",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/fastlane2%40pladi-alm-406408.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

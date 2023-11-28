@@ -15,6 +15,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
+### android increase_version
+
+```sh
+[bundle exec] fastlane android increase_version
+```
+
+
+
 ### android version
 
 ```sh
@@ -38,22 +46,6 @@ Submit a new Beta
 ```
 
 Deploy a new version to the Google Play
-
-### android send_slack_test
-
-```sh
-[bundle exec] fastlane android send_slack_test
-```
-
-
-
-### android send_slack_playstore
-
-```sh
-[bundle exec] fastlane android send_slack_playstore
-```
-
-
 
 ----
 
