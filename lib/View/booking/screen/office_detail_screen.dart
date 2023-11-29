@@ -53,7 +53,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
       body: renderBody(),
       bottomNavigationBar: PurpleBottomButton(
         title: '예약',
-        onPressed: (data == null) ? null : didTapBookingButton,
+        onPressed: didTapBookingButton,
       ),
     );
   }
@@ -66,9 +66,6 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
         future: fetchData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError || snapshot.data == null) {
-            print('snapshot.hasError -> ${snapshot.hasError}');
-            print('snapshot.error -> ${snapshot.error}');
-            print('snapshot.data -> ${snapshot.data}');
             isLoading = false;
             return const Center(
               child: Text(

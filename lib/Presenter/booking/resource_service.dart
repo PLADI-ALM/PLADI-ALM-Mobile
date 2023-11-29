@@ -56,8 +56,20 @@ class ResourceService {
     return response;
   }
 
-  Future<dynamic> getBookedTimeList(
-      int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
+  Future<dynamic> getBookedTimeList(int resourceId, DateTime date) async {
+    String selectedDate = DateFormat('yyyy-MM-dd').format(date);
+    print('selectedDate - $selectedDate');
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$resourceURL/$resourceId/booking-time',
+        null,
+        {'date': selectedDate,},
+        null);
+    return response;
+  }
+
+  Future<dynamic> getBookedDateList(int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
     String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
     String selectedDayStr = (selectedDay != null)
         ? DateFormat('yyyy-MM-dd').format(selectedDay)
@@ -93,17 +105,30 @@ class ResourceService {
     return response;
   }
 
-  Future<dynamic> getBookedDetailInfo(
-      int resourceId, DateTime selectedDate, int selectedTime) async {
-    String selectedDateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
-    String startTimeStr =
-        (selectedTime < 10) ? '0$startTime:00' : '$startTime:00';
+  /// 예약된 날짜, 시간의 예약 내역 조회
+  Future<dynamic> getBookedDetailInfo(int resourceId, DateTime selectedDate, int selectedTime) async {
+    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String time = (selectedTime < 10) ? '0$selectedTime' : '$selectedTime';
 
+    print('$date $time');
     final response = await APIManager().request(
         RequestType.get,
         '$resourceURL/$resourceId/booking',
         null,
-        {'date': selectedDateStr, 'time': startTimeStr},
+        {'dateTime': '$date $time'},
+        null);
+    return response;
+  }
+
+  /// 예약된 날짜의 모등 예약 내역 조회
+  Future<dynamic> getBookedInfoList(int resourceId, DateTime selectedDate) async {
+    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$resourceURL/$resourceId/booking-info',
+        null,
+        {'date': date},
         null);
     return response;
   }

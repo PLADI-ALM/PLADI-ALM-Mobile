@@ -30,7 +30,7 @@ class BookingResourceScreen extends StatefulWidget {
 class _BookingResourceScreenState extends State<BookingResourceScreen> {
 
   List<String> bookedDayList = [];
-  List<List<int>> bookedTimeList = [];
+  List<int> bookedTimeList = [];
 
   DateTime? startDate;
   DateTime? endDate;
@@ -39,7 +39,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   int endTime = -1;
 
   bool isSettingStart = true;
-  bool isLoading = true;
+  bool isLoading = false;
 
   TextEditingController memoController = TextEditingController();
 
@@ -49,14 +49,6 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   void initState() {
     super.initState();
     getBookedTimeListInfo();
-  }
-
-  void getBookedTimeListInfo() async {
-    dynamic response = await ResourceService().getBookedTimeList(widget.resourceId, DateTime.now(), null);
-    if (response != null) {
-      ResourceBookedList data = ResourceBookedList.fromJson(response);
-      setState(() { bookedDayList = data.data; });
-    }
   }
 
 
@@ -124,6 +116,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
                 child: CustomRangeCalender(
+                  selectDate: selectDate,
                   changedStartDate: changedStartDate,
                   changedEndDate: changedEndDate,
                   bookedDayList: bookedDayList,
@@ -211,16 +204,14 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: darkGrey.withOpacity(0.3))
       ),
-      child: Flexible(
-        child: TextField(
-          controller: memoController,
-          maxLength: 100,
-          cursorColor: purple,
-          decoration: const InputDecoration(
-            hintText: '이용목적을 입력해주세요.',
-            hintStyle: TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
-            border: InputBorder.none,
-          ),
+      child: TextField(
+        controller: memoController,
+        maxLength: 100,
+        cursorColor: purple,
+        decoration: const InputDecoration(
+          hintText: '이용목적을 입력해주세요.',
+          hintStyle: TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
+          border: InputBorder.none,
         ),
       ),
     );
@@ -244,16 +235,6 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     else { return const Color(0xFF939393); }
   }
 
-  // void setBookedTimeList(OfficeBookingResponse data) {
-  //   if (data.status == 200 && data.data.bookedTimes.isNotEmpty) {
-  //     for (var time in data.data.bookedTimes) {
-  //       setState(() {
-  //         bookedTimeList.add([getTimeWithString(time!.startTime), getTimeWithString(time!.endTime)]);
-  //       });
-  //     }
-  //   }
-  // }
-
   int getTimeWithString(String timeStr) {
     timeStr = timeStr.substring(0,2);
     if (timeStr[0] == '0') { return int.parse(timeStr[1]); }
@@ -261,8 +242,8 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   }
 
   bool isBookedTime(int index) {
-    for (List<int> time in bookedTimeList) {
-      if ((time[0] <= index) && (time[1] > index)) { return true; }
+    for (int time in bookedTimeList) {
+      if (time == index) { return true; }
       else { continue; }
     }
     return false;
@@ -401,7 +382,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
                           width: 85,
                           child: Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
                       ),
-                      Text(info.department, style: const TextStyle(fontSize: 14, color: Colors.black),),
+                      Text(info.reservatorDepartment, style: const TextStyle(fontSize: 14, color: Colors.black),),
                     ],
                   ),
                 ),
@@ -433,5 +414,35 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
         );
       }),
     );
+  }
+
+
+  /// Helper Methods
+  void selectDate(DateTime selectedDate) async {
+    bookedTimeList = [];
+    dynamic response = await ResourceService().getBookedTimeList(widget.resourceId, selectedDate ?? DateTime.now());
+    if (response != null) {
+      dynamic data = ResourceBookingOfDateResponse.fromJson(response);
+      setBookedTimeList(data);
+    }
+  }
+
+  void setBookedTimeList(ResourceBookingOfDateResponse data) {
+    if (data.status == 200 && data.data.isNotEmpty) {
+      for (var time in data.data) {
+        setState(() {
+          String hourStr = time!.substring(0,2);
+          bookedTimeList.add(int.parse(hourStr));
+        });
+      }
+    }
+  }
+
+  void getBookedTimeListInfo() async {
+    dynamic response = await ResourceService().getBookedDateList(widget.resourceId, DateTime.now(), null);
+    if (response != null) {
+      ResourceBookedList data = ResourceBookedList.fromJson(response);
+      setState(() { bookedDayList = data.data; });
+    }
   }
 }

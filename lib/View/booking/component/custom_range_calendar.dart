@@ -7,14 +7,17 @@ import '../../colors.dart';
 
 typedef SetSelectedStartDate = void Function(DateTime? date);
 typedef SetSelectedEndDate = void Function(DateTime? date);
+typedef SetSelectedDate = void Function(DateTime date);
 
 class CustomRangeCalender extends StatefulWidget {
+  final SetSelectedDate selectDate;
   final SetSelectedStartDate changedStartDate;
   final SetSelectedEndDate changedEndDate;
   final double? calendarDayHeight;
   final List<String> bookedDayList;
 
   const CustomRangeCalender({
+    required this.selectDate,
     required this.changedStartDate,
     required this.changedEndDate,
     required this.bookedDayList,
@@ -79,6 +82,7 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
       onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
         setState(() {
           focusedDay = selectedDay;
+          // widget.selectDate();
         });
       },
       rangeStartDay: focusedStartDay,
@@ -98,6 +102,7 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
             widget.changedStartDate(focusedDay);
             widget.changedEndDate(null);
           }
+          widget.selectDate(focusedDay);
         });
       },
       selectedDayPredicate: (DateTime day) { return isSameDay(selectedDay, day); },
