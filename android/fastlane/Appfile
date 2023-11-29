@@ -1,0 +1,2 @@
+json_key_file("./pladi-alm-406408-e26a000b1620.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.pladi.frontend") # e.g. com.krausefx.app
