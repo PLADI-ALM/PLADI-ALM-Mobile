@@ -1,12 +1,11 @@
 name: Deploy iOS and Android App to App Store and Play Store
 on:
   push:
-    branches:
-      - beta
+    branches: [ beta ]
   pull_request:
 jobs:
   beta-ios:
-    name: Build and release iOS app
+    name: iOS 앱 빌드 테스트 및 Testflight 추가
     runs-on: macos-latest
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
@@ -19,6 +18,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.2'
+          
       - name: 캐시된 빌드 파일 초기화
         run: flutter clean 
 
@@ -44,7 +44,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.IOS_SLACK }}
         timeout-minutes: 40
   beta-android:
-    name: Build and release Android app
+    name: 안드로이드 앱 빌드 테스트 및 Playstore 추가
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -70,7 +70,7 @@ jobs:
           
       - name: Decoding Keystore file
         run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
-        
+
       - name: 캐시된 빌드 파일 초기화
         run: flutter clean 
 
