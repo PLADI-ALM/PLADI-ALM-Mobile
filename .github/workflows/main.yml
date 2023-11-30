@@ -32,7 +32,7 @@ jobs:
         run: cd ios && pod install --repo-update
   
       - name: IOS Prod 빌드
-        run: flutter build ios --release --no-codesign --flavor production -t lib/main_prod.dart
+        run: flutter build ios
   
       - name: fastlane 설치
         run: arch -arm64 brew install fastlane
@@ -58,6 +58,19 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.2'
+
+      - name: Creating key.properties file
+        env:
+          PROPERTIES_PATH: "./android/key.properties"
+        run: |
+          echo keyPassword=\${{ secrets.KEY_PROPERTY_KEY_PASSWORD }} > ${{env.PROPERTIES_PATH}}
+          echo storePassword=\${{ secrets.KEY_PROPERTY_STORE_PASSWORD }} >> ${{env.PROPERTIES_PATH}}
+          echo keyAlias=\${{ secrets.KEY_PROPERTY_KEY_ALIAS }} >> ${{env.PROPERTIES_PATH}}
+          echo storeFile=\${{ secrets.KEY_PROPERTY_STORE_FILE }} >> ${{env.PROPERTIES_PATH}}
+          
+      - name: Decoding Keystore file
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+        
       - name: 캐시된 빌드 파일 초기화
         run: flutter clean 
 
