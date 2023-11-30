@@ -116,7 +116,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             width: 20,
                           ),
                           infoCardItem(CupertinoIcons.person_2, '수용인원',
-                              data.data.capacity ?? "수용인원"),
+                              '${data.data.capacity}명' ?? "수용인원"),
                         ],
                       ),
                     ),
