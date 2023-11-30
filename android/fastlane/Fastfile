@@ -136,18 +136,32 @@ platform :android do
   end
 
   def send_slack_test
+    yaml_file_path = "../..//pubspec.yaml"
+    data = YAML.load_file(yaml_file_path)
+    version = data["version"]
+
     slack(
       message: "안드로이드 앱이 Playstore(test)에 성공적으로 업로드 되었습니다.",
       channel: "#2-app-fastlane-android",
-      slack_url: ENV["SLACK_WEBHOOK_URL"]
+      slack_url: ENV["SLACK_WEBHOOK_URL"],
+      payload: {
+        "Version": version
+      }
     )
   end
 
   def send_slack_playstore
+    yaml_file_path = "../..//pubspec.yaml"
+    data = YAML.load_file(yaml_file_path)
+    version = data["version"]
+
     slack(
       message: "안드로이드 앱이 Playstore에 성공적으로 업로드 되었습니다.",
       channel: "#2-app-fastlane-android",
-      slack_url: ENV["SLACK_WEBHOOK_URL"]
+      slack_url: ENV["SLACK_WEBHOOK_URL"],
+      payload: {
+        "Version": version
+      }
     )
   end
 end

@@ -47,10 +47,18 @@ Push a new beta build to TestFlight
 
 Push a new release build to the App Store
 
-### ios send_slack
+### ios send_slack_test
 
 ```sh
-[bundle exec] fastlane ios send_slack
+[bundle exec] fastlane ios send_slack_test
+```
+
+
+
+### ios send_slack_appstore
+
+```sh
+[bundle exec] fastlane ios send_slack_appstore
 ```
 
 
