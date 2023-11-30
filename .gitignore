@@ -3,6 +3,7 @@
 *.log
 *.pyc
 *.swp
+*.env
 .DS_Store
 .atom/
 .buildlog/
@@ -48,5 +49,8 @@ app.*.map.json
 
 Gemfile
 Gemfile.lock
-fastlane/Appfile
-fastlane/Fastfile
+android/fastlane/.env
+android/fastlane/.env
+ios/fastlane/.env
+android/fastlane/.env
+ios/fastlane/.env
