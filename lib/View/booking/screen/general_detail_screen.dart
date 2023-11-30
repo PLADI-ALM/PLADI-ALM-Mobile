@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/Presenter/booking/car_service.dart';
@@ -118,12 +119,7 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
                     width: MediaQuery.of(context).size.width,
                     height: 232,
                     child: (data.data.imgUrl == null)
-                        ? const Center(
-                            child: Text(
-                              '이미지를 불러올 수 없습니다.',
-                              style: TextStyle(fontSize: 16, color: purple),
-                            ),
-                          )
+                        ? SvgPicture.asset('asset/image/main_logo.svg')
                         : Image.network(
                             data.data.imgUrl,
                             fit: BoxFit.fitWidth,
