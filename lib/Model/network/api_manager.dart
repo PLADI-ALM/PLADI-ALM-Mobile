@@ -67,10 +67,12 @@ class APIManager {
 
   /// Methods of Token
   void writeToken(String accessToken, String refreshToken, String role) async {
-    isAdmin = (role == 'ADMIN');
     await storage.write(key: accessTokenKey, value: accessToken);
-    await storage.write(key: refreshTokenKey, value: refreshToken);
+    await storage.write(key: accessTokenKey, value: accessToken);
+    await storage.write(key: roleKey, value: role);
+
     setToken();
+    isAdmin = await storage.read(key: roleKey) == 'ADMIN';
   }
 
   void setToken() async {
@@ -90,6 +92,7 @@ class APIManager {
 
     final refreshToken = await storage.read(key: refreshTokenKey);
     final accessToken = await storage.read(key: accessTokenKey);
+    isAdmin = await storage.read(key: roleKey) == 'ADMIN';
 
     if (refreshToken == null && accessToken == null) {
       return false;
