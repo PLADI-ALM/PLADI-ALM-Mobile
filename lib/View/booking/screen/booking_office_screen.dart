@@ -197,7 +197,7 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
     );
   }
 
-  void showBookingInfoDialog(BookingDetail info) {
+  void showBookingInfoDialog(OfficeBookingDetail info) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -249,7 +249,7 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
                           width: 85,
                           child: Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
                       ),
-                      Text(info.reservatorDepartment, style: const TextStyle(fontSize: 14, color: Colors.black),),
+                      Text(info.department, style: const TextStyle(fontSize: 14, color: Colors.black),),
                     ],
                   ),
                 ),
@@ -341,8 +341,8 @@ class _BookingOfficeScreenState extends State<BookingOfficeScreen> {
   void didTapBookedTimeItem(int index) async {
     dynamic response = await OfficeService().getBookedInfo(widget.officeId, selectedDay ?? DateTime.now(), index);
     if (response != null) {
-      dynamic data = BookingDetailResponse.fromJson(response);
-      BookingDetail info = data.data;
+      dynamic data = OfficeBookingDetailResponse.fromJson(response);
+      OfficeBookingDetail info = data.data;
       showBookingInfoDialog(info);
     }
   }

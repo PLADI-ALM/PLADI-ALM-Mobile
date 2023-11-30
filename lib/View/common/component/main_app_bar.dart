@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/mypage/screen/mypage_screen.dart';
 import 'package:frontend/View/notification/screen/notification_screen.dart';
 

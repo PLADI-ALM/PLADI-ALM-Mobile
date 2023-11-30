@@ -103,8 +103,8 @@ OfficeDetailInfo _$OfficeDetailInfoFromJson(Map<String, dynamic> json) =>
       location: json['location'] as String?,
       capacity: json['capacity'] as String?,
       description: json['description'] as String?,
-      facilityList: (json['facilityList'] as List<dynamic>)
-          .map((e) => e as String?)
+      facilityList: (json['facilityList'] as List<dynamic>?)
+          ?.map((e) => e as String?)
           .toList(),
       imgUrl: json['imgUrl'] as String?,
       name: json['name'] as String?,
@@ -167,19 +167,19 @@ Map<String, dynamic> _$BookingTimeToJson(BookingTime instance) =>
       'endTime': instance.endTime,
     };
 
-BookingDetailResponse _$BookingDetailResponseFromJson(
+OfficeBookingDetailResponse _$OfficeBookingDetailResponseFromJson(
         Map<String, dynamic> json) =>
-    BookingDetailResponse(
+    OfficeBookingDetailResponse(
       status: json['status'] as int,
       code: json['code'] as String,
       message: json['message'] as String,
       data: json['data'] == null
           ? null
-          : BookingDetail.fromJson(json['data'] as Map<String, dynamic>),
+          : OfficeBookingDetail.fromJson(json['data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$BookingDetailResponseToJson(
-        BookingDetailResponse instance) =>
+Map<String, dynamic> _$OfficeBookingDetailResponseToJson(
+        OfficeBookingDetailResponse instance) =>
     <String, dynamic>{
       'status': instance.status,
       'code': instance.code,
@@ -187,22 +187,19 @@ Map<String, dynamic> _$BookingDetailResponseToJson(
       'data': instance.data,
     };
 
-BookingDetail _$BookingDetailFromJson(Map<String, dynamic> json) =>
-    BookingDetail(
+OfficeBookingDetail _$OfficeBookingDetailFromJson(Map<String, dynamic> json) =>
+    OfficeBookingDetail(
       reservatorName: json['reservatorName'] as String,
       reservatorPhone: json['reservatorPhone'] as String,
-      reservatorDepartment: json['reservatorDepartment'] as String,
-      startDateTime: json['startDateTime'] as String,
-      endDateTime: json['endDateTime'] as String,
+      department: json['department'] as String,
     );
 
-Map<String, dynamic> _$BookingDetailToJson(BookingDetail instance) =>
+Map<String, dynamic> _$OfficeBookingDetailToJson(
+        OfficeBookingDetail instance) =>
     <String, dynamic>{
       'reservatorName': instance.reservatorName,
       'reservatorPhone': instance.reservatorPhone,
-      'reservatorDepartment': instance.reservatorDepartment,
-      'startDateTime': instance.startDateTime,
-      'endDateTime': instance.endDateTime,
+      'department': instance.department,
     };
 
 OfficeBookingRequest _$OfficeBookingRequestFromJson(

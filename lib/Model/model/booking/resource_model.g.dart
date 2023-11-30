@@ -167,6 +167,46 @@ Map<String, dynamic> _$ResourceBookingRequestToJson(
       'memo': instance.memo,
     };
 
+GeneralBookingDetailResponse _$GeneralBookingDetailResponseFromJson(
+        Map<String, dynamic> json) =>
+    GeneralBookingDetailResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: json['data'] == null
+          ? null
+          : GeneralBookingDetail.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$GeneralBookingDetailResponseToJson(
+        GeneralBookingDetailResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+GeneralBookingDetail _$GeneralBookingDetailFromJson(
+        Map<String, dynamic> json) =>
+    GeneralBookingDetail(
+      reservatorName: json['reservatorName'] as String,
+      reservatorPhone: json['reservatorPhone'] as String,
+      reservatorDepartment: json['reservatorDepartment'] as String,
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+    );
+
+Map<String, dynamic> _$GeneralBookingDetailToJson(
+        GeneralBookingDetail instance) =>
+    <String, dynamic>{
+      'reservatorName': instance.reservatorName,
+      'reservatorPhone': instance.reservatorPhone,
+      'reservatorDepartment': instance.reservatorDepartment,
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+    };
+
 ResourceBookingHistoryResponse _$ResourceBookingHistoryResponseFromJson(
         Map<String, dynamic> json) =>
     ResourceBookingHistoryResponse(

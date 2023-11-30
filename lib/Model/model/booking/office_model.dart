@@ -90,21 +90,21 @@ class OfficeDetailInfo {
   String? location;
   String? capacity;
   String? description;
-  List<String?> facilityList;
+  List<String?>? facilityList;
   String? imgUrl;
   String? name;
   int? officeId;
   bool? isActive;
 
   OfficeDetailInfo({
-    required this.location,
-    required this.capacity,
-    required this.description,
-    required this.facilityList,
-    required this.imgUrl,
-    required this.name,
+    this.location,
+    this.capacity,
+    this.description,
+    this.facilityList,
+    this.imgUrl,
+    this.name,
     required this.officeId,
-    required this.isActive,
+    this.isActive,
   });
 
   factory OfficeDetailInfo.fromJson(Map<String, dynamic> json) =>
@@ -154,38 +154,34 @@ class BookingTime {
 }
 
 @JsonSerializable()
-class BookingDetailResponse extends GeneralModel {
-  BookingDetail? data;
+class OfficeBookingDetailResponse extends GeneralModel {
+  OfficeBookingDetail? data;
 
-  BookingDetailResponse({
+  OfficeBookingDetailResponse({
     required super.status,
     required super.code,
     required super.message,
     required this.data,
   });
 
-  factory BookingDetailResponse.fromJson(Map<String, dynamic> json) =>
-      _$BookingDetailResponseFromJson(json);
+  factory OfficeBookingDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$OfficeBookingDetailResponseFromJson(json);
 }
 
 @JsonSerializable()
-class BookingDetail {
+class OfficeBookingDetail {
   String reservatorName;
   String reservatorPhone;
-  String reservatorDepartment;
-  String startDateTime;
-  String endDateTime;
+  String department;
 
-  BookingDetail({
+  OfficeBookingDetail({
     required this.reservatorName,
     required this.reservatorPhone,
-    required this.reservatorDepartment,
-    required this.startDateTime,
-    required this.endDateTime,
+    required this.department,
   });
 
-  factory BookingDetail.fromJson(Map<String, dynamic> json) =>
-      _$BookingDetailFromJson(json);
+  factory OfficeBookingDetail.fromJson(Map<String, dynamic> json) =>
+      _$OfficeBookingDetailFromJson(json);
 }
 
 /// 회의실 예약 데이터 모델

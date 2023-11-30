@@ -280,8 +280,8 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   void didTapBookedTimeItem(int index) async {
     dynamic response = await ResourceService().getBookedDetailInfo(widget.resourceId, (endDate == null) ? startDate! : endDate!, index);
     if (response != null) {
-      dynamic data = BookingDetailResponse.fromJson(response);
-      BookingDetail info = data.data;
+      dynamic data = GeneralBookingDetailResponse.fromJson(response);
+      GeneralBookingDetail info = data.data;
       showBookingInfoDialog(info);
     }
   }
@@ -330,7 +330,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   }
 
 
-  void showBookingInfoDialog(BookingDetail info) {
+  void showBookingInfoDialog(GeneralBookingDetail info) {
     showDialog(
       context: context,
       barrierDismissible: true,
