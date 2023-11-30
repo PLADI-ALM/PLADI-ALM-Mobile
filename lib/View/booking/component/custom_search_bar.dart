@@ -112,10 +112,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   }
 
   void didChangedSearchBar() {
-    if (isFilterInfoEmpty()) {
-      Fluttertoast.showToast(msg: '사용 일자 및 시간을 선택해주세요!', gravity: ToastGravity.CENTER);
-      return;
-    }
     BookingScreenState? parent = context.findAncestorStateOfType<BookingScreenState>();
     parent!.searchItems((controller.value.text.isEmpty) ? '' : controller.value.text);
   }
