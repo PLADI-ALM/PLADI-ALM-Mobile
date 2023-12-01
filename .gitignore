@@ -50,7 +50,9 @@ app.*.map.json
 Gemfile
 Gemfile.lock
 android/fastlane/.env
-android/fastlane/.env
+/android/fastlane/.env
 ios/fastlane/.env
-android/fastlane/.env
+/ios/fastlane/.env
+ios/fastlane/*.env
+android/fastlane/*.env
 ios/fastlane/.env
