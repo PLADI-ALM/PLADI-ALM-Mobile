@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/View/colors.dart';
+import 'package:frontend/View/equipment/screen/equipment_screen.dart';
 
 import '../../booking/screen/booking_screen.dart';
 import '../component/tabbar_item.dart';
 import '../../booking/screen/booking_history_screen.dart';
 
 class RootTab extends StatefulWidget {
-
   final int? initialIndex;
 
-  const RootTab({
-    this.initialIndex,
-    Key? key
-  }) : super(key: key);
+  const RootTab({this.initialIndex, Key? key}) : super(key: key);
 
   @override
   State<RootTab> createState() => _RootTabState();
@@ -38,9 +35,10 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
     super.initState();
 
     controller = TabController(
-        length: APIManager().isAdmin ? adminTabBarIcons.length : basicTabBarIcons.length,
-        vsync: this
-    );
+        length: APIManager().isAdmin
+            ? adminTabBarIcons.length
+            : basicTabBarIcons.length,
+        vsync: this);
     controller.addListener(tabListener);
     index = widget.initialIndex ?? 0;
     selectedTab = widget.initialIndex ?? 0;
@@ -71,15 +69,21 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
     if (APIManager().isAdmin) {
       return [
         const BookingScreen(),
-        const BookingScreen(),
-        const BookingHistoryScreen(isAdmin: false,),
-        const BookingHistoryScreen(isAdmin: true,),
+        const EquipmentScreen(),
+        const BookingHistoryScreen(
+          isAdmin: false,
+        ),
+        const BookingHistoryScreen(
+          isAdmin: true,
+        ),
       ];
     } else {
       return [
         const BookingScreen(),
-        const BookingScreen(),
-        const BookingHistoryScreen(isAdmin: false,),
+        const EquipmentScreen(),
+        const BookingHistoryScreen(
+          isAdmin: false,
+        ),
       ];
     }
   }
@@ -87,10 +91,9 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   /// 화면 중앙 UI 구현 메소드 ///
   Widget renderTabBarView() {
     return TabBarView(
-      physics: const NeverScrollableScrollPhysics(),
-      controller: controller,
-      children: getTabBarItemList()
-    );
+        physics: const NeverScrollableScrollPhysics(),
+        controller: controller,
+        children: getTabBarItemList());
   }
 
   /// 하단 탭바 구현 메소드 ///
@@ -101,12 +104,10 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.white,
         selectedItemColor: purple,
         unselectedItemColor: Colors.black,
-
         selectedLabelStyle: renderLabelStyle(),
         unselectedLabelStyle: renderLabelStyle(),
         type: BottomNavigationBarType.fixed,
-
-        onTap: (index){
+        onTap: (index) {
           controller.animateTo(index);
           setState(() {
             selectedTab = 0;
@@ -119,9 +120,6 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   }
 
   TextStyle renderLabelStyle() {
-    return const TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w500
-    );
+    return const TextStyle(fontSize: 10, fontWeight: FontWeight.w500);
   }
 }
