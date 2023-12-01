@@ -28,15 +28,12 @@ class BookingResourceScreen extends StatefulWidget {
 
 class _BookingResourceScreenState extends State<BookingResourceScreen> {
 
-  List<String> bookedDayList = [
-    '2023-12-16',
-    '2023-12-20',
-    '2023-12-21',
-  ];
+  List<String> bookedDayList = [];
   List<int> bookedTimeList = [];
 
   DateTime? startDate;
   DateTime? endDate;
+  DateTime? selectedDate;
 
   int startTime = -1;
   int endTime = -1;
@@ -53,7 +50,6 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     super.initState();
     getBookedDateListInfo();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +116,8 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
                 ),
                 child: CustomRangeCalender(
                   selectDate: selectDate,
-                  changedStartDate: changedStartDate,
-                  changedEndDate: changedEndDate,
                   changedDate: changedDate,
-                  didTapBookedDate: didTapBookedDate,
+                  // didTapBookedDate: showBookingInfoListDialog,
                   bookedDayList: bookedDayList,
                 )
               ),
@@ -441,7 +435,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     );
   }
 
-  void didTapBookedDate(DateTime date) {
+  void showBookingInfoListDialog(List<GeneralBookingDetail> infoList) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -452,21 +446,46 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
           title: renderPopupTitleView(),
           content: Container(
-            height: MediaQuery.of(context).size.height * 0.75,
-            margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 10),
+            height: 160.0 * infoList.length,
+            width: MediaQuery.of(context).size.width - 100,
+            margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 15),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: infoList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return renderBookingInfoForPopup(infoList[index]);
+              },
+            ),
           ),
         );
       }),
     );
   }
 
+  bool isDisabledDay(DateTime dateTime) {
+    for (var element in bookedDayList) {
+      if (DateFormat('yyyy-MM-dd').format(dateTime) == element) { return true; }
+    }
+    return false;
+  }
+
   /// Helper Methods
-  void selectDate(DateTime selectedDate) async {
+  void selectDate(DateTime dateTime) async {
     bookedTimeList = [];
-    dynamic response = await ResourceService().getBookedTimeList(widget.resourceId, selectedDate ?? DateTime.now());
-    if (response != null) {
-      dynamic data = ResourceBookingOfDateResponse.fromJson(response);
-      setBookedTimeList(data);
+    if (isDisabledDay(dateTime)) {
+      dynamic response = await ResourceService().getBookedInfoList(widget.resourceId, selectedDate ?? DateTime.now());
+      if (response != null) {
+        dynamic data = GeneralBookingInfoListResponse.fromJson(response);
+        List<GeneralBookingDetail> infoList = data.data;
+        showBookingInfoListDialog(infoList);
+      }
+
+    } else {
+      dynamic response = await ResourceService().getBookedTimeList(widget.resourceId, dateTime);
+      if (response != null) {
+        dynamic data = ResourceBookingOfDateResponse.fromJson(response);
+        setBookedTimeList(data);
+      }
     }
   }
 
@@ -482,10 +501,10 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   }
 
   void getBookedDateListInfo() async {
-    // dynamic response = await ResourceService().getBookedDateList(widget.resourceId, DateTime.now(), null);
-    // if (response != null) {
-    //   ResourceBookedList data = ResourceBookedList.fromJson(response);
-    //   setState(() { bookedDayList = data.data; });
-    // }
+    dynamic response = await ResourceService().getBookedDateList(widget.resourceId, DateTime.now(), null);
+    if (response != null) {
+      ResourceBookedList data = ResourceBookedList.fromJson(response);
+      setState(() { bookedDayList = data.data; });
+    }
   }
 }
