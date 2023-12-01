@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../colors.dart';
 
-typedef SetSelectedStartDate = void Function(DateTime? date);
-typedef SetSelectedEndDate = void Function(DateTime? date);
 typedef SetSelectedDate = void Function(DateTime date);
 typedef ChangedDate = void Function(DateTime? start, DateTime? end);
 typedef DidTapBookedDate = void Function(DateTime date);
@@ -14,15 +11,12 @@ typedef DidTapBookedDate = void Function(DateTime date);
 class CustomRangeCalender extends StatefulWidget {
   final SetSelectedDate selectDate;
   final ChangedDate changedDate;
-  // final DidTapBookedDate didTapBookedDate;
-
   final double? calendarDayHeight;
   final List<String> bookedDayList;
 
   const CustomRangeCalender({
     required this.selectDate,
     required this.changedDate,
-    // required this.didTapBookedDate,
     required this.bookedDayList,
     this.calendarDayHeight,
     Key? key

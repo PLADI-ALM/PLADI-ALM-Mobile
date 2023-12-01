@@ -332,27 +332,28 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   }
 
   void changedDate(DateTime? start, DateTime? end) {
-    setState(() {
-      startDate = (start == null) ? null : DateTime(start.year, start.month, start.day);
-      endDate = (end == null)
-          ? DateTime(start!.year, start!.month, start!.day)
-          : DateTime(end.year, end.month, end.day);
+    if (start == null && end == null) {
+      setState(() {
+       startDate = null;
+       endDate = null;
+      });
 
-      print('start -> $start');
-      print('end -> $end');
-    });
+    } else {
+      setState(() {
+        startDate = (start == null) ? null : DateTime(start.year, start.month, start.day);
+        endDate = (end == null)
+            ? DateTime(start!.year, start!.month, start!.day)
+            : DateTime(end.year, end.month, end.day);
+      });
+    }
   }
 
   void changedStartDate(DateTime? time) {
-    setState(() {
-      startDate = (time == null) ? null : DateTime(time.year, time.month, time.day);
-    });
+    setState(() { startDate = (time == null) ? null : DateTime(time.year, time.month, time.day); });
   }
 
   void changedEndDate(DateTime? time) {
-    setState(() {
-      endDate = (time == null) ? null : DateTime(time.year, time.month, time.day);
-    });
+    setState(() { endDate = (time == null) ? null : DateTime(time.year, time.month, time.day); });
   }
 
   void didTapResetTimeGridButton() {
