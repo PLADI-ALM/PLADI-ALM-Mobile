@@ -54,7 +54,7 @@ class _BookingCarScreenState extends State<BookingCarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const SubAppBar(titleText: '장비 예약',),
+      appBar: const SubAppBar(titleText: '차량 예약',),
       body: renderBody(),
       bottomNavigationBar: PurpleBottomButton(
         title: '예약',
@@ -331,15 +331,21 @@ class _BookingCarScreenState extends State<BookingCarScreen> {
   }
 
   void changedDate(DateTime? start, DateTime? end) {
-    setState(() {
-      startDate = (start == null) ? null : DateTime(start.year, start.month, start.day);
-      endDate = (end == null)
-          ? DateTime(start!.year, start!.month, start!.day)
-          : DateTime(end.year, end.month, end.day);
+    if (start == null && end == null) {
+      setState(() {
+        startDate = null;
+        endDate = null;
+      });
 
-      print('start -> $start');
-      print('end -> $end');
-    });
+    } else {
+
+      setState(() {
+        startDate = (start == null) ? null : DateTime(start.year, start.month, start.day);
+        endDate = (end == null)
+            ? DateTime(start!.year, start!.month, start!.day)
+            : DateTime(end.year, end.month, end.day);
+      });
+    }
   }
 
   void changedStartDate(DateTime? time) {
