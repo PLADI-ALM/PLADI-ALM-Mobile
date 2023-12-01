@@ -95,48 +95,33 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
       rangeStartDay: focusedStartDay,
       rangeEndDay: focusedEndDay,
       rangeSelectionMode: RangeSelectionMode.enforced,
-      onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-        print('onDaySelected - $selectedDay');
-      },
       onRangeSelected: (DateTime? start, DateTime? end, DateTime focusedDay) {
         setState(() {
           /// 날짜 선택 해제하는 경우
           if (focusedDay == focusedStartDay) {
-            print('focusedDay == focusedStartDay');
             focusedStartDay = focusedEndDay;
             focusedEndDay = null;
             widget.changedDate(focusedStartDay, focusedEndDay);
             return;
           }
           if (focusedDay == focusedEndDay) {
-            print('focusedDay == focusedEndDay');
             focusedStartDay = focusedStartDay;
             focusedEndDay = null;
             widget.changedDate(focusedStartDay, focusedEndDay);
             return;
           }
 
-
+          /// 날짜 선택하는 경우
           widget.selectDate(focusedDay);  // 하단 타임 그리드 내 예약된 시간 정보 좆회를 위한 메소드 호출
-          if (focusedStartDay == null) {
-            print('focusedStartDay == null');
-            focusedStartDay = focusedDay;
-          } else if (focusedEndDay == null) {
-            print('focusedEndDay == null');
-            focusedEndDay = focusedDay;
-          } else {
-            if (focusedDay.isAfter(focusedStartDay!)) {
-              print('focusedDay.isAfter(focusedStartDay!)');
-              focusedEndDay = focusedDay;
-            } else {
-              print('else');
-              focusedStartDay = focusedDay;
-            }
+
+          if (focusedStartDay == null) { focusedStartDay = focusedDay; }
+          else if (focusedEndDay == null) { focusedEndDay = focusedDay; }
+          else {
+            if (focusedDay.isAfter(focusedStartDay!)) { focusedEndDay = focusedDay; }
+            else { focusedStartDay = focusedDay; }
           }
 
           widget.changedDate(focusedStartDay, focusedEndDay);
-
-
 
         });
       },
