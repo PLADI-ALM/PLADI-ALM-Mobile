@@ -5,7 +5,6 @@ import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../Model/model/booking/office_model.dart';
 import '../../../Model/model/booking/resource_model.dart';
 import '../../../Model/model/general_model.dart';
 import '../../colors.dart';
@@ -29,7 +28,11 @@ class BookingResourceScreen extends StatefulWidget {
 
 class _BookingResourceScreenState extends State<BookingResourceScreen> {
 
-  List<String> bookedDayList = [];
+  List<String> bookedDayList = [
+    '2023-12-16',
+    '2023-12-20',
+    '2023-12-21',
+  ];
   List<int> bookedTimeList = [];
 
   DateTime? startDate;
@@ -48,7 +51,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   @override
   void initState() {
     super.initState();
-    getBookedTimeListInfo();
+    getBookedDateListInfo();
   }
 
 
@@ -119,6 +122,8 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
                   selectDate: selectDate,
                   changedStartDate: changedStartDate,
                   changedEndDate: changedEndDate,
+                  changedDate: changedDate,
+                  didTapBookedDate: didTapBookedDate,
                   bookedDayList: bookedDayList,
                 )
               ),
@@ -217,6 +222,80 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     );
   }
 
+
+  Widget renderPopupTitleView() {
+    return  Row(
+      children: [
+        Flexible(child: Container()),
+        const Text('예약 정보', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
+        Flexible(child: Container()),
+        SizedBox(
+          width: 17, height: 17,
+          child: IconButton(
+              onPressed: (){Navigator.of(context).pop();},
+              padding: EdgeInsets.zero,
+              icon: const Icon(CupertinoIcons.xmark, size: 17, color: Colors.black,)
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget renderBookingInfoForPopup(GeneralBookingDetail info) {
+    return Column(
+      children: [
+        const SizedBox(height: 20,),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0,),
+          child: Row(
+            children: [
+              const SizedBox(
+                  width: 85,
+                  child: Text('예약자명', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+              ),
+              Text(info.reservatorName, style: const TextStyle(fontSize: 14, color: Colors.black),),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0,),
+          child: Row(
+            children: [
+              const SizedBox(
+                  width: 85,
+                  child: Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+              ),
+              Text(info.reservatorDepartment, style: const TextStyle(fontSize: 14, color: Colors.black),),
+            ],
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0,),
+          child: Row(
+            children: [
+              const SizedBox(
+                  width: 85,
+                  child: Text('연락처', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
+              ),
+              Text(info.reservatorPhone, style: const TextStyle(fontSize: 14, color: Colors.black),),
+              const SizedBox(width: 5,),
+              SizedBox(
+                width: 15, height: 15,
+                child: IconButton(
+                    onPressed: () { didTapCallButton(info.reservatorPhone); },
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(Icons.phone_in_talk_outlined, color: Colors.black, size: 15,)
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
   /// Helper Methods
   Color getBackColorOfTimeItem(int index) {
     if (isBookedTime(index)) { return const Color(0xFFE9E9E9); }
@@ -258,6 +337,18 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     setState(() { isSettingStart = false; });
   }
 
+  void changedDate(DateTime? start, DateTime? end) {
+    setState(() {
+      startDate = (start == null) ? null : DateTime(start.year, start.month, start.day);
+      endDate = (end == null)
+          ? DateTime(start!.year, start!.month, start!.day)
+          : DateTime(end.year, end.month, end.day);
+
+      print('start -> $start');
+      print('end -> $end');
+    });
+  }
+
   void changedStartDate(DateTime? time) {
     setState(() {
       startDate = (time == null) ? null : DateTime(time.year, time.month, time.day);
@@ -280,8 +371,8 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   void didTapBookedTimeItem(int index) async {
     dynamic response = await ResourceService().getBookedDetailInfo(widget.resourceId, (endDate == null) ? startDate! : endDate!, index);
     if (response != null) {
-      dynamic data = BookingDetailResponse.fromJson(response);
-      BookingDetail info = data.data;
+      dynamic data = GeneralBookingDetailResponse.fromJson(response);
+      GeneralBookingDetail info = data.data;
       showBookingInfoDialog(info);
     }
   }
@@ -330,7 +421,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   }
 
 
-  void showBookingInfoDialog(BookingDetail info) {
+  void showBookingInfoDialog(GeneralBookingDetail info) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -338,84 +429,36 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
           insetPadding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          title: Row(
-            children: [
-              Flexible(child: Container()),
-              const Text('예약 정보', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
-              Flexible(child: Container()),
-              SizedBox(
-                width: 17, height: 17,
-                child: IconButton(
-                    onPressed: (){Navigator.of(context).pop();},
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(CupertinoIcons.xmark, size: 17, color: Colors.black,)
-                ),
-              )
-            ],
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
+          title: renderPopupTitleView(),
           content: Container(
             height: 150,
             margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 10),
-            child: Column(
-              children: [
-                const SizedBox(height: 20,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                          width: 85,
-                          child: Text('예약자명', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
-                      ),
-                      Text(info.reservatorName, style: const TextStyle(fontSize: 14, color: Colors.black),),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                          width: 85,
-                          child: Text('부서', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
-                      ),
-                      Text(info.reservatorDepartment, style: const TextStyle(fontSize: 14, color: Colors.black),),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0,),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                          width: 85,
-                          child: Text('연락처', style: TextStyle(fontSize: 14, color: Color(0xFF717171)),)
-                      ),
-                      Text(info.reservatorPhone, style: const TextStyle(fontSize: 14, color: Colors.black),),
-                      const SizedBox(width: 5,),
-                      SizedBox(
-                        width: 15, height: 15,
-                        child: IconButton(
-                            onPressed: () { didTapCallButton(info.reservatorPhone); },
-                            padding: EdgeInsets.zero,
-                            icon: const Icon(Icons.phone_in_talk_outlined, color: Colors.black, size: 15,)
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            child: renderBookingInfoForPopup(info),
           ),
         );
       }),
     );
   }
 
+  void didTapBookedDate(DateTime date) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: ((context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
+          title: renderPopupTitleView(),
+          content: Container(
+            height: MediaQuery.of(context).size.height * 0.75,
+            margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 10),
+          ),
+        );
+      }),
+    );
+  }
 
   /// Helper Methods
   void selectDate(DateTime selectedDate) async {
@@ -438,11 +481,11 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     }
   }
 
-  void getBookedTimeListInfo() async {
-    dynamic response = await ResourceService().getBookedDateList(widget.resourceId, DateTime.now(), null);
-    if (response != null) {
-      ResourceBookedList data = ResourceBookedList.fromJson(response);
-      setState(() { bookedDayList = data.data; });
-    }
+  void getBookedDateListInfo() async {
+    // dynamic response = await ResourceService().getBookedDateList(widget.resourceId, DateTime.now(), null);
+    // if (response != null) {
+    //   ResourceBookedList data = ResourceBookedList.fromJson(response);
+    //   setState(() { bookedDayList = data.data; });
+    // }
   }
 }

@@ -155,6 +155,41 @@ class ResourceBookingRequest {
   Map<String, dynamic> toJson() => _$ResourceBookingRequestToJson(this);
 }
 
+@JsonSerializable()
+class GeneralBookingDetailResponse extends GeneralModel {
+  GeneralBookingDetail? data;
+
+  GeneralBookingDetailResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory GeneralBookingDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$GeneralBookingDetailResponseFromJson(json);
+}
+
+@JsonSerializable()
+class GeneralBookingDetail {
+  String reservatorName;
+  String reservatorPhone;
+  String reservatorDepartment;
+  String startDateTime;
+  String endDateTime;
+
+  GeneralBookingDetail({
+    required this.reservatorName,
+    required this.reservatorPhone,
+    required this.reservatorDepartment,
+    required this.startDateTime,
+    required this.endDateTime,
+  });
+
+  factory GeneralBookingDetail.fromJson(Map<String, dynamic> json) =>
+      _$GeneralBookingDetailFromJson(json);
+}
+
 /// 장비 예약 목록 조회 데이터 모델
 @JsonSerializable()
 class ResourceBookingHistoryResponse extends GeneralModel {

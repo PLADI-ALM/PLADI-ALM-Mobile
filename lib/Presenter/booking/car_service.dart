@@ -25,6 +25,18 @@ class CarService {
   }
 
   Future<dynamic> getCarListData() async {
+    String startTimeStr = '';
+    String endTimeStr = '';
+
+    if (startDate != null && startTime != null) {
+      startTimeStr = '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}';
+    }
+
+    if (endDate != null && endTime != null) {
+      endTimeStr = '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}';
+    }
+
+
     final response = await APIManager().request(
         RequestType.get,
         carURL,
@@ -33,10 +45,8 @@ class CarService {
             ? null
             : {
                 "carName": keyword,
-                "startDate":
-                    '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}',
-                "endDate":
-                    '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}'
+                "startDate": startTimeStr,
+                "endDate": endTimeStr
               },
         null);
     return response;

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/booking/office_model.dart';
 import 'package:frontend/Model/network/api_manager.dart';
@@ -90,10 +91,12 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 232,
-                      child: Image.network(
-                        data.data.imgUrl,
-                        fit: BoxFit.fitWidth,
-                      ),
+                      child: (data.data.imgUrl == null)
+                          ? SvgPicture.asset('asset/image/main_logo.svg')
+                          : Image.network(
+                              data.data.imgUrl,
+                              fit: BoxFit.fitWidth,
+                            ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(20),
@@ -113,7 +116,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             width: 20,
                           ),
                           infoCardItem(CupertinoIcons.person_2, '수용인원',
-                              data.data.capacity ?? "수용인원"),
+                              '${data.data.capacity}명' ?? "수용인원"),
                         ],
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:frontend/Model/model/booking/resource_model.dart';
 import 'package:frontend/View/booking/screen/booking_screen.dart';
 
@@ -41,7 +42,7 @@ class _ResourceItemState extends State<ResourceItem> {
                 height: 176,
                 margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: (widget.data.imgUrl == null)
-                    ? Image.asset('asset/image/pladi_icon.png')
+                    ? SvgPicture.asset('asset/image/main_logo.svg')
                     : Image.network(widget.data.imgUrl!, fit: BoxFit.fitWidth)),
             renderResourceInfo(),
           ],

@@ -8,11 +8,16 @@ import '../../colors.dart';
 typedef SetSelectedStartDate = void Function(DateTime? date);
 typedef SetSelectedEndDate = void Function(DateTime? date);
 typedef SetSelectedDate = void Function(DateTime date);
+typedef ChangedDate = void Function(DateTime? start, DateTime? end);
+typedef DidTapBookedDate = void Function(DateTime date);
 
 class CustomRangeCalender extends StatefulWidget {
   final SetSelectedDate selectDate;
   final SetSelectedStartDate changedStartDate;
   final SetSelectedEndDate changedEndDate;
+  final ChangedDate changedDate;
+  final DidTapBookedDate didTapBookedDate;
+
   final double? calendarDayHeight;
   final List<String> bookedDayList;
 
@@ -20,6 +25,8 @@ class CustomRangeCalender extends StatefulWidget {
     required this.selectDate,
     required this.changedStartDate,
     required this.changedEndDate,
+    required this.changedDate,
+    required this.didTapBookedDate,
     required this.bookedDayList,
     this.calendarDayHeight,
     Key? key
@@ -75,38 +82,51 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
         ),
       ),
       calendarBuilders: CalendarBuilders(
+        disabledBuilder: (context, day, focusedDay) {
+          return GestureDetector(
+            onTap: (){ widget.didTapBookedDate(day); },
+            child: Center(child: Text(day.day.toString(), style: const TextStyle(color: Colors.grey),),),
+          );
+        },
         dowBuilder: (context, day) {
           return Center(child: Text(weekdays[day.weekday-1], style: weekdayStyle,),);
         },
       ),
-      onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-        setState(() {
-          focusedDay = selectedDay;
-          // widget.selectDate();
-        });
-      },
       rangeStartDay: focusedStartDay,
       rangeEndDay: focusedEndDay,
       rangeSelectionMode: RangeSelectionMode.enforced,
       onRangeSelected: (DateTime? start, DateTime? end, DateTime focusedDay) {
         setState(() {
-          if (focusedStartDay == null) {
-            focusedStartDay = focusedDay;
-            widget.changedStartDate(focusedDay);
-          } else if (focusedEndDay == null) {
-            focusedEndDay = focusedDay;
-            widget.changedEndDate(focusedDay);
-          } else {
-            focusedStartDay = focusedDay;
+          /// 날짜 선택 해제하는 경우
+          if (focusedDay == focusedStartDay) {
+            focusedStartDay = focusedEndDay;
             focusedEndDay = null;
-            widget.changedStartDate(focusedDay);
-            widget.changedEndDate(null);
+            widget.changedDate(focusedStartDay, focusedEndDay);
+            return;
           }
-          widget.selectDate(focusedDay);
+          if (focusedDay == focusedEndDay) {
+            focusedStartDay = focusedStartDay;
+            focusedEndDay = null;
+            widget.changedDate(focusedStartDay, focusedEndDay);
+            return;
+          }
+
+          /// 날짜 선택하는 경우
+          widget.selectDate(focusedDay);  // 하단 타임 그리드 내 예약된 시간 정보 좆회를 위한 메소드 호출
+
+          if (focusedStartDay == null) { focusedStartDay = focusedDay; }
+          else if (focusedEndDay == null) { focusedEndDay = focusedDay; }
+          else {
+            if (focusedDay.isAfter(focusedStartDay!)) { focusedEndDay = focusedDay; }
+            else { focusedStartDay = focusedDay; }
+          }
+
+          widget.changedDate(focusedStartDay, focusedEndDay);
+
         });
       },
       selectedDayPredicate: (DateTime day) { return isSameDay(selectedDay, day); },
-      enabledDayPredicate: (DateTime day) { return isBookedDay(day); },
+      enabledDayPredicate: (DateTime day) { return isBookedDay(day); }
     );
   }
 
