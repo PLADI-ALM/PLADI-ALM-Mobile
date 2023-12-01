@@ -32,7 +32,7 @@ jobs:
         run: cd ios && pod install --repo-update
   
       - name: IOS Prod 빌드
-        run: flutter build ios
+        run: flutter build ios --release --no-codesign --no-sound-null-safety
         env: 
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
