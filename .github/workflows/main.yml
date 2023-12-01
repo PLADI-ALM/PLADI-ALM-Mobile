@@ -40,7 +40,6 @@ jobs:
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_KEY_CONTENT: ${{ secrets.ASCAPI_KEY_CONTENT }}
-          PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
   
       - name: fastlane 설치
         run: arch -arm64 brew install fastlane
@@ -53,8 +52,7 @@ jobs:
           MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}s
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
-          PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
+          APP_STORE_CONNECT_API_KEY_KEY_CONTENT: ${{ secrets.ASCAPI_KEY_CONTENT }}
           SLACK_WEBHOOK_URL: ${{ secrets.IOS_SLACK }}
         timeout-minutes: 40
   # beta-android:
