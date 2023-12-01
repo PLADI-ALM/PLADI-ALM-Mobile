@@ -156,6 +156,22 @@ class CarBookingHistory {
       _$CarBookingHistoryFromJson(json);
 }
 
+/// 장비 예약 데이터 모델
+@JsonSerializable()
+class CarBookingRequest {
+  String startDateTime;
+  String endDateTime;
+  String memo;
+
+  CarBookingRequest({
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.memo,
+  });
+
+  Map<String, dynamic> toJson() => _$CarBookingRequestToJson(this);
+}
+
 @JsonSerializable()
 class AdminCarBookingHistoryResponse extends GeneralModel {
   AdminCarBookingHistory data;

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
+import '../../Model/model/booking/car_model.dart';
 import '../../Model/model/booking/return_booking_model.dart';
 import '../../Model/model/general_model.dart';
 import '../../Model/network/api_manager.dart';
@@ -142,6 +143,88 @@ class CarService {
       if (response != null) {
         final error =
             GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
+    }
+  }
+
+  /// 예약된 날짜, 시간의 예약 내역 조회
+  Future<dynamic> getBookedDetailInfo(int resourceId, DateTime selectedDate, int selectedTime) async {
+    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String time = (selectedTime < 10) ? '0$selectedTime' : '$selectedTime';
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$carURL/$resourceId/booking',
+        null,
+        {'dateTime': '$date $time'},
+        null);
+    return response;
+  }
+
+  /// 예약된 날짜의 모든 예약 내역 조회
+  Future<dynamic> getBookedInfoList(int carId, DateTime selectedDate) async {
+    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$carURL/$carId/booking-info',
+        null,
+        {'date': date},
+        null);
+    return response;
+  }
+
+  Future<dynamic> getBookedTimeList(int carId, DateTime date) async {
+    String selectedDate = DateFormat('yyyy-MM-dd').format(date);
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$carURL/$carId/booking-time',
+        null,
+        {'date': selectedDate,},
+        null);
+    return response;
+  }
+
+  Future<dynamic> getBookedDateList(int carId, DateTime selectedMonth, DateTime? selectedDay) async {
+    String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
+
+    final response = await APIManager().request(
+        RequestType.get,
+        '$carURL/$carId/booking-state',
+        null,
+        {'month': selectedMonthStr,},
+        null);
+    return response;
+  }
+
+  /// 차량 예약
+  Future<dynamic> bookCar(int carId, DateTime startDate, DateTime endDate, String memo) async {
+    String startDateStr = DateFormat('yyyy-MM-dd HH').format(startDate);
+    String endDateStr = DateFormat('yyyy-MM-dd HH').format(endDate);
+
+    CarBookingRequest body = CarBookingRequest(
+      startDateTime: startDateStr,
+      endDateTime: endDateStr,
+      memo: memo,
+    );
+
+    try {
+      final response = await APIManager().request(RequestType.post,
+          '$carURL/$carId', null, null, body.toJson());
+
+      if (response != null) {
+        final data = GeneralModel.fromJson(response);
+        return data;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error =
+        GeneralModel.fromJson(response.data as Map<String, dynamic>);
         return error.message;
       }
     }

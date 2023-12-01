@@ -164,6 +164,20 @@ Map<String, dynamic> _$CarBookingHistoryToJson(CarBookingHistory instance) =>
       'status': instance.status,
     };
 
+CarBookingRequest _$CarBookingRequestFromJson(Map<String, dynamic> json) =>
+    CarBookingRequest(
+      startDateTime: json['startDateTime'] as String,
+      endDateTime: json['endDateTime'] as String,
+      memo: json['memo'] as String,
+    );
+
+Map<String, dynamic> _$CarBookingRequestToJson(CarBookingRequest instance) =>
+    <String, dynamic>{
+      'startDateTime': instance.startDateTime,
+      'endDateTime': instance.endDateTime,
+      'memo': instance.memo,
+    };
+
 AdminCarBookingHistoryResponse _$AdminCarBookingHistoryResponseFromJson(
         Map<String, dynamic> json) =>
     AdminCarBookingHistoryResponse(

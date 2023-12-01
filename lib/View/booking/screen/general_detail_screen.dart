@@ -5,6 +5,7 @@ import 'package:frontend/Model/network/api_manager.dart';
 import 'package:frontend/Presenter/booking/car_service.dart';
 import 'package:frontend/View/booking/component/admin_right_item.dart';
 import 'package:frontend/View/booking/screen/admin_booking_hisorty_screen.dart';
+import 'package:frontend/View/booking/screen/booking_car_screen.dart';
 import 'package:frontend/View/booking/screen/booking_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -274,11 +275,15 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
   void didTapBookingButton() {
     if (data == null) {
       Fluttertoast.showToast(msg: '장비 정보를 불러올 수 없으므로 예약이 불가능합니다.');
+
     } else {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => BookingResourceScreen(
-                resourceId: widget.id,
-              )));
+      switch (widget.type) {
+        case BookingType.resource:
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingResourceScreen(resourceId: widget.id,)));
+        case BookingType.car:
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookingCarScreen(carId: widget.id,)));
+        default: return;
+      }
     }
   }
 
