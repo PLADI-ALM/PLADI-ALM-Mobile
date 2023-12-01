@@ -80,7 +80,6 @@ platform :ios do
   lane :beta do |options|
     match(type: "appstore")
     setup_ci()
-    sh "git pull --ff-only origin master"
     get_certificates
     get_provisioning_profile
     cocoapods(use_bundle_exec: false)
