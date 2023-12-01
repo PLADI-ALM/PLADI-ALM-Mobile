@@ -54,7 +54,7 @@ class _BookingCarScreenState extends State<BookingCarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const SubAppBar(titleText: '장비 예약',),
+      appBar: const SubAppBar(titleText: '차량 예약',),
       body: renderBody(),
       bottomNavigationBar: PurpleBottomButton(
         title: '예약',
