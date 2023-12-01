@@ -67,7 +67,6 @@ class ResourceService {
 
   Future<dynamic> getBookedTimeList(int resourceId, DateTime date) async {
     String selectedDate = DateFormat('yyyy-MM-dd').format(date);
-    print('selectedDate - $selectedDate');
 
     final response = await APIManager().request(
         RequestType.get,
@@ -80,21 +79,12 @@ class ResourceService {
 
   Future<dynamic> getBookedDateList(int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
     String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
-    String selectedDayStr = (selectedDay != null)
-        ? DateFormat('yyyy-MM-dd').format(selectedDay)
-        : '';
-
-    print('selectedMonthStr - $selectedMonthStr');
-    print('selectedDayStr - $selectedDayStr');
 
     final response = await APIManager().request(
         RequestType.get,
         '$resourceURL/$resourceId/booking-state',
         null,
-        {
-          'month': selectedMonthStr,
-          // 'date':selectedDayStr
-        },
+        {'month': selectedMonthStr,},
         null);
     return response;
   }
@@ -119,7 +109,6 @@ class ResourceService {
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
     String time = (selectedTime < 10) ? '0$selectedTime' : '$selectedTime';
 
-    print('$date $time');
     final response = await APIManager().request(
         RequestType.get,
         '$resourceURL/$resourceId/booking',
@@ -129,7 +118,7 @@ class ResourceService {
     return response;
   }
 
-  /// 예약된 날짜의 모등 예약 내역 조회
+  /// 예약된 날짜의 모든 예약 내역 조회
   Future<dynamic> getBookedInfoList(int resourceId, DateTime selectedDate) async {
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
 

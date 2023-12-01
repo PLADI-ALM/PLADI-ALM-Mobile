@@ -156,6 +156,21 @@ class ResourceBookingRequest {
 }
 
 @JsonSerializable()
+class GeneralBookingInfoListResponse extends GeneralModel {
+  List<GeneralBookingDetail>? data;
+
+  GeneralBookingInfoListResponse({
+    required super.status,
+    required super.code,
+    required super.message,
+    required this.data,
+  });
+
+  factory GeneralBookingInfoListResponse.fromJson(Map<String, dynamic> json) =>
+      _$GeneralBookingInfoListResponseFromJson(json);
+}
+
+@JsonSerializable()
 class GeneralBookingDetailResponse extends GeneralModel {
   GeneralBookingDetail? data;
 

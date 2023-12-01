@@ -1,32 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Model/model/booking/resource_model.dart';
 import '../../../Model/model/general_model.dart';
+import '../../../Presenter/booking/car_service.dart';
 import '../../colors.dart';
 import '../../common/component/purple_bottom_button.dart';
 import '../../common/component/sub_app_bar.dart';
 import '../component/custom_range_calendar.dart';
 import 'booking_success_screen.dart';
 
-class BookingResourceScreen extends StatefulWidget {
+class BookingCarScreen extends StatefulWidget {
+  final int carId;
 
-  final int resourceId;
-
-  const BookingResourceScreen({
-    required this.resourceId,
+  const BookingCarScreen({
+    required this.carId,
     Key? key
   }) : super(key: key);
 
   @override
-  State<BookingResourceScreen> createState() => _BookingResourceScreenState();
+  State<BookingCarScreen> createState() => _BookingCarScreenState();
 }
 
-class _BookingResourceScreenState extends State<BookingResourceScreen> {
+class _BookingCarScreenState extends State<BookingCarScreen> {
 
   List<String> bookedDayList = [];
   List<int> bookedTimeList = [];
@@ -68,90 +67,90 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
     return isLoading
         ? const Center(child: CircularProgressIndicator(color: Colors.purple,))
         : ListView(
+      children: [
+        /// 시작일시, 종료일시 텍스트
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
             children: [
-              /// 시작일시, 종료일시 텍스트
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text('시작 일시', style: titleStyle,),
-                        TextButton(
-                            onPressed: didTapStartDateText,
-                            child: Text((startDate == null) ? '시작일시를 선택해주세요.' : DateFormat('yyyy.MM.dd HH:mm').format(startDate!),
-                              style: TextStyle(fontSize: (startDate == null) ? 13 : 16, fontWeight: FontWeight.bold, color: (startDate == null) ? const Color(0xFFC9C9C9) : Colors.black),
-                            )
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text('종료 일시', style: titleStyle,),
-                        TextButton(
-                            onPressed: didTapEndDateText,
-                            child: Text((endDate == null) ? '종료일시를 선택해주세요.' : DateFormat('yyyy.MM.dd HH:mm').format(endDate!),
-                              style: TextStyle(fontSize: (endDate == null) ? 13 : 16, fontWeight: FontWeight.bold, color: (endDate == null) ? const Color(0xFFC9C9C9) : Colors.black),
-                            )
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+              Row(
+                children: [
+                  Text('시작 일시', style: titleStyle,),
+                  TextButton(
+                      onPressed: didTapStartDateText,
+                      child: Text((startDate == null) ? '시작일시를 선택해주세요.' : DateFormat('yyyy.MM.dd HH:mm').format(startDate!),
+                        style: TextStyle(fontSize: (startDate == null) ? 13 : 16, fontWeight: FontWeight.bold, color: (startDate == null) ? const Color(0xFFC9C9C9) : Colors.black),
+                      )
+                  ),
+                ],
               ),
-              const Divider(thickness: 1.0,),
-              const SizedBox(height: 10,),
-
-              /// 날짜 선택 캘린더
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text('날짜 선택', style: titleStyle,)
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
-                decoration: const BoxDecoration(
-                    color: Color(0xFFF2F2F2),
-                    borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-                child: CustomRangeCalender(
-                  selectDate: selectDate,
-                  changedDate: changedDate,
-                  // didTapBookedDate: showBookingInfoListDialog,
-                  bookedDayList: bookedDayList,
-                )
-              ),
-              const Divider(thickness: 1.0,),
-
-              /// 시간 선택 그리드뷰
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Row(
-                  children: [
-                    Text('시간 선택', style: titleStyle,),
-                    Flexible(child: Container()),
-                    SizedBox(
-                        width: 22, height: 22,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: didTapResetTimeGridButton,
-                          icon: const Icon(CupertinoIcons.refresh, size: 22,),
-                        )
-                    )
-                  ],
-                ),
-              ),
-              renderTimeGrid(),
-              const Divider(thickness: 1.0,),
-
-              /// 이용목적 텍스트 필드
-              const Padding(
-                padding: EdgeInsets.only(left: 20, top: 20),
-                child: Text('이용목적', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-              ),
-              renderMemoField()
+              Row(
+                children: [
+                  Text('종료 일시', style: titleStyle,),
+                  TextButton(
+                      onPressed: didTapEndDateText,
+                      child: Text((endDate == null) ? '종료일시를 선택해주세요.' : DateFormat('yyyy.MM.dd HH:mm').format(endDate!),
+                        style: TextStyle(fontSize: (endDate == null) ? 13 : 16, fontWeight: FontWeight.bold, color: (endDate == null) ? const Color(0xFFC9C9C9) : Colors.black),
+                      )
+                  ),
+                ],
+              )
             ],
-          );
+          ),
+        ),
+        const Divider(thickness: 1.0,),
+        const SizedBox(height: 10,),
+
+        /// 날짜 선택 캘린더
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text('날짜 선택', style: titleStyle,)
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+            decoration: const BoxDecoration(
+                color: Color(0xFFF2F2F2),
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+            child: CustomRangeCalender(
+              selectDate: selectDate,
+              changedDate: changedDate,
+              // didTapBookedDate: showBookingInfoListDialog,
+              bookedDayList: bookedDayList,
+            )
+        ),
+        const Divider(thickness: 1.0,),
+
+        /// 시간 선택 그리드뷰
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: Row(
+            children: [
+              Text('시간 선택', style: titleStyle,),
+              Flexible(child: Container()),
+              SizedBox(
+                  width: 22, height: 22,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: didTapResetTimeGridButton,
+                    icon: const Icon(CupertinoIcons.refresh, size: 22,),
+                  )
+              )
+            ],
+          ),
+        ),
+        renderTimeGrid(),
+        const Divider(thickness: 1.0,),
+
+        /// 이용목적 텍스트 필드
+        const Padding(
+          padding: EdgeInsets.only(left: 20, top: 20),
+          child: Text('이용목적', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+        ),
+        renderMemoField()
+      ],
+    );
   }
 
 
@@ -363,7 +362,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   }
 
   void didTapBookedTimeItem(int index) async {
-    dynamic response = await ResourceService().getBookedDetailInfo(widget.resourceId, (endDate == null) ? startDate! : endDate!, index);
+    dynamic response = await CarService().getBookedDetailInfo(widget.carId, (endDate == null) ? startDate! : endDate!, index);
     if (response != null) {
       dynamic data = GeneralBookingDetailResponse.fromJson(response);
       GeneralBookingDetail info = data.data;
@@ -400,7 +399,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
 
   void didTapBookingButton() async {
     setState(() { isLoading = true; });
-    dynamic response = await ResourceService().bookResource(widget.resourceId, startDate!, endDate!, memoController.value.text ?? '');
+    dynamic response = await CarService().bookCar(widget.carId, startDate!, endDate!, memoController.value.text ?? '');
     setState(() { isLoading = false; });
     if (response != null) {
       if (response.runtimeType == GeneralModel) {
@@ -473,7 +472,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   void selectDate(DateTime dateTime) async {
     bookedTimeList = [];
     if (isDisabledDay(dateTime)) {
-      dynamic response = await ResourceService().getBookedInfoList(widget.resourceId, selectedDate ?? DateTime.now());
+      dynamic response = await CarService().getBookedInfoList(widget.carId, selectedDate ?? DateTime.now());
       if (response != null) {
         dynamic data = GeneralBookingInfoListResponse.fromJson(response);
         List<GeneralBookingDetail> infoList = data.data;
@@ -481,7 +480,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
       }
 
     } else {
-      dynamic response = await ResourceService().getBookedTimeList(widget.resourceId, dateTime);
+      dynamic response = await CarService().getBookedTimeList(widget.carId, dateTime);
       if (response != null) {
         dynamic data = ResourceBookingOfDateResponse.fromJson(response);
         setBookedTimeList(data);
@@ -501,7 +500,7 @@ class _BookingResourceScreenState extends State<BookingResourceScreen> {
   }
 
   void getBookedDateListInfo() async {
-    dynamic response = await ResourceService().getBookedDateList(widget.resourceId, DateTime.now(), null);
+    dynamic response = await CarService().getBookedDateList(widget.carId, DateTime.now(), null);
     if (response != null) {
       ResourceBookedList data = ResourceBookedList.fromJson(response);
       setState(() { bookedDayList = data.data; });

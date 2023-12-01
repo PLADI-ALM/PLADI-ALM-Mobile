@@ -167,6 +167,26 @@ Map<String, dynamic> _$ResourceBookingRequestToJson(
       'memo': instance.memo,
     };
 
+GeneralBookingInfoListResponse _$GeneralBookingInfoListResponseFromJson(
+        Map<String, dynamic> json) =>
+    GeneralBookingInfoListResponse(
+      status: json['status'] as int,
+      code: json['code'] as String,
+      message: json['message'] as String,
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => GeneralBookingDetail.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$GeneralBookingInfoListResponseToJson(
+        GeneralBookingInfoListResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'code': instance.code,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
 GeneralBookingDetailResponse _$GeneralBookingDetailResponseFromJson(
         Map<String, dynamic> json) =>
     GeneralBookingDetailResponse(

@@ -13,20 +13,16 @@ typedef DidTapBookedDate = void Function(DateTime date);
 
 class CustomRangeCalender extends StatefulWidget {
   final SetSelectedDate selectDate;
-  final SetSelectedStartDate changedStartDate;
-  final SetSelectedEndDate changedEndDate;
   final ChangedDate changedDate;
-  final DidTapBookedDate didTapBookedDate;
+  // final DidTapBookedDate didTapBookedDate;
 
   final double? calendarDayHeight;
   final List<String> bookedDayList;
 
   const CustomRangeCalender({
     required this.selectDate,
-    required this.changedStartDate,
-    required this.changedEndDate,
     required this.changedDate,
-    required this.didTapBookedDate,
+    // required this.didTapBookedDate,
     required this.bookedDayList,
     this.calendarDayHeight,
     Key? key
@@ -84,7 +80,7 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
       calendarBuilders: CalendarBuilders(
         disabledBuilder: (context, day, focusedDay) {
           return GestureDetector(
-            onTap: (){ widget.didTapBookedDate(day); },
+            onTap: (){ widget.selectDate(day); },
             child: Center(child: Text(day.day.toString(), style: const TextStyle(color: Colors.grey),),),
           );
         },
