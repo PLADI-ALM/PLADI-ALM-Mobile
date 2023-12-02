@@ -1,5 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:frontend/Model/model/equipment/equipment_category_model.dart';
+import 'package:frontend/Presenter/equipment/equipment_service.dart';
+import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EquipmentAddScreen extends StatefulWidget {
   const EquipmentAddScreen({super.key});
@@ -9,7 +16,8 @@ class EquipmentAddScreen extends StatefulWidget {
 }
 
 class _EquipmentAddScreen extends State<EquipmentAddScreen> {
-  final categories = ["1", "2", "3"];
+  var categories = [""];
+  var userImage;
   String? _selectedCategory;
   FocusNode nameFocusNode = FocusNode();
   FocusNode quantityFocusNode = FocusNode();
@@ -41,8 +49,46 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
       appBar: const SubAppBar(
         titleText: '신규 비품 추가',
       ),
-      body: renderBody(),
+      body: futureBody(),
+      bottomNavigationBar: PurpleBottomButton(
+        title: '추가',
+        onPressed: equipmentAdd,
+      ),
     );
+  }
+
+  Widget futureBody() {
+    return FutureBuilder(
+        future: EquipmentService().getEquipmentCategory(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return notCategoryBody();
+          }
+
+          if (snapshot.hasData) {
+            categories = EquipmentCategoryResponseModel.fromJson(snapshot.data)
+                .data
+                .categoryNames;
+            if (categories.isEmpty) {
+              return notCategoryBody();
+            } else {
+              return renderBody();
+            }
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
+  }
+
+  Widget notCategoryBody() {
+    return Center(
+        child: Container(
+      width: double.infinity,
+      height: double.infinity,
+      alignment: Alignment.center,
+      child: const Text("카테고리 목록이 없습니다.\n다시 시도해주세요.",
+          style: TextStyle(fontSize: 16, color: Colors.purple)),
+    ));
   }
 
   Widget renderBody() {
@@ -193,18 +239,29 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
           const SizedBox(
             height: 14,
           ),
-          SizedBox(
+          Container(
             width: double.infinity,
             height: 42,
+            padding: const EdgeInsets.all(10),
+            clipBehavior: Clip.antiAlias,
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(width: 1, color: Color(0xFF939393)),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
             child: DropdownButton(
               hint: const Text('카테고리를 선택해주세요.',
                   style: TextStyle(
-                    color: Color(0xFFC9C9C9),
+                    color: Color(0xFF4C4C4C),
                     fontSize: 13,
                     fontFamily: 'NanumSquare_ac',
                     fontWeight: FontWeight.w400,
                     height: 0,
                   )),
+              isExpanded: true,
+              underline: const SizedBox.shrink(),
               value: _selectedCategory,
               items: categories.map((category) {
                 return DropdownMenuItem(
@@ -310,26 +367,42 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
           const SizedBox(
             height: 14,
           ),
-          SizedBox(
-            width: double.infinity,
-            height: 42,
-            child: TextField(
-              maxLines: 1,
-              focusNode: nameFocusNode,
-              obscureText: false,
-              controller: nameController,
-              decoration: const InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF640FAF))),
-                  isDense: true,
-                  hintText: "비품명을 입력해주세요.",
-                  contentPadding: EdgeInsets.all(10)),
-            ),
-          ),
+          Row(
+            children: [
+              Container(
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFFF6F6F6),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  width: 79,
+                  height: 79,
+                  child: IconButton(
+                    icon: userImage == null
+                        ? SvgPicture.asset('asset/image/image_plus.svg')
+                        : Image.file(
+                            userImage,
+                            fit: BoxFit.fill,
+                          ),
+                    onPressed: imageAdd,
+                  )),
+            ],
+          )
         ],
       ),
     );
   }
 
-  void moveToAddEquipment() {}
+  void imageAdd() async {
+    var picker = ImagePicker();
+    var image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        userImage = File(image.path);
+      });
+    }
+  }
+
+  void equipmentAdd() {}
 }
