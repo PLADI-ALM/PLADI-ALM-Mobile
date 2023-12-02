@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/Model/model/equipment/equipment_category_model.dart';
+import 'package:frontend/Model/model/equipment/image_url_model.dart';
 import 'package:frontend/Presenter/equipment/equipment_service.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
@@ -17,7 +19,7 @@ class EquipmentAddScreen extends StatefulWidget {
 
 class _EquipmentAddScreen extends State<EquipmentAddScreen> {
   var categories = [""];
-  var userImage;
+  File? userImage;
   String? _selectedCategory;
   FocusNode nameFocusNode = FocusNode();
   FocusNode quantityFocusNode = FocusNode();
@@ -52,7 +54,7 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
       body: futureBody(),
       bottomNavigationBar: PurpleBottomButton(
         title: '추가',
-        onPressed: equipmentAdd,
+        onPressed: checkImage,
       ),
     );
   }
@@ -382,7 +384,7 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
                     icon: userImage == null
                         ? SvgPicture.asset('asset/image/image_plus.svg')
                         : Image.file(
-                            userImage,
+                            userImage!,
                             fit: BoxFit.fill,
                           ),
                     onPressed: imageAdd,
@@ -392,6 +394,46 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
         ],
       ),
     );
+  }
+
+  void showAlert(String content) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            title: const Column(
+              children: <Widget>[
+                Text("비품 추가 오류"),
+              ],
+            ),
+            //
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(content),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text(
+                  "확인",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 
   void imageAdd() async {
@@ -404,5 +446,33 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
     }
   }
 
-  void equipmentAdd() {}
+  void checkEssential() {
+    if (nameController.text == "" ||
+        quantityController.text == "" ||
+        _selectedCategory == null) {
+      showAlert("필수 요소를 입력해주세요.");
+    } else {
+      checkImage();
+    }
+  }
+
+  void checkImage() async {
+    if (userImage != null) {
+      dynamic response = await EquipmentService().getImageUrl();
+      final data = ImageUrlModel.fromJson(response);
+
+      Future<dynamic> result =
+          EquipmentService().putIamge(data.presignedUrl, userImage!);
+      result.then((value) => {
+            if (value == true)
+              {addEquipment(data.imageKey)}
+            else
+              {showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
+          });
+    } else {
+      addEquipment(null);
+    }
+  }
+
+  void addEquipment(String? imageKey) {}
 }
