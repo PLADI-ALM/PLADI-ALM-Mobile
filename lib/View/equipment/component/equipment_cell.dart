@@ -28,20 +28,32 @@ class _EquipmentCellState extends State<EquipmentCell> {
         width: double.infinity,
         height: 120,
         decoration: ShapeDecoration(
-          color: const Color(0xFFF7F3FB),
+          color: const Color(0xFFFCFBFF),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5.76),
           ),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x517A7A7B),
+              blurRadius: 19.20,
+              offset: Offset(0, 7.68),
+              spreadRadius: 0,
+            )
+          ],
         ),
         margin: const EdgeInsets.only(top: 10),
         child: Row(
           children: [
             Container(
                 margin: const EdgeInsets.only(top: 14, left: 14, bottom: 14),
-                child: (widget.equipment.imgUrl == null)
-                    ? Image.asset('asset/image/pladi_icon.png')
-                    : Image.network(widget.equipment.imgUrl!,
-                        fit: BoxFit.fitWidth)),
+                child: SizedBox(
+                  width: 90,
+                  height: 90,
+                  child: (widget.equipment.imgUrl == null)
+                      ? Image.asset('asset/image/pladi_icon.png')
+                      : Image.network(widget.equipment.imgUrl!,
+                          fit: BoxFit.fitWidth),
+                )),
             Container(
               margin: const EdgeInsets.only(
                   top: 17, left: 10, bottom: 14, right: 10),
@@ -49,13 +61,12 @@ class _EquipmentCellState extends State<EquipmentCell> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         alignment: Alignment.center,
                         width: 65,
-                        height: 30,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4.72, vertical: 1.18),
+                        height: 22,
                         decoration: ShapeDecoration(
                           color: const Color(0xFF640FAF),
                           shape: RoundedRectangleBorder(
@@ -84,7 +95,6 @@ class _EquipmentCellState extends State<EquipmentCell> {
                           fontSize: 15,
                           fontFamily: 'NanumSquare_ac',
                           fontWeight: FontWeight.w700,
-                          height: 0.10,
                           letterSpacing: 0.10,
                         ),
                       ),
@@ -92,13 +102,12 @@ class _EquipmentCellState extends State<EquipmentCell> {
                         width: 10,
                       ),
                       Text(
-                        widget.equipment.quantity.toString(),
+                        widget.equipment.quantity,
                         style: const TextStyle(
                           color: Color(0xFF717171),
                           fontSize: 13,
                           fontFamily: 'NanumSquare_ac',
                           fontWeight: FontWeight.w700,
-                          height: 0.14,
                           letterSpacing: 0.10,
                         ),
                       )
@@ -124,7 +133,6 @@ class _EquipmentCellState extends State<EquipmentCell> {
                           fontSize: 13,
                           fontFamily: 'NanumSquare_ac',
                           fontWeight: FontWeight.w700,
-                          height: 0.14,
                           letterSpacing: 0.10,
                         ),
                       )
@@ -152,7 +160,6 @@ class _EquipmentCellState extends State<EquipmentCell> {
                           fontSize: 13,
                           fontFamily: 'NanumSquare_ac',
                           fontWeight: FontWeight.w700,
-                          height: 0.14,
                           letterSpacing: 0.10,
                         ),
                       )

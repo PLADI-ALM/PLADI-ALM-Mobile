@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:frontend/Model/model/equipment/equipment_list_model.dart';
 import 'package:frontend/Presenter/equipment/equipment_service.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
 import 'package:frontend/View/equipment/component/equipment_cell.dart';
+import 'package:frontend/View/equipment/screen/equipment_add_screen.dart';
 
 class EquipmentScreen extends StatefulWidget {
   const EquipmentScreen({super.key});
@@ -14,7 +16,18 @@ class EquipmentScreen extends StatefulWidget {
 class _EquipmentScreen extends State<EquipmentScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: const MainAppBar(), body: futureBody());
+    return Scaffold(
+      appBar: const MainAppBar(),
+      body: futureBody(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          moveToAddEquipment();
+        },
+        tooltip: 'Increment',
+        backgroundColor: const Color(0xFF640FAF),
+        child: addButton(),
+      ),
+    );
   }
 
   Widget futureBody() {
@@ -60,5 +73,36 @@ class _EquipmentScreen extends State<EquipmentScreen> {
         return EquipmentCell(equipment: equipmentList[index]);
       },
     );
+  }
+
+  Widget addButton() {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: const ShapeDecoration(
+        color: Color(0xFF640FAF),
+        shape: OvalBorder(),
+        shadows: [
+          BoxShadow(
+            color: Color(0x19000000),
+            blurRadius: 20,
+            offset: Offset(0, 4),
+            spreadRadius: 0,
+          )
+        ],
+      ),
+      child: Center(
+        child: SvgPicture.asset(
+          'asset/image/plus.svg',
+          width: 22,
+          height: 22,
+        ),
+      ),
+    );
+  }
+
+  void moveToAddEquipment() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const EquipmentAddScreen()));
   }
 }
