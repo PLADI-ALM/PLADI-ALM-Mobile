@@ -10,10 +10,11 @@ class EquipmentScreen extends StatefulWidget {
   const EquipmentScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _EquipmentScreen();
+  State<StatefulWidget> createState() => EquipmentScreenState();
 }
 
-class _EquipmentScreen extends State<EquipmentScreen> {
+class EquipmentScreenState extends State<EquipmentScreen>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,9 +33,9 @@ class _EquipmentScreen extends State<EquipmentScreen> {
 
   Widget futureBody() {
     List<EquipmentModel> notificationList;
-    return FutureBuilder(
-        future: EquipmentService().getEquipment(),
-        builder: (context, snapshot) {
+    return FutureBuilder<dynamic>(
+        future: fetchData(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError) {
             return noDataBody();
           }
@@ -104,5 +105,16 @@ class _EquipmentScreen extends State<EquipmentScreen> {
   void moveToAddEquipment() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (_) => const EquipmentAddScreen()));
+  }
+
+  Future<dynamic> fetchData() async {
+    return EquipmentService().getEquipment();
+  }
+
+  void reloadData() {
+    print(123);
+    setState(() {
+      fetchData();
+    });
   }
 }

@@ -8,6 +8,7 @@ import 'package:frontend/Model/model/equipment/image_url_model.dart';
 import 'package:frontend/Presenter/equipment/equipment_service.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
+import 'package:frontend/View/equipment/screen/equipment_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EquipmentAddScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
   var categories = [""];
   File? userImage;
   String? _selectedCategory;
+
   FocusNode nameFocusNode = FocusNode();
   FocusNode quantityFocusNode = FocusNode();
   FocusNode loacationFocusNode = FocusNode();
@@ -54,7 +56,7 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
       body: futureBody(),
       bottomNavigationBar: PurpleBottomButton(
         title: '추가',
-        onPressed: checkImage,
+        onPressed: checkEssential,
       ),
     );
   }
@@ -95,6 +97,7 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
 
   Widget renderBody() {
     return Container(
+      color: Colors.white,
       margin: const EdgeInsets.only(top: 14, right: 20, left: 20),
       child: Column(
         children: [
@@ -474,5 +477,26 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
     }
   }
 
-  void addEquipment(String? imageKey) {}
+  void addEquipment(String? imageKey) {
+    var name = nameController.text;
+    var quantity = quantityController.text;
+    var description =
+        descriptionController.text == "" ? null : descriptionController.text;
+    var location =
+        loacationController.text == "" ? null : loacationController.text;
+    var imgKey = imageKey != null ? "equipment/$imageKey" : null;
+
+    Future<dynamic> result = EquipmentService().addEquipment(
+        _selectedCategory!, description, imgKey, location, name, quantity);
+    result.then((value) => {
+          if (value == true) {moveToPop()} else {showAlert(value)}
+        });
+  }
+
+  void moveToPop() {
+    EquipmentScreenState? parent =
+        context.findAncestorStateOfType<EquipmentScreenState>();
+    Navigator.of(context).pop();
+    parent!.reloadData();
+  }
 }

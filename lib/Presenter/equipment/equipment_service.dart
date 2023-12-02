@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:frontend/Model/model/equipment/image_url_model.dart';
+import 'package:frontend/Model/model/equipment/equipment_add_request.dart';
 import 'package:frontend/Model/model/equipment/image_url_request.dart';
+import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/Model/network/api_manager.dart';
 
 class EquipmentService {
-  final equipmentURL = '/equipments?cond=';
+  final equipmentGetURL = '/equipments?cond=';
+  final equipmentPostURL = '/equipments';
   final equipmentCategoryURL = "/equipments/categories";
   final bukitURL =
       "https://gpkzpnv8lh.execute-api.ap-northeast-2.amazonaws.com/dev/presignedurl-lambda";
@@ -21,8 +23,8 @@ class EquipmentService {
   }
 
   Future<dynamic> getEquipment() async {
-    final response =
-        APIManager().request(RequestType.get, equipmentURL, null, null, null);
+    final response = APIManager()
+        .request(RequestType.get, equipmentGetURL, null, null, null);
     return response;
   }
 
@@ -53,6 +55,33 @@ class EquipmentService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<dynamic> addEquipment(String category, String? description,
+      String? imgKey, String? location, String name, String quantity) async {
+    try {
+      final body = EquipmentAddRequest(
+              category: category,
+              description: description,
+              imgKey: imgKey,
+              location: location,
+              name: name,
+              quantity: quantity)
+          .toJson();
+
+      var response = APIManager()
+          .request(RequestType.post, equipmentPostURL, null, null, body);
+      if (response != null) {
+        return true;
+      }
+    } on DioError catch (e) {
+      final response = e.response;
+      if (response != null) {
+        final error =
+            GeneralModel.fromJson(response.data as Map<String, dynamic>);
+        return error.message;
+      }
     }
   }
 }
