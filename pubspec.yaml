@@ -21,6 +21,8 @@ dependencies:
   firebase_messaging: "^14.5.0"
   flutter_local_notifications: "^14.0.0+1"
   url_launcher: "^6.2.1"
+  http: ^0.13.4
+  path_provider: ^2.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

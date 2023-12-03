@@ -1,18 +1,24 @@
 import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/Model/model/equipment/equipment_category_model.dart';
+import 'package:frontend/Model/model/equipment/equipment_list_model.dart';
 import 'package:frontend/Model/model/equipment/image_url_model.dart';
 import 'package:frontend/Presenter/equipment/equipment_service.dart';
 import 'package:frontend/View/common/component/purple_bottom_button.dart';
 import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:frontend/View/equipment/screen/equipment_screen.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class EquipmentAddScreen extends StatefulWidget {
-  const EquipmentAddScreen({super.key});
+  final EquipmentModel? equipment;
+
+  const EquipmentAddScreen({super.key, this.equipment});
 
   @override
   State<StatefulWidget> createState() => _EquipmentAddScreen();
@@ -35,7 +41,41 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
 
   @override
   void initState() {
+    checkEdit();
     super.initState();
+  }
+
+  void checkEdit() async {
+    if (widget.equipment != null) {
+      nameController.text = widget.equipment!.name;
+      quantityController.text = widget.equipment!.quantity;
+
+      _selectedCategory = widget.equipment!.category;
+
+      if (widget.equipment!.location != null) {
+        loacationController.text = widget.equipment!.location!;
+      }
+      if (widget.equipment!.description != null) {
+        descriptionController.text = widget.equipment!.description!;
+      }
+
+      if (widget.equipment!.imgUrl != null) {
+        urlToFile(widget.equipment!.imgUrl!);
+      }
+    }
+  }
+
+  void urlToFile(String imageUrl) async {
+    final http.Response responseData = await http.get(Uri.parse(imageUrl));
+    Uint8List uint8list = responseData.bodyBytes;
+    var buffer = uint8list.buffer;
+    ByteData byteData = ByteData.view(buffer);
+    var tempDir = await getTemporaryDirectory();
+    File file = await File('${tempDir.path}/jpeg').writeAsBytes(
+        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    setState(() {
+      userImage = file;
+    });
   }
 
   @override
@@ -50,12 +90,12 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SubAppBar(
-        titleText: '신규 비품 추가',
+      appBar: SubAppBar(
+        titleText: widget.equipment == null ? '신규 비품 추가' : "비품 수정",
       ),
       body: futureBody(),
       bottomNavigationBar: PurpleBottomButton(
-        title: '추가',
+        title: widget.equipment == null ? '추가' : "수정",
         onPressed: checkEssential,
       ),
     );
@@ -486,17 +526,31 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
         loacationController.text == "" ? null : loacationController.text;
     var imgKey = imageKey != null ? "equipment/$imageKey" : null;
 
-    Future<dynamic> result = EquipmentService().addEquipment(
-        _selectedCategory!, description, imgKey, location, name, quantity);
-    result.then((value) => {
-          if (value == true) {moveToPop()} else {showAlert(value)}
-        });
+    if (widget.equipment == null) {
+      Future<dynamic> result = EquipmentService().addEquipment(
+          _selectedCategory!, description, imgKey, location, name, quantity);
+      result.then((value) => {
+            if (value == true) {moveToPop()} else {showAlert(value)}
+          });
+    } else {
+      Future<dynamic> result = EquipmentService().editEquipment(
+          widget.equipment!.equipmentId,
+          _selectedCategory!,
+          description,
+          imgKey,
+          location,
+          name,
+          quantity);
+      result.then((value) => {
+            if (value == true)
+              {Navigator.of(context).pop(), Navigator.of(context).pop()}
+            else
+              {showAlert(value)}
+          });
+    }
   }
 
   void moveToPop() {
-    EquipmentScreenState? parent =
-        context.findAncestorStateOfType<EquipmentScreenState>();
     Navigator.of(context).pop();
-    parent!.reloadData();
   }
 }
