@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'constants.dart';
 
-enum RequestType { get, post, patch, delete }
+enum RequestType { get, post, patch, delete, put }
 
 class APIManager {
   /// Singleton Pattern
@@ -20,7 +20,6 @@ class APIManager {
   bool isAdmin = false;
   String fcmToken = "";
 
-  /// Request methods
   dynamic request(
     RequestType requestType,
     String path,
@@ -29,8 +28,8 @@ class APIManager {
     Map<String, dynamic>? data,
   ) async {
     setToken();
-    print('${await storage.read(key: accessTokenKey)}');
-    print('${defaultOptions.headers}');
+    // print('${await storage.read(key: accessTokenKey)}');
+    // print('${defaultOptions.headers}');
 
     if (options != null && options.headers != null) {
       defaultOptions.headers!.addAll(options.headers!);
@@ -53,6 +52,11 @@ class APIManager {
             options: defaultOptions,
             queryParameters: queryParameters,
             data: data);
+      case RequestType.put:
+        response = await dio.put(baseUrl + path,
+            options: defaultOptions,
+            queryParameters: queryParameters,
+            data: data);
 
       case RequestType.delete:
         response = await dio.delete(baseUrl + path,
@@ -61,6 +65,46 @@ class APIManager {
 
     print('api + $response');
     print('api + ${response.data}');
+
+    return response.data;
+  }
+
+  /// Request methods
+  dynamic imageRequest(
+    RequestType requestType,
+    String path,
+    Options? options,
+    Map<String, dynamic>? queryParameters,
+    dynamic data,
+  ) async {
+    dynamic response;
+    switch (requestType) {
+      case RequestType.get:
+        response = await dio.get(path,
+            options: options, queryParameters: queryParameters);
+
+      case RequestType.post:
+        response = await dio.post(path,
+            options: options, queryParameters: queryParameters, data: data);
+
+      case RequestType.patch:
+        response = await dio.patch(path,
+            options: options, queryParameters: queryParameters, data: data);
+
+      case RequestType.put:
+        Options op = Options();
+        op.contentType = 'multipart/form-data';
+        op.maxRedirects!.isFinite;
+        response = await dio.put(path,
+            options: op, queryParameters: queryParameters, data: data);
+
+      case RequestType.delete:
+        response = await dio.delete(path,
+            options: options, queryParameters: queryParameters);
+    }
+
+    // print('api + $response');
+    // print('api + ${response.data}');
 
     return response.data;
   }

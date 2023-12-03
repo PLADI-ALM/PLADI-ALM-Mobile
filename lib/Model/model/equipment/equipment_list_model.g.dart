@@ -66,7 +66,7 @@ EquipmentModel _$EquipmentModelFromJson(Map<String, dynamic> json) =>
       keeper: json['keeper'] as String,
       location: json['location'] as String?,
       name: json['name'] as String,
-      quantity: json['quantity'] as int,
+      quantity: json['quantity'] as String,
     );
 
 Map<String, dynamic> _$EquipmentModelToJson(EquipmentModel instance) =>

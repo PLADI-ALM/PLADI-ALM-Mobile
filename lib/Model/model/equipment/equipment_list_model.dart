@@ -53,7 +53,7 @@ class EquipmentModel {
   String keeper;
   String? location;
   String name;
-  int quantity;
+  String quantity;
 
   EquipmentModel({
     required this.category,
