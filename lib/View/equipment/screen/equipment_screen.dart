@@ -23,8 +23,12 @@ class EquipmentScreenState extends State<EquipmentScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       appBar: const MainAppBar(),
-      body: futureBody(),
+      body: SingleChildScrollView(
+        child: futureBody(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           moveToAddEquipment();
@@ -70,7 +74,7 @@ class EquipmentScreenState extends State<EquipmentScreen>
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
           width: MediaQuery.of(context).size.width,
           height: 36,
           decoration: const BoxDecoration(
@@ -106,12 +110,12 @@ class EquipmentScreenState extends State<EquipmentScreen>
           ),
         ),
         Container(
+            margin: const EdgeInsets.only(top: 7),
             height: MediaQuery.of(context).size.height * 0.7,
             color: Colors.white,
             child: equipmentList.isEmpty
                 ? noDataBody()
                 : ListView.builder(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 7),
                     scrollDirection: Axis.vertical,
                     itemCount: equipmentList.length,
                     itemBuilder: (BuildContext context, int index) {

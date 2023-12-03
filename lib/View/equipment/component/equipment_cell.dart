@@ -45,7 +45,7 @@ class _EquipmentCellState extends State<EquipmentCell> {
             )
           ],
         ),
-        margin: const EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Row(
           children: [
             Container(
