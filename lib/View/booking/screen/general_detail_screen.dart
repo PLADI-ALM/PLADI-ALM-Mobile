@@ -42,14 +42,10 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
     isLoading = true;
     dynamic response;
     switch (widget.type) {
-      case BookingType.resource:
-        response = await ResourceService().getResourceDetailData(widget.id);
-      case BookingType.car:
-        response = await CarService().getCarDetailData(widget.id);
-      default:
-        return;
+      case BookingType.resource: response = await ResourceService().getResourceDetailData(widget.id);
+      case BookingType.car: response = await CarService().getCarDetailData(widget.id);
+      default: return;
     }
-    // dynamic response = await ResourceService().getResourceDetailData(widget.resourceId);
     isLoading = false;
     return response;
   }
@@ -95,6 +91,9 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
         future: fetchData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError || snapshot.data == null) {
+            print('snapshot.hasError - ${snapshot.hasError}');
+            print('snapshot.error - ${snapshot.error}');
+            print('snapshot.data - ${snapshot.data}');
             return const Center(
               child: Text(
                 '정보를 불러오지 못 하였습니다.',
@@ -102,14 +101,7 @@ class _GeneralDetailScreenState extends State<GeneralDetailScreen> {
               ),
             );
           } else {
-            if (isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: purple,
-                ),
-              );
-            }
-            // data = ResourceDetailResponse.fromJson(snapshot.data);
+            if (isLoading) { return const Center(child: CircularProgressIndicator(color: purple,),); }
             configure(snapshot.data);
             return SizedBox(
               width: MediaQuery.of(context).size.width,

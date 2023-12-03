@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:frontend/View/booking/screen/booking_screen.dart';
+import 'package:frontend/View/booking/screen/office_detail_screen.dart';
 
 import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
 import '../../colors.dart';
 import '../screen/booking_history_screen.dart';
 import '../screen/booking_return_screen.dart';
+import '../screen/general_detail_screen.dart';
 import 'booking_status_item.dart';
 
 enum BookingManageType { cancel, giveBack, reject, allow  }  // 취소, 반납, 반려, 허가
@@ -81,7 +83,8 @@ class _BookingItemCardState extends State<BookingItemCard> {
               ),
               Expanded(child: Container()),
               SizedBox(
-                child: IconButton(onPressed: (){},
+                child: IconButton(
+                    onPressed: didTapMoveToDetailButton,
                     style: IconButton.styleFrom(padding: EdgeInsets.zero),
                     icon: const Icon(Icons.arrow_forward_ios, size: 16,)
                 ),
@@ -336,4 +339,12 @@ class _BookingItemCardState extends State<BookingItemCard> {
     parent!.reloadData(response);
   }
 
+  void didTapMoveToDetailButton() {
+    switch (widget.type) {
+      case BookingType.office:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfficeDetailScreen(officeId: widget.id,)));
+      default:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GeneralDetailScreen(type: widget.type, id: widget.id,)));
+    }
+  }
 }
