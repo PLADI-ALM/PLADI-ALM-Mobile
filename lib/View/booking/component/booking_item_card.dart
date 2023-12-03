@@ -17,6 +17,7 @@ class BookingItemCard extends StatefulWidget {
   final bool isAdmin;
   final BookingType type;
   final int id;
+  final int tergetId;
   final String name;
   final String? location;
   final String startDateTime;
@@ -28,6 +29,7 @@ class BookingItemCard extends StatefulWidget {
     required this.isAdmin,
     required this.type,
     required this.id,
+    required this.tergetId,
     required this.name,
     required this.location,
     required this.startDateTime,
@@ -342,9 +344,9 @@ class _BookingItemCardState extends State<BookingItemCard> {
   void didTapMoveToDetailButton() {
     switch (widget.type) {
       case BookingType.office:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfficeDetailScreen(officeId: widget.id,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfficeDetailScreen(officeId: widget.tergetId,)));
       default:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GeneralDetailScreen(type: widget.type, id: widget.id,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GeneralDetailScreen(type: widget.type, id: widget.tergetId,)));
     }
   }
 }

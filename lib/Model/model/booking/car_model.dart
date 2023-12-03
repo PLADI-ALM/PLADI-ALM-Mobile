@@ -135,6 +135,7 @@ class CarBookingHistoryData {
 @JsonSerializable()
 class CarBookingHistory {
   int id;
+  int targetId;
   String name;
   String? location;
   String startDateTime;
@@ -144,6 +145,7 @@ class CarBookingHistory {
 
   CarBookingHistory({
     required this.id,
+    required this.targetId,
     required this.name,
     this.location,
     required this.startDateTime,

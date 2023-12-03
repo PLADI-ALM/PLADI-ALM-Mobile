@@ -102,7 +102,7 @@ class _CustomRangeCalenderState extends State<CustomRangeCalender> {
           }
 
           /// 날짜 선택하는 경우
-          widget.selectDate(focusedDay);  // 하단 타임 그리드 내 예약된 시간 정보 좆회를 위한 메소드 호출
+          widget.selectDate(focusedDay);  // 하단 타임 그리드 내 예약된 시간 정보 조회를 위한 메소드 호출
 
           if (focusedStartDay == null) { focusedStartDay = focusedDay; }
           else if (focusedEndDay == null) { focusedEndDay = focusedDay; }

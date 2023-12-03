@@ -157,6 +157,7 @@ class BookingHistoryScreenState extends State<BookingHistoryScreen> with SingleT
                       isAdmin: widget.isAdmin,
                       type: currentType,
                       id: data.data.content[index].id,
+                      tergetId: data.data.content[index].targetId,
                       name: data.data.content[index].name,
                       location: (currentType == BookingType.office)
                           ? data.data.content[index].detailInfo

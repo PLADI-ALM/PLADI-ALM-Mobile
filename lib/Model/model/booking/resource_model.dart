@@ -236,6 +236,7 @@ class ResourceBookingHistoryData {
 @JsonSerializable()
 class ResourceBookingHistory {
   int id;
+  int targetId;
   String name;
   String? location;
   String startDateTime;
@@ -245,6 +246,7 @@ class ResourceBookingHistory {
 
   ResourceBookingHistory({
     required this.id,
+    required this.targetId,
     required this.name,
     this.location,
     required this.startDateTime,

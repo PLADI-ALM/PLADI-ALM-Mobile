@@ -145,6 +145,7 @@ Map<String, dynamic> _$CarBookingHistoryDataToJson(
 CarBookingHistory _$CarBookingHistoryFromJson(Map<String, dynamic> json) =>
     CarBookingHistory(
       id: json['id'] as int,
+      targetId: json['targetId'] as int,
       name: json['name'] as String,
       location: json['location'] as String?,
       startDateTime: json['startDateTime'] as String,
@@ -156,6 +157,7 @@ CarBookingHistory _$CarBookingHistoryFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CarBookingHistoryToJson(CarBookingHistory instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'targetId': instance.targetId,
       'name': instance.name,
       'location': instance.location,
       'startDateTime': instance.startDateTime,
