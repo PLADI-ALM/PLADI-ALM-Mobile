@@ -17,7 +17,9 @@ class BookingItemCard extends StatefulWidget {
   final bool isAdmin;
   final BookingType type;
   final int id;
-  final int tergetId;
+  final int targetId;
+  final String? reservatorName;
+  final String? reservatorPhone;
   final String name;
   final String? location;
   final String startDateTime;
@@ -29,7 +31,9 @@ class BookingItemCard extends StatefulWidget {
     required this.isAdmin,
     required this.type,
     required this.id,
-    required this.tergetId,
+    required this.targetId,
+    this.reservatorName,
+    this.reservatorPhone,
     required this.name,
     required this.location,
     required this.startDateTime,
@@ -95,7 +99,22 @@ class _BookingItemCardState extends State<BookingItemCard> {
           ),
           const Divider(thickness: 1.2,),
 
-          /// 예약일시, 이용목적, 예약상태
+          /// 예약자, 예약일시, 이용목적, 예약상태
+          widget.isAdmin
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('예약자', style: titleStyle,),
+                      ),
+                      Text('${widget.reservatorName} (${widget.reservatorPhone})', style: contentStyle, overflow: TextOverflow.ellipsis)
+                    ],
+                  ),
+                )
+              : const SizedBox(height: 0,),
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -344,9 +363,9 @@ class _BookingItemCardState extends State<BookingItemCard> {
   void didTapMoveToDetailButton() {
     switch (widget.type) {
       case BookingType.office:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfficeDetailScreen(officeId: widget.tergetId,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfficeDetailScreen(officeId: widget.targetId,)));
       default:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GeneralDetailScreen(type: widget.type, id: widget.tergetId,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GeneralDetailScreen(type: widget.type, id: widget.targetId,)));
     }
   }
 }

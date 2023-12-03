@@ -234,6 +234,8 @@ class OfficeBookingHistoryData {
 class OfficeBookingHistory {
   int id;
   int targetId;
+  String? reservatorName;
+  String? reservatorPhone;
   String name;
   String? detailInfo;
   String startDateTime;
@@ -244,6 +246,8 @@ class OfficeBookingHistory {
   OfficeBookingHistory({
     required this.id,
     required this.targetId,
+    this.reservatorName,
+    this.reservatorPhone,
     required this.name,
     this.detailInfo,
     required this.startDateTime,

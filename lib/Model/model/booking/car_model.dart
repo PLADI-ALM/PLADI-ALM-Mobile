@@ -136,6 +136,8 @@ class CarBookingHistoryData {
 class CarBookingHistory {
   int id;
   int targetId;
+  String? reservatorName;
+  String? reservatorPhone;
   String name;
   String? location;
   String startDateTime;
@@ -146,6 +148,8 @@ class CarBookingHistory {
   CarBookingHistory({
     required this.id,
     required this.targetId,
+    this.reservatorName,
+    this.reservatorPhone,
     required this.name,
     this.location,
     required this.startDateTime,
