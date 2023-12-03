@@ -317,7 +317,7 @@ AdminResourceBookingHistory _$AdminResourceBookingHistoryFromJson(
       responsibilityName: json['responsibilityName'] as String,
       responsibilityPhone: json['responsibilityPhone'] as String,
       description: json['description'] as String?,
-      imgUrl: json['imgUrl'] as String,
+      imgUrl: json['imgUrl'] as String?,
       productList: (json['productList'] as List<dynamic>)
           .map((e) => ResourcesList.fromJson(e as Map<String, dynamic>))
           .toList(),

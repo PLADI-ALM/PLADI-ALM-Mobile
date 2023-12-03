@@ -29,7 +29,7 @@ class APIManager {
   ) async {
     setToken();
     // print('${await storage.read(key: accessTokenKey)}');
-    // print('${defaultOptions.headers}');
+    print('${defaultOptions.headers}');
 
     if (options != null && options.headers != null) {
       defaultOptions.headers!.addAll(options.headers!);

@@ -11,6 +11,7 @@ import 'package:frontend/View/common/component/sub_app_bar.dart';
 import 'package:frontend/View/login/screen/login_screen.dart';
 import 'package:frontend/View/mypage/component/mypage_cell.dart';
 import 'package:frontend/View/mypage/screen/myinfo_edit_screen.dart';
+import 'package:frontend/View/mypage/screen/webview_screen.dart';
 
 class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
@@ -207,9 +208,23 @@ class _MypageScreen extends State<MypageScreen> {
         .push(MaterialPageRoute(builder: (_) => const MyInfoEditScreen()));
   }
 
-  void moveToService() {}
+  void moveToService() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => const WebviewScreen(
+              url:
+                  'https://broadleaf-mist-919.notion.site/eb903eafa720419a925fa6d1ec5ebde9?pvs=4',
+              title: '서비스 이용약관',
+            )));
+  }
 
-  void moveToInfo() {}
+  void moveToInfo() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => const WebviewScreen(
+              url:
+                  'https://broadleaf-mist-919.notion.site/9310499f66614abbbca63bb201ed07b5?pvs=4',
+              title: '개인정보 처리방침',
+            )));
+  }
 
   void logout() {
     Future<dynamic> result = MypageService().logout();

@@ -110,7 +110,7 @@ class _AdminBookingHistoryCellState extends State<AdminBookingHistoryCell> {
                     width: 28,
                   ),
                   Text(
-                    widget.goal ?? '미기입',
+                    widget.goal == null ? '미기입' : widget.goal!,
                     style: contentStyle,
                     textAlign: TextAlign.justify,
                   )
