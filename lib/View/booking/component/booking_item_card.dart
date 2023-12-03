@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Presenter/booking/resource_service.dart';
 import 'package:frontend/View/booking/screen/booking_screen.dart';
+import 'package:frontend/View/booking/screen/office_detail_screen.dart';
 
 import '../../../Presenter/booking/car_service.dart';
 import '../../../Presenter/booking/office_service.dart';
 import '../../colors.dart';
 import '../screen/booking_history_screen.dart';
 import '../screen/booking_return_screen.dart';
+import '../screen/general_detail_screen.dart';
 import 'booking_status_item.dart';
 
 enum BookingManageType { cancel, giveBack, reject, allow  }  // 취소, 반납, 반려, 허가
@@ -15,6 +17,9 @@ class BookingItemCard extends StatefulWidget {
   final bool isAdmin;
   final BookingType type;
   final int id;
+  final int targetId;
+  final String? reservatorName;
+  final String? reservatorPhone;
   final String name;
   final String? location;
   final String startDateTime;
@@ -26,6 +31,9 @@ class BookingItemCard extends StatefulWidget {
     required this.isAdmin,
     required this.type,
     required this.id,
+    required this.targetId,
+    this.reservatorName,
+    this.reservatorPhone,
     required this.name,
     required this.location,
     required this.startDateTime,
@@ -81,7 +89,8 @@ class _BookingItemCardState extends State<BookingItemCard> {
               ),
               Expanded(child: Container()),
               SizedBox(
-                child: IconButton(onPressed: (){},
+                child: IconButton(
+                    onPressed: didTapMoveToDetailButton,
                     style: IconButton.styleFrom(padding: EdgeInsets.zero),
                     icon: const Icon(Icons.arrow_forward_ios, size: 16,)
                 ),
@@ -90,7 +99,22 @@ class _BookingItemCardState extends State<BookingItemCard> {
           ),
           const Divider(thickness: 1.2,),
 
-          /// 예약일시, 이용목적, 예약상태
+          /// 예약자, 예약일시, 이용목적, 예약상태
+          widget.isAdmin
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('예약자', style: titleStyle,),
+                      ),
+                      Text('${widget.reservatorName} (${widget.reservatorPhone})', style: contentStyle, overflow: TextOverflow.ellipsis)
+                    ],
+                  ),
+                )
+              : const SizedBox(height: 0,),
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -336,4 +360,12 @@ class _BookingItemCardState extends State<BookingItemCard> {
     parent!.reloadData(response);
   }
 
+  void didTapMoveToDetailButton() {
+    switch (widget.type) {
+      case BookingType.office:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfficeDetailScreen(officeId: widget.targetId,)));
+      default:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GeneralDetailScreen(type: widget.type, id: widget.targetId,)));
+    }
+  }
 }

@@ -265,6 +265,9 @@ ResourceBookingHistory _$ResourceBookingHistoryFromJson(
         Map<String, dynamic> json) =>
     ResourceBookingHistory(
       id: json['id'] as int,
+      targetId: json['targetId'] as int,
+      reservatorName: json['reservatorName'] as String?,
+      reservatorPhone: json['reservatorPhone'] as String?,
       name: json['name'] as String,
       location: json['location'] as String?,
       startDateTime: json['startDateTime'] as String,
@@ -277,6 +280,9 @@ Map<String, dynamic> _$ResourceBookingHistoryToJson(
         ResourceBookingHistory instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'targetId': instance.targetId,
+      'reservatorName': instance.reservatorName,
+      'reservatorPhone': instance.reservatorPhone,
       'name': instance.name,
       'location': instance.location,
       'startDateTime': instance.startDateTime,
