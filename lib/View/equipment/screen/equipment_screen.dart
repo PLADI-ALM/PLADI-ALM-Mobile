@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,6 +19,7 @@ class EquipmentScreen extends StatefulWidget {
 class EquipmentScreenState extends State<EquipmentScreen>
     with SingleTickerProviderStateMixin {
   String cond = "";
+  TextEditingController condController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,11 +48,7 @@ class EquipmentScreenState extends State<EquipmentScreen>
           if (snapshot.hasData) {
             notificationList =
                 EquipmentResponseModel.fromJson(snapshot.data).data.content;
-            if (notificationList.isEmpty) {
-              return noDataBody();
-            } else {
-              return renderBody(notificationList);
-            }
+            return renderBody(notificationList);
           } else {
             return const CircularProgressIndicator();
           }
@@ -69,16 +67,61 @@ class EquipmentScreenState extends State<EquipmentScreen>
   }
 
   Widget renderBody(List<EquipmentModel> equipmentList) {
-    return ListView.builder(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 7),
-      scrollDirection: Axis.vertical,
-      itemCount: equipmentList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          onTap: () => showDetail(equipmentList[index]),
-          child: EquipmentCell(equipment: equipmentList[index]),
-        );
-      },
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          width: MediaQuery.of(context).size.width,
+          height: 36,
+          decoration: const BoxDecoration(
+              color: Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          child: Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Icon(
+                  CupertinoIcons.search,
+                  color: Colors.black,
+                ),
+              ),
+              Flexible(
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: TextFormField(
+                  cursorColor: purple,
+                  controller: condController,
+                  decoration: const InputDecoration(
+                    hintText: "비품 검색",
+                    hintStyle:
+                        TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                ),
+              )),
+            ],
+          ),
+        ),
+        Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            color: Colors.white,
+            child: equipmentList.isEmpty
+                ? noDataBody()
+                : ListView.builder(
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 7),
+                    scrollDirection: Axis.vertical,
+                    itemCount: equipmentList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () => showDetail(equipmentList[index]),
+                        child: EquipmentCell(equipment: equipmentList[index]),
+                      );
+                    },
+                  ))
+      ],
     );
   }
 
@@ -478,6 +521,7 @@ class EquipmentScreenState extends State<EquipmentScreen>
   }
 
   Future<dynamic> fetchData() async {
+    cond = condController.text;
     return EquipmentService().getEquipment(cond);
   }
 
