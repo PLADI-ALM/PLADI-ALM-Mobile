@@ -93,7 +93,7 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
       appBar: SubAppBar(
         titleText: widget.equipment == null ? '신규 비품 추가' : "비품 수정",
       ),
-      body: futureBody(),
+      body: SingleChildScrollView(child: futureBody()),
       bottomNavigationBar: PurpleBottomButton(
         title: widget.equipment == null ? '추가' : "수정",
         onPressed: checkEssential,
@@ -542,10 +542,7 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
           name,
           quantity);
       result.then((value) => {
-            if (value == true)
-              {Navigator.of(context).pop(), Navigator.of(context).pop()}
-            else
-              {showAlert(value)}
+            if (value == true) {moveToPop()} else {showAlert(value)}
           });
     }
   }

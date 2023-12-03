@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/equipment/equipment_list_model.dart';
+import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/Presenter/equipment/equipment_service.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
@@ -45,6 +46,10 @@ class EquipmentScreenState extends State<EquipmentScreen>
     return FutureBuilder<dynamic>(
         future: fetchData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const CircularProgressIndicator();
+          }
+
           if (snapshot.hasError) {
             return noDataBody();
           }
@@ -434,12 +439,11 @@ class EquipmentScreenState extends State<EquipmentScreen>
               ],
             ),
           );
-        }).then((value) {
-      setState(() {});
-    });
+        });
   }
 
   void showDeleteSheet(EquipmentModel equipment) {
+    Navigator.of(context).pop();
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -512,7 +516,9 @@ class EquipmentScreenState extends State<EquipmentScreen>
             ),
           );
         }).then((value) {
-      setState(() {});
+      setState(() {
+        reloadData();
+      });
     });
   }
 
@@ -538,6 +544,7 @@ class EquipmentScreenState extends State<EquipmentScreen>
   }
 
   void editEquipment(EquipmentModel equipment) {
+    Navigator.of(context).pop();
     Navigator.of(context)
         .push(MaterialPageRoute(
             builder: (_) => EquipmentAddScreen(equipment: equipment)))
@@ -549,12 +556,9 @@ class EquipmentScreenState extends State<EquipmentScreen>
   void deleteEquipment(EquipmentModel equipment) {
     Future<dynamic> result =
         EquipmentService().deleteEquipment(equipment.equipmentId);
-    result.then((value) => {
-          if (value == true)
-            {Navigator.of(context).pop(), Navigator.of(context).pop()}
-          else
-            {Fluttertoast.showToast(msg: value)}
-        });
+
+    Navigator.of(context).pop();
+    setState(() {});
   }
 
   void popNavi() {
