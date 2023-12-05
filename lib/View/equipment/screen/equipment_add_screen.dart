@@ -530,7 +530,14 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
       Future<dynamic> result = EquipmentService().addEquipment(
           _selectedCategory!, description, imgKey, location, name, quantity);
       result.then((value) => {
-            if (value == true) {moveToPop()} else {showAlert(value)}
+            if (value == true)
+              {
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  moveToPop();
+                })
+              }
+            else
+              {showAlert(value)}
           });
     } else {
       Future<dynamic> result = EquipmentService().editEquipment(
@@ -542,7 +549,14 @@ class _EquipmentAddScreen extends State<EquipmentAddScreen> {
           name,
           quantity);
       result.then((value) => {
-            if (value == true) {moveToPop()} else {showAlert(value)}
+            if (value == true)
+              {
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  moveToPop();
+                })
+              }
+            else
+              {showAlert(value)}
           });
     }
   }

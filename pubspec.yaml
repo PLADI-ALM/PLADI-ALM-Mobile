@@ -2,7 +2,7 @@
 name: frontend
 description: A new Flutter project.
 publish_to: none
-version: 18.0.0+18
+version: 20.0.0+20
 environment:
   sdk: ">=3.0.5 <4.0.0"
 dependencies:
@@ -23,7 +23,7 @@ dependencies:
   url_launcher: "^6.2.1"
   http: "^0.13.4"
   path_provider: "^2.1.1"
-  flutter_inappwebview: ^5.7.2+3
+  flutter_inappwebview: "^5.7.2+3"
 dev_dependencies:
   flutter_test:
     sdk: flutter

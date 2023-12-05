@@ -30,11 +30,13 @@ class ResourceService {
     String endTimeStr = '';
 
     if (startDate != null && startTime != null) {
-      startTimeStr = '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}';
+      startTimeStr =
+          '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}';
     }
 
     if (endDate != null && endTime != null) {
-      endTimeStr = '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}';
+      endTimeStr =
+          '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}';
     }
 
     final response = await APIManager().request(
@@ -72,19 +74,24 @@ class ResourceService {
         RequestType.get,
         '$resourceURL/$resourceId/booking-time',
         null,
-        {'date': selectedDate,},
+        {
+          'date': selectedDate,
+        },
         null);
     return response;
   }
 
-  Future<dynamic> getBookedDateList(int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
+  Future<dynamic> getBookedDateList(
+      int resourceId, DateTime selectedMonth, DateTime? selectedDay) async {
     String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
 
     final response = await APIManager().request(
         RequestType.get,
         '$resourceURL/$resourceId/booking-state',
         null,
-        {'month': selectedMonthStr,},
+        {
+          'month': selectedMonthStr,
+        },
         null);
     return response;
   }
@@ -105,7 +112,8 @@ class ResourceService {
   }
 
   /// 예약된 날짜, 시간의 예약 내역 조회
-  Future<dynamic> getBookedDetailInfo(int resourceId, DateTime selectedDate, int selectedTime) async {
+  Future<dynamic> getBookedDetailInfo(
+      int resourceId, DateTime selectedDate, int selectedTime) async {
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
     String time = (selectedTime < 10) ? '0$selectedTime' : '$selectedTime';
 
@@ -119,15 +127,12 @@ class ResourceService {
   }
 
   /// 예약된 날짜의 모든 예약 내역 조회
-  Future<dynamic> getBookedInfoList(int resourceId, DateTime selectedDate) async {
+  Future<dynamic> getBookedInfoList(
+      int resourceId, DateTime selectedDate) async {
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
 
-    final response = await APIManager().request(
-        RequestType.get,
-        '$resourceURL/$resourceId/booking-info',
-        null,
-        {'date': date},
-        null);
+    final response = await APIManager().request(RequestType.get,
+        '$resourceURL/$resourceId/booking-info', null, {'date': date}, null);
     return response;
   }
 
@@ -164,8 +169,9 @@ class ResourceService {
 
   // 장비 예약 목록 조회
   Future<dynamic> getResourceBookingHistoryList(bool isAdmin) async {
-    String url =
-        isAdmin ? resourceAdminBookingHistoryURL : resourceBookingHistoryURL;
+    String url = isAdmin
+        ? "$resourceAdminBookingHistoryURL?23size=200"
+        : "$resourceBookingHistoryURL?size=200";
     final response =
         await APIManager().request(RequestType.get, url, null, null, null);
     return response;

@@ -9,7 +9,7 @@ import '../../Model/network/api_manager.dart';
 class CarService {
   final carURL = '/cars';
   final carBookingHistoryURL = '/bookings/cars';
-  final carAdminBookingHistoryURL = '/admin/bookings/cars';
+  final carAdminBookingHistoryURL = '/admin/bookings/cars&size';
 
   DateTime? startDate;
   DateTime? startTime;
@@ -30,13 +30,14 @@ class CarService {
     String endTimeStr = '';
 
     if (startDate != null && startTime != null) {
-      startTimeStr = '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}';
+      startTimeStr =
+          '${DateFormat('yyyy-MM-dd').format(startDate!)} ${DateFormat('HH:mm').format(startTime!)}';
     }
 
     if (endDate != null && endTime != null) {
-      endTimeStr = '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}';
+      endTimeStr =
+          '${DateFormat('yyyy-MM-dd').format(endDate!)} ${DateFormat('HH:mm').format(endTime!)}';
     }
-
 
     final response = await APIManager().request(
         RequestType.get,
@@ -149,16 +150,13 @@ class CarService {
   }
 
   /// 예약된 날짜, 시간의 예약 내역 조회
-  Future<dynamic> getBookedDetailInfo(int resourceId, DateTime selectedDate, int selectedTime) async {
+  Future<dynamic> getBookedDetailInfo(
+      int resourceId, DateTime selectedDate, int selectedTime) async {
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
     String time = (selectedTime < 10) ? '0$selectedTime' : '$selectedTime';
 
-    final response = await APIManager().request(
-        RequestType.get,
-        '$carURL/$resourceId/booking',
-        null,
-        {'dateTime': '$date $time'},
-        null);
+    final response = await APIManager().request(RequestType.get,
+        '$carURL/$resourceId/booking', null, {'dateTime': '$date $time'}, null);
     return response;
   }
 
@@ -166,12 +164,8 @@ class CarService {
   Future<dynamic> getBookedInfoList(int carId, DateTime selectedDate) async {
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
 
-    final response = await APIManager().request(
-        RequestType.get,
-        '$carURL/$carId/booking-info',
-        null,
-        {'date': date},
-        null);
+    final response = await APIManager().request(RequestType.get,
+        '$carURL/$carId/booking-info', null, {'date': date}, null);
     return response;
   }
 
@@ -182,25 +176,31 @@ class CarService {
         RequestType.get,
         '$carURL/$carId/booking-time',
         null,
-        {'date': selectedDate,},
+        {
+          'date': selectedDate,
+        },
         null);
     return response;
   }
 
-  Future<dynamic> getBookedDateList(int carId, DateTime selectedMonth, DateTime? selectedDay) async {
+  Future<dynamic> getBookedDateList(
+      int carId, DateTime selectedMonth, DateTime? selectedDay) async {
     String selectedMonthStr = DateFormat('yyyy-MM').format(selectedMonth);
 
     final response = await APIManager().request(
         RequestType.get,
         '$carURL/$carId/booking-state',
         null,
-        {'month': selectedMonthStr,},
+        {
+          'month': selectedMonthStr,
+        },
         null);
     return response;
   }
 
   /// 차량 예약
-  Future<dynamic> bookCar(int carId, DateTime startDate, DateTime endDate, String memo) async {
+  Future<dynamic> bookCar(
+      int carId, DateTime startDate, DateTime endDate, String memo) async {
     String startDateStr = DateFormat('yyyy-MM-dd HH').format(startDate);
     String endDateStr = DateFormat('yyyy-MM-dd HH').format(endDate);
 
@@ -211,8 +211,8 @@ class CarService {
     );
 
     try {
-      final response = await APIManager().request(RequestType.post,
-          '$carURL/$carId', null, null, body.toJson());
+      final response = await APIManager().request(
+          RequestType.post, '$carURL/$carId', null, null, body.toJson());
 
       if (response != null) {
         final data = GeneralModel.fromJson(response);
@@ -224,7 +224,7 @@ class CarService {
       final response = e.response;
       if (response != null) {
         final error =
-        GeneralModel.fromJson(response.data as Map<String, dynamic>);
+            GeneralModel.fromJson(response.data as Map<String, dynamic>);
         return error.message;
       }
     }

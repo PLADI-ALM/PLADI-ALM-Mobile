@@ -129,6 +129,7 @@ class APIManager {
   void deleteToken() {
     storage.delete(key: refreshTokenKey);
     storage.delete(key: accessTokenKey);
+    isAdmin = false;
   }
 
   Future<bool> checkToken() async {
