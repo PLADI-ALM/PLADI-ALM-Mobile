@@ -32,22 +32,22 @@ class _NotificationCellState extends State<NotificationCell> {
 
   void getType() {
     switch (widget.notification.notificationType) {
-      case "장비 예약 요청":
+      case "장비예약 요청":
         type = NotificationType.Request;
         break;
-      case "장비 예약 완료":
+      case "장비예약 완료":
         type = NotificationType.Complete;
         break;
-      case "장비 예약 승인":
+      case "장비예약 승인":
         type = NotificationType.Approve;
         break;
-      case "장비 예약 반려":
+      case "장비예약 반려":
         type = NotificationType.Cancel;
         break;
-      case "장비 예약 반납":
+      case "장비예약 반납":
         type = NotificationType.Return;
         break;
-      case "장비 예약 종료":
+      case "장비예약 종료":
         type = NotificationType.End;
         break;
     }
@@ -55,6 +55,7 @@ class _NotificationCellState extends State<NotificationCell> {
 
   @override
   void initState() {
+    getType();
     super.initState();
   }
 

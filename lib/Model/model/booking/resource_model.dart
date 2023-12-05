@@ -285,7 +285,7 @@ class AdminResourceBookingHistory {
   String responsibilityName;
   String responsibilityPhone;
   String? description;
-  String imgUrl;
+  String? imgUrl;
   List<ResourcesList> productList;
 
   AdminResourceBookingHistory({

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:frontend/Model/model/equipment/equipment_list_model.dart';
+import 'package:frontend/Model/model/general_model.dart';
 import 'package:frontend/Presenter/equipment/equipment_service.dart';
 import 'package:frontend/View/colors.dart';
 import 'package:frontend/View/common/component/main_app_bar.dart';
@@ -23,6 +24,8 @@ class EquipmentScreenState extends State<EquipmentScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       appBar: const MainAppBar(),
       body: futureBody(),
       floatingActionButton: FloatingActionButton(
@@ -41,6 +44,10 @@ class EquipmentScreenState extends State<EquipmentScreen>
     return FutureBuilder<dynamic>(
         future: fetchData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const CircularProgressIndicator();
+          }
+
           if (snapshot.hasError) {
             return noDataBody();
           }
@@ -67,61 +74,71 @@ class EquipmentScreenState extends State<EquipmentScreen>
   }
 
   Widget renderBody(List<EquipmentModel> equipmentList) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          width: MediaQuery.of(context).size.width,
-          height: 36,
-          decoration: const BoxDecoration(
-              color: Color(0xFFF5F5F5),
-              borderRadius: BorderRadius.all(Radius.circular(8))),
-          child: Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Icon(
-                  CupertinoIcons.search,
-                  color: Colors.black,
-                ),
-              ),
-              Flexible(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: TextFormField(
-                  cursorColor: purple,
-                  controller: condController,
-                  decoration: const InputDecoration(
-                    hintText: "비품 검색",
-                    hintStyle:
-                        TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
-                    border: InputBorder.none,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+            width: MediaQuery.of(context).size.width,
+            height: 36,
+            decoration: const BoxDecoration(
+                color: Color(0xFFF5F5F5),
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Icon(
+                    CupertinoIcons.search,
+                    color: Colors.black,
                   ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
                 ),
-              )),
-            ],
-          ),
-        ),
-        Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            color: Colors.white,
-            child: equipmentList.isEmpty
-                ? noDataBody()
-                : ListView.builder(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 7),
-                    scrollDirection: Axis.vertical,
-                    itemCount: equipmentList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () => showDetail(equipmentList[index]),
-                        child: EquipmentCell(equipment: equipmentList[index]),
-                      );
+                Flexible(
+                    child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: TextFormField(
+                    cursorColor: purple,
+                    controller: condController,
+                    decoration: const InputDecoration(
+                      hintText: "비품 검색",
+                      hintStyle:
+                          TextStyle(fontSize: 13, color: Color(0xFFC9C9C9)),
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      setState(() {});
                     },
-                  ))
-      ],
+                  ),
+                )),
+              ],
+            ),
+          ),
+          Expanded(
+              child: Container(
+                  margin: const EdgeInsets.only(top: 7),
+                  height: equipmentList.isEmpty
+                      ? MediaQuery.of(context).size.height
+                      : (MediaQuery.of(context).size.height -
+                          (AppBar().preferredSize.height +
+                              MediaQuery.of(context).padding.top)),
+                  color: Colors.white,
+                  child: equipmentList.isEmpty
+                      ? noDataBody()
+                      : ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: equipmentList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () => showDetail(equipmentList[index]),
+                              child: EquipmentCell(
+                                  equipment: equipmentList[index]),
+                            );
+                          },
+                        )))
+        ],
+      ),
     );
   }
 
@@ -430,12 +447,11 @@ class EquipmentScreenState extends State<EquipmentScreen>
               ],
             ),
           );
-        }).then((value) {
-      setState(() {});
-    });
+        });
   }
 
   void showDeleteSheet(EquipmentModel equipment) {
+    Navigator.of(context).pop();
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -508,7 +524,9 @@ class EquipmentScreenState extends State<EquipmentScreen>
             ),
           );
         }).then((value) {
-      setState(() {});
+      setState(() {
+        reloadData();
+      });
     });
   }
 
@@ -534,6 +552,7 @@ class EquipmentScreenState extends State<EquipmentScreen>
   }
 
   void editEquipment(EquipmentModel equipment) {
+    Navigator.of(context).pop();
     Navigator.of(context)
         .push(MaterialPageRoute(
             builder: (_) => EquipmentAddScreen(equipment: equipment)))
@@ -545,12 +564,9 @@ class EquipmentScreenState extends State<EquipmentScreen>
   void deleteEquipment(EquipmentModel equipment) {
     Future<dynamic> result =
         EquipmentService().deleteEquipment(equipment.equipmentId);
-    result.then((value) => {
-          if (value == true)
-            {Navigator.of(context).pop(), Navigator.of(context).pop()}
-          else
-            {Fluttertoast.showToast(msg: value)}
-        });
+
+    Navigator.of(context).pop();
+    setState(() {});
   }
 
   void popNavi() {

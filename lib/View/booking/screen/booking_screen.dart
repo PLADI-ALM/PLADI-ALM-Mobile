@@ -14,7 +14,7 @@ import '../component/custom_search_bar.dart';
 import '../component/office_item.dart';
 import '../component/resource_item.dart';
 
-enum BookingType {  office, resource, car  }
+enum BookingType { office, resource, car }
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
@@ -23,8 +23,8 @@ class BookingScreen extends StatefulWidget {
   State<BookingScreen> createState() => BookingScreenState();
 }
 
-class BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
-
+class BookingScreenState extends State<BookingScreen>
+    with SingleTickerProviderStateMixin {
   static const category = ['회의실', '장비', '차량'];
   BookingType currentType = BookingType.office;
 
@@ -39,6 +39,7 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
     super.initState();
     controller = TabController(length: 3, vsync: this);
     controller.addListener(tabListener);
+    isLoading = true;
   }
 
   @override
@@ -76,19 +77,20 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
       child: Column(
         children: [
           renderTabBar(),
-          CustomSearchBar(type: currentType,),
+          CustomSearchBar(
+            type: currentType,
+          ),
           Expanded(
             child: TabBarView(
               controller: controller,
-              children:
-              category.map((e) => renderItems(e)).toList(),
+              children: category.map((e) => renderItems(e)).toList(),
             ),
           )
         ],
       ),
     );
   }
-  
+
   Widget renderTabBar() {
     const TextStyle selectedTextStyle = TextStyle(
       fontSize: 14,
@@ -103,74 +105,88 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
     return SizedBox(
       height: 38,
       child: TabBar(
-        controller: controller,
-        isScrollable: true,
-        indicatorColor: purple,
-        indicatorWeight: 3.0,
-        indicatorPadding: const EdgeInsets.only(left: 10, right: 10),
-        labelColor: purple,
-        labelStyle: selectedTextStyle,
-        unselectedLabelColor: Colors.grey,
-        unselectedLabelStyle: unSelectedTextStyle,
-        tabs: [
-          renderTabItem(category[0]),
-          renderTabItem(category[1]),
-          renderTabItem(category[2]),
-        ]
-      ),
+          controller: controller,
+          isScrollable: true,
+          indicatorColor: purple,
+          indicatorWeight: 3.0,
+          indicatorPadding: const EdgeInsets.only(left: 10, right: 10),
+          labelColor: purple,
+          labelStyle: selectedTextStyle,
+          unselectedLabelColor: Colors.grey,
+          unselectedLabelStyle: unSelectedTextStyle,
+          tabs: [
+            renderTabItem(category[0]),
+            renderTabItem(category[1]),
+            renderTabItem(category[2]),
+          ]),
     );
   }
 
   Widget renderTabItem(String title) {
     return SizedBox(
-      width: (MediaQuery.of(context).size.width - 100) / 3 ,
-      child: Tab(icon: Text(title),),
+      width: (MediaQuery.of(context).size.width - 100) / 3,
+      child: Tab(
+        icon: Text(title),
+      ),
     );
   }
-  
+
   Widget renderItems(String categoryName) {
     return FutureBuilder<dynamic>(
-      future: fetchData(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError || snapshot.data == null) {
-          return const Center(
-            child: Text('정보를 불러오지 못 하였습니다.', style: TextStyle(fontSize: 16, color: purple),),
-          );
-        }
-        else {
-          if (isLoading) {
-            return const Center(child: CircularProgressIndicator(color: purple,),);
+        future: fetchData(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return const Center(
+              child: Text(
+                '정보를 불러오지 못 하였습니다.',
+                style: TextStyle(fontSize: 16, color: purple),
+              ),
+            );
+          } else {
+            if (isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: purple,
+                ),
+              );
+            }
+            data = configureData(snapshot.data);
+            return Container(
+              height: getItemHeight() * data.data.content.length,
+              color: Colors.white,
+              child: (data.data.content.length == 0)
+                  ? const Center(
+                      child: Text(
+                        '결과 정보가 없습니다.',
+                        style: TextStyle(fontSize: 16, color: purple),
+                      ),
+                    )
+                  : ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: data.data.content.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return renderItem(data, index);
+                      },
+                    ),
+            );
           }
-          data = configureData(snapshot.data);
-          return Container(
-            height: getItemHeight() * data.data.content.length,
-            color: Colors.white,
-            child: (data.data.content.length == 0)
-                ? const Center(
-                    child: Text('결과 정보가 없습니다.', style: TextStyle(fontSize: 16, color: purple),),
-                  )
-                : ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: data.data.content.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return renderItem(data, index);
-                    },
-                  ),
-          );
-        }
-
-      }
-    );
+        });
   }
 
   Widget renderItem(GeneralModel data, int itemIndex) {
     switch (currentType) {
       case BookingType.office:
-        return OfficeItem(data: (data as OfficeResponseModel).data.content[itemIndex],);
+        return OfficeItem(
+          data: (data as OfficeResponseModel).data.content[itemIndex],
+        );
       case BookingType.resource:
-        return ResourceItem(data: (data as ResourceResponseModel).data.content[itemIndex],);
+        return ResourceItem(
+          data: (data as ResourceResponseModel).data.content[itemIndex],
+        );
       case BookingType.car:
-        return CarItem(data: (data as CarResponseModel).data.content[itemIndex],);
+        return CarItem(
+          data: (data as CarResponseModel).data.content[itemIndex],
+        );
     }
   }
 
@@ -179,9 +195,12 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
     setState(() {
       FocusScope.of(context).unfocus();
       switch (controller.index) {
-        case 0: currentType = BookingType.office;
-        case 1: currentType = BookingType.resource;
-        case 2: currentType = BookingType.car;
+        case 0:
+          currentType = BookingType.office;
+        case 1:
+          currentType = BookingType.resource;
+        case 2:
+          currentType = BookingType.car;
       }
       OfficeService().keyword = '';
       ResourceService().keyword = '';
@@ -191,9 +210,12 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
 
   double getItemHeight() {
     switch (currentType) {
-      case BookingType.office: return 292.0;
-      case BookingType.resource: return 232.0;
-      case BookingType.car: return 232.0;
+      case BookingType.office:
+        return 292.0;
+      case BookingType.resource:
+        return 232.0;
+      case BookingType.car:
+        return 232.0;
     }
   }
 
@@ -211,9 +233,12 @@ class BookingScreenState extends State<BookingScreen> with SingleTickerProviderS
   void searchItems(String keyword) {
     setState(() {
       switch (currentType) {
-        case BookingType.office: OfficeService().keyword = keyword;
-        case BookingType.resource: ResourceService().keyword = keyword;
-        case BookingType.car: CarService().keyword = keyword;
+        case BookingType.office:
+          OfficeService().keyword = keyword;
+        case BookingType.resource:
+          ResourceService().keyword = keyword;
+        case BookingType.car:
+          CarService().keyword = keyword;
       }
     });
   }

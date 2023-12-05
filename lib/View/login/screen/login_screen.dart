@@ -223,9 +223,11 @@ class _LoginScreenState extends State<LoginScreen> {
     result.then((value) => {
           if (value == true)
             {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => const RootTab()),
-                  (route) => false)
+              Future.delayed(const Duration(milliseconds: 100), () {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const RootTab()),
+                    (route) => false);
+              })
             }
           else if (value == false)
             {showAlert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")}
